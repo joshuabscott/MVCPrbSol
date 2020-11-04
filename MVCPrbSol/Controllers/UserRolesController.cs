@@ -9,6 +9,8 @@ using MVCPrbSol.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SQLitePCL;
+using MVCPrbSol.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCPrbSol.Controllers
 {
@@ -18,7 +20,7 @@ namespace MVCPrbSol.Controllers
         private readonly IPSRolesService _rolesService;
         private readonly UserManager<PSUser> _userManager;
 
-        public PSRolesController(ApplicationDbContext context, IPSRolesService rolesService, UserManager<PSUser> userManager)
+        public UserRolesController(ApplicationDbContext context, IPSRolesService rolesService, UserManager<PSUser> userManager)
         {
             _context = context;
             _rolesService = rolesService;
@@ -30,5 +32,26 @@ namespace MVCPrbSol.Controllers
         {
             return View();
         }
+
+
+        public async Task<IActionResult>  ManageUserRoles()
+        {
+            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
+            List<PSUser> users = _context.Users.ToList();
+
+            foreach (var user in users)
+            {
+                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();
+                vm.User = user;
+                var selected = await _rolesService.LIstUserRoles(user);
+                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);
+                model.Add(vm);
+            }
+
+            return View(model);
+        }
     }
 }
+
+
+//UserRolesController Index.cshtml

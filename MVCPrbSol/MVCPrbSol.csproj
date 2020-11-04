@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Utilities\" />
+    <Folder Include="Views\UserRoles\" />
   </ItemGroup>
 
 </Project>
