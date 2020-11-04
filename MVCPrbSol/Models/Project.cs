@@ -10,7 +10,7 @@ namespace MVCPrbSol.Models
     public class Project
         //prob tab tab gives this code
     {
-        public Project ()
+        public Project()
         {
             Tickets = new HashSet<Ticket>();
         }

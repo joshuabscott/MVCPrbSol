@@ -16,11 +16,11 @@ namespace MVCPrbSol.Models
 
         [Required]
         [StringLength(50)]
-        public string LasttName { get; set; }
+        public string LastName { get; set; }
 
         [Display(Name = "Full Name")]
         [NotMapped]
-        public string FullName { get { return $"{FirstName} {LasttName}"; } }
+        public string FullName { get { return $"{FirstName} {LastName}"; } }
 
         [Display (Name = "Avatar")]
         public string ImagePath { get; set; }

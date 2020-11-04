@@ -16,6 +16,7 @@ namespace MVCPrbSol.Models
             Notifications = new HashSet<Notification>();
             Histories = new HashSet<TicketHistory>();
         }
+
         public int Id { get; set; }
         [Required]
         [StringLength(50)]

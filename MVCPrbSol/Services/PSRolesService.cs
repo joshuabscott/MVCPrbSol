@@ -22,13 +22,37 @@ namespace MVCPrbSol.Services
 
         public async Task<bool> AddUserToRole(PSUser user, string roleName)
         {
-            var result = await _userManger.AddToRoleAsync(user, roleName);
+            var result = await _userManager.AddToRoleAsync(user, roleName);
             return result.Succeeded;
         }
 
-    public async Task<bool> IsUserInRole(PSUser user, string roleName)
-        {          
+        public async Task<bool> IsUserInRole(PSUser user, string roleName)
+        {
+            return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public async Task<IEnumerable<string>> LIstUserRoles(PSUser user)
+        {
             throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveUserFromRole(PSUser user, string roleName)
+        {
+            var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+            return result.Succeeded;
+        }
+
+        public async Task<ICollection<PSUser>> UsersInRole(string roleName)
+        {
+            var users = await _userManager.GetUserAsync(roleName);
+            return users;
+        }
+
+        //  //
+        public async Task<ICollection<PSUser>> UsersNotInRole(IdentityRole role)
+        {
+            //var roleId = await _roleManager.GetRoleIdAsync(role);
+            return await _userManager.Users.Where(u => IsUserInRole(u, role.Name).Result == false).ToList();
         }
     }
 }

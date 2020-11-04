@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MVCPrbSol.Data;
+using MVCPrbSol.Models;
 using MVCPrbSol.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using SQLitePCL;
 
 namespace MVCPrbSol.Controllers

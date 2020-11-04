@@ -18,6 +18,7 @@ namespace MVCPrbSol.Models
 
         public int TicketId { get; set; }
         public virtual Ticket Ticket { get; set; }
+
         public string UserId { get; set; }
         public virtual PSUser User { get; set; }
     }
