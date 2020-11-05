@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using MVCPrbSol.Models.ViewModels;
+using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPSProjectService _pSProjectService;
 
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context, IPSProjectService pSProjectService)
         {
             _context = context;
+            _pSProjectService = pSProjectService;
         }
 
         // GET: Projects

@@ -100,7 +100,7 @@ namespace MVCPrbSol.Services
 
         public async Task<ICollection<PSUser>> UsersNotOnProject(int projectId)
         {
-            return await _context.Users.Where(u => IsUserNotOnProject(u.Id, ProjectId).Result == false).ToListAsync();
+            return await _context.Users.Where(u => IsUserNotOnProject(u.Id, projectId).Result == false).ToListAsync();
         }
     }
 }

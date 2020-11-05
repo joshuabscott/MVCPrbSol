@@ -148,6 +148,35 @@ namespace MVCPrbSol.Data
                 throw;
             }
             #endregion
+
+            #region New User
+            // New User
+            var defaultNew = new PSUser
+            {
+                UserName = "BruceWayne@mailinator.com",
+                Email = "BruceWayne@mailinator.com",
+                FirstName = "Bruce",
+                LastName = "Wayne",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Qm7KEY]d8HN&");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            #endregion
         }
     }
 }
