@@ -33,7 +33,7 @@ namespace MVCPrbSol.Controllers
             return View();
         }
 
-
+        //Get
         public async Task<IActionResult>  ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
@@ -52,6 +52,3 @@ namespace MVCPrbSol.Controllers
         }
     }
 }
-
-
-//UserRolesController Index.cshtml

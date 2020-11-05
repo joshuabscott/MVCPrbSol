@@ -15,7 +15,7 @@ namespace MVCPrbSol
 {
     public class Program
     {
-        public async static Main(string[] args)
+        public async static Task Main(string[] args)
         {
             //CreateHostBuilder(args).Build().Run();
             var host = CreateHostBuilder(args).Build();
@@ -29,12 +29,12 @@ namespace MVCPrbSol
                     var userManager = services.GetRequiredService<UserManager<PSUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(roleManager);
-                    //await ContextSeed.SeedDefaultUserAsync(userManager, roleManager);
+                    await ContextSeed.SeedDefaultUserAsync(userManager);
                 }
                 catch (Exception ex)
                 {
                     var logger = loggerFactory.CreateLogger<Program>();
-                    logger.LogError(ex, "An error occured seeding the DB.");
+                    logger.LogError(ex, "An error occurred seeding the DB.");
                 }
             }
             host.Run();

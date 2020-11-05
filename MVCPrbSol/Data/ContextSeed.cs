@@ -22,7 +22,7 @@ namespace MVCPrbSol.Data
     public static class ContextSeed
     {
         //Seed Roles
-        public static async Task SeedDefaultUserAsync(RoleManager<IdentityRole> roleManager)
+        public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             await roleManager.CreateAsync(new IdentityRole(Roles.Administrator.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.ProgjectManager.ToString()));
@@ -40,7 +40,7 @@ namespace MVCPrbSol.Data
                 UserName = "joshuabscott@gmail.com",
                 Email = "joshuabscott@gmail.com",
                 FirstName = "Joshua",
-                LastName = "Raynor",
+                LastName = "Scott",
                 EmailConfirmed = true,
             };
             try
@@ -88,8 +88,8 @@ namespace MVCPrbSol.Data
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine("**************************************");
                 throw;
-
-                #endregion
+            }
+            #endregion
 
             #region Seed Developer
             //Seed Default Developer User
@@ -118,37 +118,36 @@ namespace MVCPrbSol.Data
                 Debug.WriteLine("**************************************");
                 throw;
             }
-                #endregion
+            #endregion
 
             #region Seed Submitter
-                //Seed Default Submitter User
-                var defaultSub = new PSUser
+            //Seed Default Submitter User
+            var defaultSub = new PSUser
+            {
+                UserName = "MattHagen@mailinator.com",
+                Email = "MattHagen@mailinator.com",
+                FirstName = "Matt",
+                LastName = "Hagen",
+                EmailConfirmed = true,
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultSub.Email);
+                if (user == null)
                 {
-                    UserName = "MattHagen@mailinator.com",
-                    Email = "MattHagen@mailinator.com",
-                    FirstName = "Matt",
-                    LastName = "Hagen",
-                    EmailConfirmed = true,
-                };
-                try
-                {
-                    var user = await userManager.FindByEmailAsync(defaultSub.Email);
-                    if (user == null)
-                    {
-                        await userManager.CreateAsync(defaultSub, "L5bt?H;46p");
-                        await userManager.AddToRoleAsync(defaultSub, Roles.Submitter.ToString());
-                    }
+                    await userManager.CreateAsync(defaultSub, "L5bt?H;46p");
+                    await userManager.AddToRoleAsync(defaultSub, Roles.Submitter.ToString());
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("**************ERROR * *****************");
-                    Debug.WriteLine("ERROR Seeding Default Submitter.");
-                    Debug.WriteLine(ex.Message);
-                    Debug.WriteLine("**************************************");
-                    throw;
-                }
-                #endregion
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("**************ERROR * *****************");
+                Debug.WriteLine("ERROR Seeding Default Submitter.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("**************************************");
+                throw;
+            }
+            #endregion
         }
     }
 }

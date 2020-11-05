@@ -27,7 +27,7 @@ namespace MVCPrbSol.Services
 
         public Task AddUserToProject(string userId, int projectId)
         {
-            var result = await _userManager.
+            var result = await _userManager;
             return result.Succeeded;
         }
 
