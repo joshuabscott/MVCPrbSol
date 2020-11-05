@@ -50,5 +50,23 @@ namespace MVCPrbSol.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel psuser)
+        {
+            PSUser user = await _context.Users.FindAsync(psuser.User.Id)
+
+            IEnumberable<string> roles = await _rolesService.LIstUserRoles(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            string userRole = psuser.SelectedRoles.FirstOrDefault();
+
+            if (Enum.TryParse(userRole, out Roles roleValue))
+            {
+                await _rolesService.AddUserToRole(user, userRole);
+                return RedirectToAction("ManageUserRoles"); 
+            }
+            return RedirectToAction("ManageUserRoles"); 
+        }
     }
 }

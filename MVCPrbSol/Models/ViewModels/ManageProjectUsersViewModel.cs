@@ -7,8 +7,8 @@ namespace MVCPrbSol.Models.ViewModels
 {
     public class ManageProjectUsersViewModel
     {
-        public Project project { get; set; }
-        public MultiSelectList Roles { get; set; }
-        public string[] SelectedRoles { get; set; }
+        public Project Project { get; set; }
+        public List<PSUser> UsersOnProject { get; set; }
+        public List<PSUser>  UsersNotOnProject { get; set; }
     }
 }

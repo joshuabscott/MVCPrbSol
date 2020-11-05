@@ -38,7 +38,10 @@ namespace MVCPrbSol.Controllers
             }
 
             var project = await _context.Projects
+                .Include(p => p.ProjectUsers)
+                .ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+     
             if (project == null)
             {
                 return NotFound();
@@ -153,5 +156,23 @@ namespace MVCPrbSol.Controllers
         {
             return _context.Projects.Any(e => e.Id == id);
         }
+
+        //[HttpGet]
+        //public async
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> AssignUsers(ProjectzusersViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.SelectedUsers != null)
+                {
+                    var currentMemebers = await _contextProjects.Include(p => p.ProjectUsers).FristOrDefaultAsync(p => p)
+                }
+            }
+        }
+
     }
 }

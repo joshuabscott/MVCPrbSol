@@ -20,8 +20,8 @@ namespace MVCPrbSol.Services
         //The Constructor - make user to only use one
         public PSProjectService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager, ApplicationDbContext context)
         {
-            _roleManager = roleManager;
-            _userManager = userManager;
+            //_roleManager = roleManager;
+            //_userManager = userManager;
             _context = context;
         }
 
