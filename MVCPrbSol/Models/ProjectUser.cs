@@ -12,5 +12,8 @@ namespace MVCPrbSol.Models
 
         public int ProjectId { get; set; }
         public Project Project { get; set; }
+
+        public string AddProjectUsers { get; set; }
+        public string RemoveProjectUsers { get; set; }
     }
 }

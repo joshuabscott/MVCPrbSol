@@ -15,10 +15,12 @@ namespace MVCPrbSol.Controllers
 {
     public class ProjectsController : Controller
     {
-        private readonly ApplicationDbContext _context;                 //Reference to be injected
+        private readonly ApplicationDbContext _context;                 
+        //Reference to be injected
         private readonly IPSProjectService _BTProjectService;
 
-        public ProjectsController(ApplicationDbContext context, IPSProjectService BTProjectService)        //Constructor //(App... context) is injected
+        public ProjectsController(ApplicationDbContext context, IPSProjectService BTProjectService)        
+        //Constructor //(App... context) is injected
         {
             _context = context;
             _BTProjectService = BTProjectService;
@@ -167,9 +169,11 @@ namespace MVCPrbSol.Controllers
 
 
         // GET: Projects/ManageProjectUsers
-        public async Task<IActionResult> AssignUsers(int id)          //By default, this is a get method//
+        public async Task<IActionResult> AssignUsers(int id)          
+        //By default, this is a get method//
         {
-            var model = new ManageProjectUsersViewModel();      //Newing up an instance of ManageProjectUsersViewModel
+            var model = new ManageProjectUsersViewModel();      
+            //Newing up an instance of ManageProjectUsersViewModel
             var project = _context.Projects.Find(id);
 
             model.Project = project;
@@ -190,7 +194,8 @@ namespace MVCPrbSol.Controllers
             {
                 if (model.SelectedProjects != null)
                 {
-                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers)           //Error points to this linq expression, but why?!  11/5/2020
+                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers)           
+                        //Error points to this linq expression, but why?!  11/5/2020
                         .FirstOrDefaultAsync(p => p.Id == model.Project.Id);
                     List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
 
