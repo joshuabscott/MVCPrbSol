@@ -9,6 +9,7 @@ namespace MVCPrbSol.Models
     {
         public string UserId { get; set; }
         public PSUser User { get; set; }
+
         public int ProjectId { get; set; }
         public Project Project { get; set; }
     }

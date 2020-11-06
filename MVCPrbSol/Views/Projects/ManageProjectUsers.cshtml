@@ -10,12 +10,11 @@
 
     <p>
 
-        Project Name:
+        Name :
 
-        <span>@Model.Project.Name</span>
+        <span>@Model.Project</span>
 
     </p>
-
 
 
     <form asp-controller="Projects" asp-action="AssignUsers" method="post">
@@ -28,9 +27,9 @@
 
             <div class="form-group">
 
-                <label asp-for="@Model.Users" class="control-label">Assign team member to Project: @Model.Project.Name</label>
+                <label asp-for="@Model.Users" class="control-label">Assign team member to Project: @Model.Project</label>
 
-                <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
+                <select asp-for="@Model.SelectedProjects" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
 
             </div>
 
@@ -49,7 +48,6 @@
         </div>
 
     </form>
-
 
 
 </div>

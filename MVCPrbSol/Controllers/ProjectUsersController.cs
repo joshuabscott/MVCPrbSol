@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVCPrbSol.Data;
+using MVCPrbSol.Models;
 using MVCPrbSol.Models.ViewModels;
 using MVCPrbSol.Services;
 using SQLitePCL;
@@ -13,21 +15,58 @@ namespace MVCPrbSol.Controllers
     public class ProjectUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IPSProjectService _projectService;
+        private readonly IPSRolesService _rolesService;
+        private readonly ProjectUser<PSUser> _projectUser;
 
-        public ManageProjectUsersViewModel model = new ManageProjectUsersViewModel)
+        public ProjectUsersController(ApplicationDbContext context, IPSRolesService rolesService, ProjectUser<PSUser> projectManager)
         {
             _context = context;
-            _projectService = IPSProjectService;
+            _rolesService = rolesService;
+            _projectUser = projectUser;
         }
 
-        public async Task<IActionResult> ManageProjectUsers(int projectId)
+
+        public IActionResult Index()
         {
-            ManageProjectUsersViewModel model = new ManageProjectUsersViewModel();
-            model.Project = _context.Projects.FristOrDefault(p => p.Id == projectId);
-            model.UsersOnProject = (List<Models.PSUser>)await _projectService.UsersOnProject(projectId);
-            model.UsersNotOnProject = (List<Models.PSUser>)await _projectService.UsersNotOnProject(projectId);
+            return View();
+        }
+
+        //Get
+        [HttpGet]
+        public async Task<IActionResult> ManageUserRoles()
+        {
+            List<ManageProjectUsersViewModel> model = new List<ManageProjectUsersViewModel>();
+            List<ProjectUser> projectusers = _context.ProjectUsers.ToList();
+
+            foreach (var projectuser in projectusers)
+            {
+                ManageProjectUsersViewModel vm = new ManageProjectUsersViewModel();
+                vm.ProjectUser = projectuser;
+                var selected = await _rolesService.LIstUserRoles(user);
+                vm.ProjectUsers = new MultiSelectList(_context.Roles, "Name", "Name", selected);
+                model.Add(vm);
+            }
+
             return View(model);
+        }
+
+        //Post
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManageUserRoles(ManageProjectUsersViewModel psuser)
+        {
+            PSUser user = await _context.Users.FindAsync(psuser.User.Id);
+
+            IEnumerable<string> roles = await _rolesService.LIstUserRoles(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            string userRole = psuser.SelectedProjects.FirstOrDefault();
+
+            if (Enum.TryParse(userRole, out Roles roleValue))
+            {
+                await _rolesService.AddUserToRole(user, userRole);
+                return RedirectToAction("ManageUserRoles");
+            }
+            return RedirectToAction("ManageUserRoles");
         }
     }
 }

@@ -39,6 +39,7 @@ namespace MVCPrbSol
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IPSRolesService, PSRolesService>();
+            services.AddScoped<IPSProjectService, PSProjectService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

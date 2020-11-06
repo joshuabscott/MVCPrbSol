@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,47 +15,30 @@ namespace MVCPrbSol.Controllers
 {
     public class ProjectsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IPSProjectService _pSProjectService;
+        private readonly ApplicationDbContext _context;                 //Reference to be injected
+        private readonly IPSProjectService _BTProjectService;
 
-        public ProjectsController(ApplicationDbContext context, IPSProjectService pSProjectService)
+        public ProjectsController(ApplicationDbContext context, IPSProjectService BTProjectService)        //Constructor //(App... context) is injected
         {
             _context = context;
-            _pSProjectService = pSProjectService;
+            _BTProjectService = BTProjectService;
         }
 
-        // GET: Projects
+
+
+        // GET: Projects Index
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());
         }
 
-        // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects
-                .Include(p => p.ProjectUsers)
-                .ThenInclude(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-     
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            return View(project);
-        }
 
         // GET: Projects/Create
         public IActionResult Create()
         {
             return View();
         }
+
 
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -72,7 +56,28 @@ namespace MVCPrbSol.Controllers
             return View(project);
         }
 
-        // GET: Projects/Edit/5
+        // GET: Projects/Details
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects
+                .Include(p => p.ProjectUsers)
+                .ThenInclude(p => p.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return View(project);
+        }
+
+
+        // GET: Projects/Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,7 +93,8 @@ namespace MVCPrbSol.Controllers
             return View(project);
         }
 
-        // POST: Projects/Edit/5
+
+        // POST: Projects/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -123,7 +129,8 @@ namespace MVCPrbSol.Controllers
             return View(project);
         }
 
-        // GET: Projects/Delete/5
+
+        // GET: Projects/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +148,8 @@ namespace MVCPrbSol.Controllers
             return View(project);
         }
 
-        // POST: Projects/Delete/5
+
+        // POST: Projects/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -157,21 +165,54 @@ namespace MVCPrbSol.Controllers
             return _context.Projects.Any(e => e.Id == id);
         }
 
-        //[HttpGet]
-        //public async
 
+        // GET: Projects/ManageProjectUsers
+        public async Task<IActionResult> AssignUsers(int id)          //By default, this is a get method//
+        {
+            var model = new ManageProjectUsersViewModel();      //Newing up an instance of ManageProjectUsersViewModel
+            var project = _context.Projects.Find(id);
+
+            model.Project = project;
+            List<PSUser> users = await _context.Users.ToListAsync();
+            List<PSUser> members = (List<PSUser>)await _BTProjectService.UsersOnProject(id);
+            model.Users = new MultiSelectList(users, "Id", "FullName", members);
+            return View(model);
+        }
+
+
+
+        //POST: Projects/Assign Users To Project
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> AssignUsers(ProjectUsersViewModel model)
+        public async Task<IActionResult> AssignUsers(ManageProjectUsersViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (model.SelectedUsers != null)
+                if (model.SelectedProjects != null)
                 {
-                    var currentMemebers = await _contextProjects.Include(p => p.ProjectUsers).FristOrDefaultAsync(p => p)
+                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers)           //Error points to this linq expression, but why?!  11/5/2020
+                        .FirstOrDefaultAsync(p => p.Id == model.Project.Id);
+                    List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
+
+                    foreach (string id in memberIds)
+                    {
+                        await _BTProjectService.RemoveUserFromProject(id, model.Project.Id);
+                    }
+
+                    foreach (string id in model.SelectedProjects)
+                    {
+                        await _BTProjectService.AddUserToProject(id, model.Project.Id);
+                    }
+                    return RedirectToAction("Index", "Projects");
+                }
+                else
+                {
+                    Debug.WriteLine("****ERROR****");
+                    //Send an error message back
                 }
             }
+            return View(model);
+
         }
 
     }

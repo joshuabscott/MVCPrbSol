@@ -13,15 +13,15 @@ namespace MVCPrbSol.Services
 {
     public class PSProjectService : IPSProjectService
     {
-        private readonly RoleManager<IdentityRole> _roleManger;
-        private readonly UserManager<PSUser> _userManger;
+        //private readonly RoleManager<IdentityRole> _roleManger;
+        //private readonly UserManager<PSUser> _userManger;
         private readonly ApplicationDbContext _context;
 
         //The Constructor - make user to only use one
-        public PSProjectService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager, ApplicationDbContext context)
+        public PSProjectService(/*RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager,*/ ApplicationDbContext context)
         {
-            _roleManager = roleManager;
-            _userManager = userManager;
+            //_roleManager = roleManager;
+            //_userManager = userManager;
             _context = context;
         }
 
@@ -40,7 +40,7 @@ namespace MVCPrbSol.Services
 
         public async Task<ICollection<Project>> ListUserProjects(string userId)
         {
-            var user = await _context.Users
+            PSUser user = await _context.Users
                 .Include(p => p.ProjectUsers)
                 .ThenInclude(p => p.Project)
                 .FirstOrDefaultAsync(matchingUser => matchingUser.Id == userId);
@@ -92,15 +92,17 @@ namespace MVCPrbSol.Services
         public async Task<ICollection<PSUser>> UsersOnProject(int projectId)
         {
             Project project = await _context.Projects
-                .Include(u => u.ProjectUsers).ThenInclude(u => u.User)
+                .Include(u => u.ProjectUsers)
+                .ThenInclude(u => u.User)
                 .FirstOrDefaultAsync(u => u.Id == projectId);
-            List<PSUser> projectusers = project.ProjectUsers.SelectMany(project => (IEnumerable<PSUser>)project.User).ToList();
+            List<PSUser> projectusers = new List<PSUser>();
+            projectusers.AddRange(project.ProjectUsers.SelectMany(project => (IEnumerable<PSUser>)project.User).ToList());
             return projectusers;
         }
 
         public async Task<ICollection<PSUser>> UsersNotOnProject(int projectId)
         {
-            return await _context.Users.Where(u => IsUserNotOnProject(u.Id, projectId).Result == false).ToListAsync();
+            return await _context.Users.Where(u => IsUserOnProject(u.Id, projectId).Result == false).ToListAsync();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MVCPrbSol.Enums;
 using MVCPrbSol.Models;
 using NuGet.Frameworks;
 using System;

@@ -9,7 +9,9 @@ namespace MVCPrbSol.Models.ViewModels
     public class ManageUserRolesViewModel
     {
         public PSUser User { get; set; }
+
         public MultiSelectList Roles { get; set; }
+
         public string[] SelectedRoles { get; set; }
     }
 }
