@@ -163,7 +163,7 @@ namespace MVCPrbSol.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> AssignUsers(ProjectzusersViewModel model)
+        public async Task<IActionResult> AssignUsers(ProjectUsersViewModel model)
         {
             if (ModelState.IsValid)
             {
