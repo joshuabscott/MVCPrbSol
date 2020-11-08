@@ -18,6 +18,31 @@ namespace MVCPrbSol.Data
         NewUser
     }
 
+    public enum TicketTypes
+    {
+        UI,
+        Calculation,
+        Logic,
+        Security
+    }
+
+    public enum TicketPriorities
+    {
+        Low,
+        Moderate,
+        Major,
+        Critical
+    }
+
+    public enum TicketStatuses
+    {
+        Opened,
+        Testing,
+        Development,
+        QA,
+        FinalPass,
+        Closed
+    }
     public static class ContextSeed
     {
         //Seed Roles
@@ -166,7 +191,7 @@ namespace MVCPrbSol.Data
             catch (Exception ex)
             {
                 Debug.WriteLine("************ ERROR  ************");
-                Debug.WriteLine("Error Seeding Default Admin User.");
+                Debug.WriteLine("Error Seeding Default Administrator.");
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine("********************************");
                 throw;
@@ -292,6 +317,694 @@ namespace MVCPrbSol.Data
                 throw;
             }
             #endregion
+
+            #region New
+            // New User
+            var defaultNew = new PSUser
+            {
+                UserName = "a@b.com",
+                Email = "a@b.com",
+                FirstName = "Adam",
+                LastName = "Brooks",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Abrooks1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "a@d.com",
+                Email = "a@d.com",
+                FirstName = "Anthony",
+                LastName = "Duval",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Aduval1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "j@h.com",
+                Email = "j@h.com",
+                FirstName = "Jackson",
+                LastName = "Holliday",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Jholliday1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "j@s.com",
+                Email = "j@s.com",
+                FirstName = "Josh",
+                LastName = "Scott",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Jscott1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "k@b.com",
+                Email = "k@b.com",
+                FirstName = "Kenan",
+                LastName = "Bjelosevic",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Kbjelosevic1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "m@n.com",
+                Email = "m@n.com",
+                FirstName = "MacColl",
+                LastName = "Nicolson",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Mnicolson1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "a@e.com",
+                Email = "a@e.com",
+                FirstName = "Adrian",
+                LastName = "Edelen",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Aedelen1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "b@c.com",
+                Email = "b@c.com",
+                FirstName = "Beau",
+                LastName = "Cunningham",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Bcunningham1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "j@h.com",
+                Email = "j@h.com",
+                FirstName = "Jessica",
+                LastName = "Hedenskog",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Jhedenskog1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "k@c.com",
+                Email = "k@c.com",
+                FirstName = "Kit",
+                LastName = "Chau",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Kchau1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "n@w.com",
+                Email = "n@w.com",
+                FirstName = "Nick",
+                LastName = "Webb",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Nwebb1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "t@b.com",
+                Email = "t@b.com",
+                FirstName = "Tony",
+                LastName = "Beavers",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Tbeavers1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "andy@rivera.com",
+                Email = "andy@rivera.com",
+                FirstName = "Andres",
+                LastName = "Rivera",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Arivera1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "c@t.com",
+                Email = "c@t.com",
+                FirstName = "Charles",
+                LastName = "Tincher",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Ctincher1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "e@j.com",
+                Email = "e@j.com",
+                FirstName = "Ethan",
+                LastName = "Jones",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Ejones1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "eli@jones.com",
+                Email = "eli@jones.com",
+                FirstName = "Eli",
+                LastName = "Jones",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Ejones1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "j@g.com",
+                Email = "j@g.com",
+                FirstName = "Jonathan",
+                LastName = "Green",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Jgreen1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "joseph@green.com",
+                Email = "joseph@green.com",
+                FirstName = "Joseph",
+                LastName = "Green",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Jgreen1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "j@s.com",
+                Email = "j@s.com",
+                FirstName = "Julio",
+                LastName = "Segarra",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Jsegarra1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "l@a.com",
+                Email = "l@a.com",
+                FirstName = "Larry",
+                LastName = "Ashton",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Lashton1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "o@o.com",
+                Email = "o@o.com",
+                FirstName = "Orlando",
+                LastName = "Olmo",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Oolmo1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "a@a.com",
+                Email = "a@a.com",
+                FirstName = "Andrew",
+                LastName = "Albanese",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Aalbanese1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "d@j.com",
+                Email = "d@j.com",
+                FirstName = "Denis",
+                LastName = "Jojot",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Djojot1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "f@s.com",
+                Email = "f@s.com",
+                FirstName = "Fred",
+                LastName = "Smith",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Fsmith1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "d@c.com",
+                Email = "d@c.com",
+                FirstName = "Danny",
+                LastName = "Carroll",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Dcarroll1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "m@j.com",
+                Email = "m@j.com",
+                FirstName = "Mark",
+                LastName = "Janicki",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Mjanicki1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            defaultNew = new PSUser
+            {
+                UserName = "s@j.com",
+                Email = "s@j.com",
+                FirstName = "Shyann",
+                LastName = "Jobe",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultNew, "Sjobe1!");
+                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+            #endregion
+
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine("*********** ERROR **********");
+            //    Debug.WriteLine("Error Seeding Ticket Priorities.");
+            //    Debug.WriteLine(ex.Message);
+            //    Debug.WriteLine("****************************");
+            //    throw;
+            //}
         }
     }
 }
