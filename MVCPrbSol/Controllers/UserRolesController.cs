@@ -43,7 +43,7 @@ namespace MVCPrbSol.Controllers
             {
                 ManageUserRolesViewModel vm = new ManageUserRolesViewModel();
                 vm.User = user;
-                var selected = await _rolesService.LIstUserRoles(user);
+                var selected = await _rolesService.ListUserRoles(user);
                 vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);
                 model.Add(vm);
             }
@@ -58,7 +58,7 @@ namespace MVCPrbSol.Controllers
         {
             PSUser user = await _context.Users.FindAsync(psuser.User.Id);
 
-            IEnumerable<string> roles = await _rolesService.LIstUserRoles(user);
+            IEnumerable<string> roles = await _rolesService.ListUserRoles(user);
             await _userManager.RemoveFromRolesAsync(user, roles);
             string userRole = psuser.SelectedRoles.FirstOrDefault();
 

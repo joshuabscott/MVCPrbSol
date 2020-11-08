@@ -12,7 +12,7 @@ namespace MVCPrbSol.Data
     public enum Roles
     {
         Administrator,
-        ProgjectManager,
+        ProjectManager,
         Developer,
         Submitter,
         NewUser
@@ -24,23 +24,135 @@ namespace MVCPrbSol.Data
         public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             await roleManager.CreateAsync(new IdentityRole(Roles.Administrator.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.ProgjectManager.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.ProjectManager.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Developer.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Submitter.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.NewUser.ToString()));
         }
 
-        public static async Task SeedDefaultUserAsync(UserManager<PSUser> userManager)
+
+
+        //In order to have default values in place for our Ticket types, statuses, and priorities, we need to seed
+        //default values in place.
+        #region Seed Default Ticket Priorities
+        public static async Task SeedDefaultTicketPrioritiesAsync(ApplicationDbContext context)
         {
-            #region Seed Administrator
-            //Seed Default Administrator User
+            try
+            {
+                if (!context.TicketPriorities.Any(tp => tp.Name == "Low"))
+                {
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Low" });
+
+                }
+                if (!context.TicketPriorities.Any(tp => tp.Name == "High"))
+                {
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "High" });
+
+                }
+                if (!context.TicketPriorities.Any(tp => tp.Name == "Blocker"))
+                {
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Blocker" });
+
+                }
+                if (!context.TicketPriorities.Any(tp => tp.Name == "Pending"))
+                {
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Pending" });
+
+                }
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("**************** ERROR ****************");
+                Debug.WriteLine("Error Seeding Ticket Priorities");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("************************************************");
+                throw;
+            }
+        }
+        #endregion
+
+        #region Seed Default Ticket Statuses
+        public static async Task SeedDefaultTicketStatusesAsync(ApplicationDbContext context)
+        {
+            try
+            {
+                if (!context.TicketStatuses.Any(ts => ts.Name == "Pending"))
+                {
+                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "Pending" });
+
+                }
+                if (!context.TicketStatuses.Any(ts => ts.Name == "In-Progress"))
+                {
+                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "In-Progress" });
+
+                }
+                if (!context.TicketStatuses.Any(ts => ts.Name == "Completed"))
+                {
+                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "Completed" });
+
+                }
+
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("**************** ERROR ****************");
+                Debug.WriteLine("Error Seeding Ticket Statuses");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("************************************************");
+                throw;
+            }
+        }
+        #endregion
+
+        #region Seed Default Ticket Types
+        public static async Task SeedDefaultTicketTypesAsync(ApplicationDbContext context)
+        {
+            try
+            {
+                if (!context.TicketTypes.Any(tt => tt.Name == "Front-End"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Front-End" });
+
+                }
+                if (!context.TicketTypes.Any(tt => tt.Name == "Back-End"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Back-End" });
+
+                }
+                if (!context.TicketTypes.Any(tt => tt.Name == "Miscellaneous"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Miscellaneous" });
+
+                }
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("**************** ERROR ****************");
+                Debug.WriteLine("Error Seeding Ticket Types");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("************************************************");
+                throw;
+            }
+        }
+        #endregion
+
+
+
+        //Seed Users
+        public static async Task SeedDefaultUsersAsync(UserManager<PSUser> userManager)
+        {
+            #region SeedAdmin
+            //SeedDefault Admin User
             var defaultAdmin = new PSUser
             {
-                UserName = "joshuabscott@gmail.com",
-                Email = "joshuabscott@gmail.com",
-                FirstName = "Joshua",
-                LastName = "Scott",
-                EmailConfirmed = true,
+                UserName = "TaliaalGhul@email.com",
+                Email = "TaliaalGhul@email.com",
+                FirstName = "Talia",
+                LastName = "al Ghul",
+                EmailConfirmed = true
             };
             try
             {
@@ -53,130 +165,133 @@ namespace MVCPrbSol.Data
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("**************ERROR * *****************");
-                Debug.WriteLine("ERROR Seeding Default Administrator.");
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default Admin User.");
                 Debug.WriteLine(ex.Message);
-                Debug.WriteLine("**************************************");
+                Debug.WriteLine("********************************");
                 throw;
             }
             #endregion
 
-            #region Seed Project Manager
-            //Seed Project Manager User
+            //SeedDefault PM User
+            #region SeedPM        
+
             var defaultPM = new PSUser
             {
-                UserName = "RomanSionis@mailinator.com",
-                Email = "RomanSionis@mailinator.com",
-                FirstName = "Roman",
-                LastName = "Sionis",
-                EmailConfirmed = true,
+                UserName = "PamelaIsley@email.com",
+                Email = "PamelaIsley@email.com",
+                FirstName = "Pamela",
+                LastName = "Isley",
+                EmailConfirmed = true
             };
             try
             {
                 var user = await userManager.FindByEmailAsync(defaultPM.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultPM, "dzmYm9<[niRP");
-                    await userManager.AddToRoleAsync(defaultPM, Roles.ProgjectManager.ToString());
+                    await userManager.CreateAsync(defaultPM, "Abc&123!");
+                    await userManager.AddToRoleAsync(defaultPM, Roles.ProjectManager.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("**************ERROR * *****************");
-                Debug.WriteLine("ERROR Seeding Default Project Manager.");
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default ProjectManager User.");
                 Debug.WriteLine(ex.Message);
-                Debug.WriteLine("**************************************");
+                Debug.WriteLine("********************************");
                 throw;
             }
             #endregion
 
-            #region Seed Developer
-            //Seed Default Developer User
-            var defaultDev = new PSUser
+            //SeedDefault Developer User
+            #region SeedDeveloper        
+
+            var defaultDeveloper = new PSUser
             {
-                UserName = " SimonHurt@mailinator.com",
-                Email = " SimonHurt@mailinator.com",
-                FirstName = " Simon",
-                LastName = "Hurt",
-                EmailConfirmed = true,
+                UserName = "RomanSion@email.com",
+                Email = "RomanSionis@email.com",
+                FirstName = "Roman",
+                LastName = "Sionis",
+                EmailConfirmed = true
             };
             try
             {
-                var user = await userManager.FindByEmailAsync(defaultDev.Email);
+                var user = await userManager.FindByEmailAsync(defaultDeveloper.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultDev, "Abi4%)}K8C#?");
-                    await userManager.AddToRoleAsync(defaultDev, Roles.Developer.ToString());
+                    await userManager.CreateAsync(defaultDeveloper, "Abc&123!");
+                    await userManager.AddToRoleAsync(defaultDeveloper, Roles.Developer.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("**************ERROR * *****************");
-                Debug.WriteLine("ERROR Seeding Default Developer.");
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default Developer User.");
                 Debug.WriteLine(ex.Message);
-                Debug.WriteLine("**************************************");
+                Debug.WriteLine("********************************");
                 throw;
             }
             #endregion
 
-            #region Seed Submitter
-            //Seed Default Submitter User
-            var defaultSub = new PSUser
+            //SeedDefault Submitter User
+            #region SeedSubmitter
+
+            var defaultSubmitter = new PSUser
             {
-                UserName = "MattHagen@mailinator.com",
-                Email = "MattHagen@mailinator.com",
-                FirstName = "Matt",
-                LastName = "Hagen",
-                EmailConfirmed = true,
+                UserName = "ThomasElliot@email.com",
+                Email = "ThomasElliot@email.com",
+                FirstName = "Thomas",
+                LastName = "Elliot",
+                EmailConfirmed = true
             };
             try
             {
-                var user = await userManager.FindByEmailAsync(defaultSub.Email);
+                var user = await userManager.FindByEmailAsync(defaultSubmitter.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultSub, "L5bt?H;46p");
-                    await userManager.AddToRoleAsync(defaultSub, Roles.Submitter.ToString());
+                    await userManager.CreateAsync(defaultSubmitter, "g9N88.se!");
+                    await userManager.AddToRoleAsync(defaultSubmitter, Roles.Submitter.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("**************ERROR * *****************");
-                Debug.WriteLine("ERROR Seeding Default Submitter.");
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default Submitter User.");
                 Debug.WriteLine(ex.Message);
-                Debug.WriteLine("**************************************");
+                Debug.WriteLine("********************************");
                 throw;
             }
             #endregion
 
-            #region New User
-            // New User
-            var defaultNew = new PSUser
+            //SeedDefault NewUser User
+            #region SeedNewUser
+
+            var defaultNewUser = new PSUser
             {
-                UserName = "BruceWayne@mailinator.com",
-                Email = "BruceWayne@mailinator.com",
+                UserName = "BruceWayne@email.com",
+                Email = "BruceWayne@email.com",
                 FirstName = "Bruce",
                 LastName = "Wayne",
                 EmailConfirmed = true
             };
             try
             {
-                var user = await userManager.FindByEmailAsync(defaultNew.Email);
+                var user = await userManager.FindByEmailAsync(defaultNewUser.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultNew, "Qm7KEY]d8HN&");
-                    await userManager.AddToRoleAsync(defaultNew, Roles.NewUser.ToString());
+                    await userManager.CreateAsync(defaultNewUser, "d(b9L>?D_Bg");
+                    await userManager.AddToRoleAsync(defaultNewUser, Roles.NewUser.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("*********** ERROR **********");
-                Debug.WriteLine("Error Seeding Default New User.");
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default NewUser User.");
                 Debug.WriteLine(ex.Message);
-                Debug.WriteLine("****************************");
+                Debug.WriteLine("********************************");
                 throw;
             }
             #endregion
         }
     }
 }
-

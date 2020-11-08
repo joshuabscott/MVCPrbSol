@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MVCPrbSol.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace MVCPrbSol.Models.ViewModels
     {
         public Project Project { get; set; }
 
-        public MultiSelectList Users { get; set; }  //Populates list box???
+        public MultiSelectList Users { get; set; }  //Populates list box
 
-        public string[] SelectedProjects { get; set; } //receives selected users????
+        public string[] SelectedUsers { get; set; } //receives selected users
+
     }
 }

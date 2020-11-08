@@ -22,8 +22,8 @@
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <input type="hidden" asp-for="@Model.Project">
-
+        <input type="hidden" asp-for="@Model.Project.Id">
+        <input type="hidden" asp-for="@Model.Project.Name">     @*These are required when creating project class*@
         <div class="col-12">
 
             <div class="form-group">

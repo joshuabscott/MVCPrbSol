@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MVCPrbSol.Data.Migrations
+namespace MVCPrbSol.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201103163347_001_PrbSolInitial")]
-    partial class _001_PrbSolInitial
+    [Migration("20201108063701_001PrbSolUsers")]
+    partial class _001PrbSolUsers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,7 +79,7 @@ namespace MVCPrbSol.Data.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LasttName")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
@@ -160,6 +160,12 @@ namespace MVCPrbSol.Data.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AddProjectUsers")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RemoveProjectUsers")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjectId", "UserId");
 

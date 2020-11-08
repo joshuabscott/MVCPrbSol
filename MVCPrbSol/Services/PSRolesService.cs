@@ -1,28 +1,23 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using MVCPrbSol.Data;
-using MVCPrbSol.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using MVCPrbSol.Models;
+using MVCPrbSol.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MVCPrbSol.Services
 {
     public class PSRolesService : IPSRolesService
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;        //Like empty shells, need contructor to fill these containers with "the goods" -Denis Jojot
         private readonly UserManager<PSUser> _userManager;
-        //private readonly ApplicationDbContext _context;
 
-        //The Constructor - make usre to only use one
-        public PSRolesService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager/*, ApplicationDbContext<context>*/)
+        public PSRolesService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager)  //Contructor. When these method reference variables _roleManager and _userManager, 
         {
             _roleManager = roleManager;
             _userManager = userManager;
-            //_context = context;
         }
 
         public async Task<bool> AddUserToRole(PSUser user, string roleName)
@@ -40,6 +35,11 @@ namespace MVCPrbSol.Services
         public async Task<IEnumerable<string>> ListUserRoles(PSUser user)
         {
             return await _userManager.GetRolesAsync(user);
+        }
+
+        public Task<IEnumerable<string>> LIstUserRoles(PSUser user)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> RemoveUserFromRole(PSUser user, string roleName)

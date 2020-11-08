@@ -32,6 +32,8 @@ namespace MVCPrbSol.Models
         public int ProjectId { get; set; }
         public int TicketTypeId { get; set; }
         public int TicketPriorityId { get; set; }
+
+        [Display (Name = "Status")]
         public int TicketStatusId { get; set; }
         public string OwnerUserId { get; set; }
         public string DeveloperUserId { get; set; }
