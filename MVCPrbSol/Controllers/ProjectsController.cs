@@ -69,6 +69,17 @@ namespace MVCPrbSol.Controllers
                 .Include(p => p.ProjectUsers)           //in Addition to project, bring the reference to projectuser
                 .ThenInclude(p => p.User)               //also bring the user reference
                 .FirstOrDefaultAsync(m => m.Id == id);      //go into db, go intoo projects table, find the first project with this id, grab that and only that item with that id
+
+            project.Tickets = await _context.Tickets
+                .Where(t => t.ProjectId == id)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .ToListAsync();
+
             if (project == null)
             {
                 return NotFound();
@@ -216,26 +227,5 @@ namespace MVCPrbSol.Controllers
             return View(model);
 
         }
-
-
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> RemoveUsersFromProject(int id)
-        //{
-
-
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> RemoveUsersFromProject(int id)
-        //{
-        //    var project = await _context.Projects.FindAsync(id);
-        //    _context.Projects.Remove(project);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
     }
 }

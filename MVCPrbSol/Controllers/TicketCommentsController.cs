@@ -47,10 +47,10 @@ namespace MVCPrbSol.Controllers
         }
 
         // GET: TicketComments/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -59,17 +59,25 @@ namespace MVCPrbSol.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
+        public async Task<IActionResult> Create([Bind("Comment,Created,TicketId,UserId")] TicketComment ticketComment)
         {
             if (ModelState.IsValid)
             {
+
+                ticketComment.Created = DateTimeOffset.Now;
+
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
+
             }
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id", ticketComment.UserId);
-            return View(ticketComment);
+            else
+            {
+                return NotFound();
+            }
+            //ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
+            //return View(ticketComment);
         }
 
         // GET: TicketComments/Edit/5
@@ -86,7 +94,7 @@ namespace MVCPrbSol.Controllers
                 return NotFound();
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id", ticketComment.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
 
@@ -123,7 +131,7 @@ namespace MVCPrbSol.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id", ticketComment.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
 

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using Microsoft.AspNetCore.Http;
+using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Controllers
 {
@@ -22,13 +24,7 @@ namespace MVCPrbSol.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tickets
-                .Include(t => t.DeveloperUser)
-                .Include(t => t.OwnerUser)
-                .Include(t => t.Project)
-                .Include(t => t.TicketPriority)
-                .Include(t => t.TicketStatus)
-                .Include(t => t.TicketType);
+            var applicationDbContext = _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -47,8 +43,9 @@ namespace MVCPrbSol.Controllers
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (ticket == null)
             {
                 return NotFound();
@@ -58,27 +55,15 @@ namespace MVCPrbSol.Controllers
         }
 
         // GET: Tickets/Create
-        public IActionResult Create(int? id)/////////////////////
+        public IActionResult Create()
         {
-            var model = new Ticket();
-            model.ProjectId = (int)id;
-            ///////////////////////////
-            ViewData["DeveloperUserId"] = new SelectList(_context.PSUsers, "Id", "FullName");
-            ViewData["OwnerUserId"] = new SelectList(_context.PSUsers, "Id", "FullName");
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
-            ////////////////////////////
-            if (User.IsInRole("Administrator") || User.IsInRole("ProjectManger"))
-            {
-                ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
-                ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
-            }
-            else
-            {
-                model.TicketPriorityId = 4;
-                model.TicketStatusId = 3;
-            }
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
             ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
-            return View(model);
+            return View();
         }
 
         // POST: Tickets/Create
@@ -86,27 +71,27 @@ namespace MVCPrbSol.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket,
+            IFormFile attachment)
         {
             if (ModelState.IsValid)
             {
-                ticket.Created = DateTimeOffset.Now;
+                if (attachment != null)
+                {
+                    AttachmentHandler attachmentHandler = new AttachmentHandler();
+                    ticket.Attachments.Add(attachmentHandler.Attach(attachment));
+                }
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return NotFound();
-            }
-            //ViewData["DeveloperUserId"] = new SelectList(_context.PSUsers, "Id", "Id", ticket.DeveloperUserId);
-            //ViewData["OwnerUserId"] = new SelectList(_context.PSUsers, "Id", "Id", ticket.OwnerUserId);
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            //ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
-            //ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
-            //ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
-            //return View(ticket);
-            //moved out 11-6-2020
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
+            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
+            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
+            return View(ticket);
         }
 
         // GET: Tickets/Edit/5
@@ -122,8 +107,8 @@ namespace MVCPrbSol.Controllers
             {
                 return NotFound();
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.PSUsers, "Id", "FullName", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.PSUsers, "Id", "FullName", ticket.OwnerUserId);
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
+            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
             ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
@@ -136,7 +121,7 @@ namespace MVCPrbSol.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
             if (id != ticket.Id)
             {
@@ -147,6 +132,11 @@ namespace MVCPrbSol.Controllers
             {
                 try
                 {
+                    if (attachment != null)
+                    {
+                        AttachmentHandler attachmentHandler = new AttachmentHandler();
+                        ticket.Attachments.Add(attachmentHandler.Attach(attachment));
+                    }
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }
@@ -163,8 +153,8 @@ namespace MVCPrbSol.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.PSUsers, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.PSUsers, "Id", "Id", ticket.OwnerUserId);
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
+            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
             ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
