@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using MVCPrbSol.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BugTracker.Controllers
+namespace MVCPrbSol.Controllers
 {
     [Authorize]
     public class HomeController : Controller

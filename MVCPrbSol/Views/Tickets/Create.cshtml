@@ -52,20 +52,8 @@
                 <label for="FileName" class="control-label"></label>
                 <input name="attachment" type="file" />
             </div>
-            @*<div class="form-group">
-                    <label asp-for="Created" class="control-label"></label>
-                    <input asp-for="Created" class="form-control" />
-                    <span asp-validation-for="Created" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Updated" class="control-label"></label>
-                    <input asp-for="Updated" class="form-control" />
-                    <span asp-validation-for="Updated" class="text-danger"></span>
-                </div>*@
-
-
-
-            @*Normal Users should not be able to see these drop-down menus. In TicketsController, if the user is not in the role of
+         
+            @*Normal Users should not be able to see these dropdown menus. In TicketsController, if the user is not in the role of
                 Admin/PM, ticket's Type, Priority, Status, and Developer fields the default should be set to unassigned, and PM decides who is put on the ticket*@
             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
             {

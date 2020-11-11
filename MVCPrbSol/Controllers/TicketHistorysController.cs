@@ -9,14 +9,14 @@ using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BugTracker.Controllers
+namespace MVCPrbSol.Controllers
 {
-    [Authorize]
-    public class TicketHistoriesController : Controller
+    [Authorize(Roles = "Administrator")]
+    public class TicketHistorysController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TicketHistoriesController(ApplicationDbContext context)
+        public TicketHistorysController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace BugTracker.Controllers
         // GET: TicketHistories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TicketHistories
+            var applicationDbContext = _context.TicketHistorys
                 .Include(t => t.Ticket)
                 .Include(t => t.User);
 
@@ -39,7 +39,7 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
-            var ticketHistory = await _context.TicketHistories
+            var ticketHistory = await _context.TicketHistorys
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -60,7 +60,7 @@ namespace BugTracker.Controllers
         }
 
         // POST: TicketHistories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -85,7 +85,7 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
-            var ticketHistory = await _context.TicketHistories.FindAsync(id);
+            var ticketHistory = await _context.TicketHistorys.FindAsync(id);
             if (ticketHistory == null)
             {
                 return NotFound();
@@ -96,7 +96,7 @@ namespace BugTracker.Controllers
         }
 
         // POST: TicketHistories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -140,7 +140,7 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
-            var ticketHistory = await _context.TicketHistories
+            var ticketHistory = await _context.TicketHistorys
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -157,15 +157,15 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ticketHistory = await _context.TicketHistories.FindAsync(id);
-            _context.TicketHistories.Remove(ticketHistory);
+            var ticketHistory = await _context.TicketHistorys.FindAsync(id);
+            _context.TicketHistorys.Remove(ticketHistory);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TicketHistoryExists(int id)
         {
-            return _context.TicketHistories.Any(e => e.Id == id);
+            return _context.TicketHistorys.Any(e => e.Id == id);
         }
     }
 }

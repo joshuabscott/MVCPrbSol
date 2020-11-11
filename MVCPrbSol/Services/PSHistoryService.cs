@@ -34,7 +34,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistories.AddAsync(history);
+                await _context.TicketHistorys.AddAsync(history);
             }
 
             if (oldTicket.Description != newTicket.Description)
@@ -49,7 +49,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistories.AddAsync(history);
+                await _context.TicketHistorys.AddAsync(history);
             }
 
             if (oldTicket.TicketTypeId != newTicket.TicketTypeId)
@@ -64,7 +64,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistories.AddAsync(history);
+                await _context.TicketHistorys.AddAsync(history);
             }
 
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
@@ -79,7 +79,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistories.AddAsync(history);
+                await _context.TicketHistorys.AddAsync(history);
             }
 
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
@@ -94,7 +94,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistories.AddAsync(history);
+                await _context.TicketHistorys.AddAsync(history);
             }
 
             if (oldTicket.DeveloperUserId != newTicket.DeveloperUserId)
@@ -111,7 +111,7 @@ namespace MVCPrbSol.Services
                         UserId = userId
 
                     };
-                    await _context.TicketHistories.AddAsync(history);
+                    await _context.TicketHistorys.AddAsync(history);
 
                 }
 
@@ -127,7 +127,7 @@ namespace MVCPrbSol.Services
                         UserId = userId
 
                     };
-                    await _context.TicketHistories.AddAsync(history);
+                    await _context.TicketHistorys.AddAsync(history);
 
                 }
                 else
@@ -142,7 +142,7 @@ namespace MVCPrbSol.Services
                         UserId = userId
 
                     };
-                    await _context.TicketHistories.AddAsync(history);
+                    await _context.TicketHistorys.AddAsync(history);
                 }
             }
             await _context.SaveChangesAsync();

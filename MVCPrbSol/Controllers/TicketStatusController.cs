@@ -9,9 +9,9 @@ using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BugTracker.Controllers
+namespace MVCPrbSol.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class TicketStatusController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -52,7 +52,7 @@ namespace BugTracker.Controllers
         }
 
         // POST: TicketStatus/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -84,7 +84,7 @@ namespace BugTracker.Controllers
         }
 
         // POST: TicketStatus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]

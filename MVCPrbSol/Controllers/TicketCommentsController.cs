@@ -10,17 +10,17 @@ using MVCPrbSol.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BugTracker.Controllers
+namespace MVCPrbSol.Controllers
 {
     [Authorize]
     public class TicketCommentsController : Controller
     {
-        private readonly ApplicationDbContext _context;         //2) local, private reference to that service
+        private readonly ApplicationDbContext _context;         
         private readonly UserManager<PSUser> _userManager;
 
-        public TicketCommentsController(ApplicationDbContext context, UserManager<PSUser> userManager)  // 1) Inject my service
+        public TicketCommentsController(ApplicationDbContext context, UserManager<PSUser> userManager)  
         {
-            _userManager = userManager;     //3) assigning the value of the injection to local reference 
+            _userManager = userManager;     
             _context = context;
         }
 
@@ -38,7 +38,7 @@ namespace BugTracker.Controllers
             {
                 return NotFound();
             }
-            //Not sure about this linq statement, might not be here or be correct
+            //Not sure about this link statement, might not be here or be correct
             var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
@@ -64,7 +64,7 @@ namespace BugTracker.Controllers
         }
 
         // POST: TicketComments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -77,9 +77,6 @@ namespace BugTracker.Controllers
 
                 ticketComment.UserId = _userManager.GetUserId(User);
 
-
-
-
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
@@ -89,9 +86,6 @@ namespace BugTracker.Controllers
             {
                 return NotFound();
             }
-            //ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
-            //return View(ticketComment);
         }
 
         // GET: TicketComments/Edit/5
@@ -113,7 +107,7 @@ namespace BugTracker.Controllers
         }
 
         // POST: TicketComments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]

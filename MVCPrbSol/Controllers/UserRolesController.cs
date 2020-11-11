@@ -11,16 +11,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BugTracker.Controllers
+namespace MVCPrbSol.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator, ProjectManager")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IPSRolesService _rolesService;
         private readonly UserManager<PSUser> _usermanager;
 
-        public UserRolesController(ApplicationDbContext context, IPSRolesService rolesService, UserManager<PSUser> userManager)     //Constructor, need to read/learn more about this
+        public UserRolesController(ApplicationDbContext context, IPSRolesService rolesService, UserManager<PSUser> userManager)     
+            //Constructor, need to read/learn more about this
         {
             _context = context;
             _rolesService = rolesService;
@@ -34,17 +35,21 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManageUserRoles()          //By default, this is a get method
+        public async Task<IActionResult> ManageUserRoles()          
+            //By default, this is a get method
         {
-            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();        //List so we can list all of our users
+            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();        
+            //List so we can list all of our users
             List<PSUser> users = _context.Users.ToList();
 
             foreach (var user in users)
             {
-                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();           //Creating dropdown
+                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();           
+                //Creating drop-down
                 vm.User = user;
                 var selected = await _rolesService.ListUserRoles(user);
-                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);      //Overload example
+                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);      
+                //Overload example
                 model.Add(vm);
             }
 

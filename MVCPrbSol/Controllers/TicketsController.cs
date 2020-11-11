@@ -20,50 +20,20 @@ namespace MVCPrbSol.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<PSUser> _userManager;
-        private readonly IPSHistoryService _historiesService;
+        private readonly IPSHistoryService _historyService;
         private readonly IPSRolesService _rolesService;
-        #region Constructor Comments
-        // The method below is a constructor. The purpose of the constructor is to initialize objects. 
-        // Constructor's name MUST MATCH the class name, and cannot have a return type(like void or int).
-        // A good way to think about setting up a contructor:
-        // 1) Inject the service I want to reference as a parameter in the Constructor.
-        // 2) Create a local, private readonly reference to the service injected. This goes above the Constructor.
-        // 3) Assign the value of the injection to local reference 
-        #endregion
+      
         public TicketsController(ApplicationDbContext context, UserManager<PSUser> userManager, IPSHistoryService historyService, IPSRolesService rolesService)
         {
             _userManager = userManager;
             _context = context;
-            _historiesService = historyService;
+            _historyService = historyService;
             _rolesService = rolesService;
         }
 
         // GET: Tickets/Index
         public async Task<IActionResult> Index(string userId)
         {
-            // What is this? why is this? what the heck is going on
-
-            //var user = _userManager.GetUserId(User);
-            //var myRole = await _rolesService.ListUserRoles(_context.Users.Find(user));
-            //var test = myRole.FirstOrDefault();
-            //switch (test)
-            //{
-            //    case "Admin":
-            //        var model = _context.Tickets.ToList();
-            //        break;
-            //    case "ProjectManager":
-            //        model = 1; //The foreach loops
-            //        break;
-            //    case "Developer":
-            //    case "NewUser":
-            //        model = _context.Tickets.Where(t => t.DeveloperUserId == user).ToList(); //The foreach loops
-            //        break;
-            //    case "Submitter":
-            //        model = _context.Tickets.Where(t => t.OwnerUserId == user).ToList(); //The foreach loops
-            //        break;
-            //}
-
-            //This is supposed to have something to do with PM's getting tickets? 
             var projectIds = new List<int>();
             var model = new List<Ticket>();
             var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
@@ -78,13 +48,6 @@ namespace MVCPrbSol.Controllers
                 model.AddRange(tickets);
             }
 
-
-
-            #region Linq Statements
-            // The method below could be written out in one long string, but it is easier to read and understand
-            // when it is divided like it is. The code below is saying "create a variable (applicationDbContext).
-            // Then 
-            #endregion
             var applicationDbContext = _context.Tickets
                 .Include(t => t.DeveloperUser)
                 .Include(t => t.OwnerUser)
@@ -102,12 +65,7 @@ namespace MVCPrbSol.Controllers
             {
                 return NotFound();
             }
-            #region Lamda Expression
-            //Lamda Expression Notes: 
-            //var ticket, which we create, Says wer're going to the database and inside the ticket table , 
-            //and we go into Ticket Table. From there we include Developer User, Owner User columns, etc. first or default is a statement saying 
-            //"give me the first row where the first row id is the same as the id's we were given."
-            #endregion
+          
             var ticket = await _context.Tickets
                 .Include(t => t.DeveloperUser)
                 .Include(t => t.OwnerUser)
@@ -126,48 +84,38 @@ namespace MVCPrbSol.Controllers
 
             return View(ticket);
         }
-
+        /// <summary>
+        /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
         // GET: Tickets/Create
         public IActionResult Create(int? id)
         {
-            var model = new Ticket();
-            model.ProjectId = (int)id;
-            // Problem: When I try to create a ticket from the Ticket index view, an error occurs that pulls me to the line above. How do I fix that?
+            //var model = new Ticket();
+            //model.ProjectId = (int)id;
 
-            #region ViewData/SelectLists
-            // These are the fields that a user can select through when creating a ticket. For example, the user should see a select list for the following things; 
-            // Developer assigned to ticket, owner of ticket, the project the ticket is assigned to, etc.
-            //in parameters of new SelectList, second var. is what prints out
-            #endregion
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
 
-
-            #region Role Authentication
-            // This is an example of role authentication; Since the common user should not be selecting the ticket priority or status, this if UserIsInRole method
-            // hides those select lists for anyone who is not logged in and in the role of Admin or PM. The else statement sets the ticket priority and status to a default
-            // pending, which the admin/PM will later assess and change to the appropriate priority or status.
-            #endregion
-            if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+            if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
             {
                 ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
                 ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
                 ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
                 ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
             }
-            else
-            {
-                model.TicketTypeId = _context.TicketTypes.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
-                model.TicketPriorityId = _context.TicketPriorities.Where(tp => tp.Name == "Pending").FirstOrDefault().Id;
-                model.TicketStatusId = _context.TicketStatuses.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
-                model.DeveloperUserId = null; //Nullable by default
-            }
-            return View(model);
+            //else
+            //{
+            //    model.TicketTypeId = _context.TicketTypes.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
+            //    model.TicketPriorityId = _context.TicketPriorities.Where(tp => tp.Name == "Pending").FirstOrDefault().Id;
+            //    model.TicketStatusId = _context.TicketStatuses.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
+            //    model.DeveloperUserId = null; //Null by default
+            //}
+            //return View(model);
+            return View();
         }
 
-
         // POST: Tickets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -194,27 +142,27 @@ namespace MVCPrbSol.Controllers
 
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });       //When user creates a new ticket, they will be redirected back to the Projects/Details View instead of the default, which was "Index"
+                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });      
+                //When user creates a new ticket, they will be redirected back to the Projects/Details View instead of the default, which was "Index"
             }
             else
             {
                 return NotFound();
             }
-            //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
-            //ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
-            //ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
-            //ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
-            //return View(ticket);
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
+            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
+            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
+            return View(ticket);
         }
 
-
         // GET: Tickets/Edit/5
-        [Authorize(Roles = "Admin,ProjecManager")]
+        [Authorize(Roles = "Administrator,ProjecManager")]
         public async Task<IActionResult> Edit(int? id)
         {
-            //Need ticket comments to show in edit view so I can edit/archive them(as admin/PM)
+            //Need ticket comments to show in edit view so I can edit/archive them(as AD/PM)
             var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
@@ -231,7 +179,6 @@ namespace MVCPrbSol.Controllers
                 return NotFound();
             }
 
-            //Need to be able to edit ticket comments; Do I need a linq statement in the get/post or just ViewDataFields?
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
@@ -242,23 +189,20 @@ namespace MVCPrbSol.Controllers
         }
 
         // POST: Tickets/Edit
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
-
             ticket.Updated = DateTimeOffset.Now;
-
-
 
             if (id != ticket.Id)
             {
                 return NotFound();
             }
 
-            //Grabbing the Id of the old ticket
+            //Id of the old ticket
             Ticket oldTicket = await _context.Tickets
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == ticket.Id);
@@ -284,8 +228,7 @@ namespace MVCPrbSol.Controllers
 
                 //Add history; 
                 string userId = _userManager.GetUserId(User);
-                await _historiesService.AddHistory(oldTicket, ticket, userId);
-
+                await _historyService.AddHistory(oldTicket, ticket, userId);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -299,6 +242,7 @@ namespace MVCPrbSol.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

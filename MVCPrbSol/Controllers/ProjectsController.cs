@@ -12,22 +12,21 @@ using MVCPrbSol.Services;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BugTracker.Controllers
+namespace MVCPrbSol.Controllers
 {
     [Authorize]
     public class ProjectsController : Controller
     {
 
-        private readonly ApplicationDbContext _context;                 //Reference to be injected
-        private readonly IPSProjectService _BTProjectService;
+        private readonly ApplicationDbContext _context;                 
+        private readonly IPSProjectService _PSProjectService;
 
-        public ProjectsController(ApplicationDbContext context, IPSProjectService BTProjectService)        //Constructor //(App... context) is injected
+        public ProjectsController(ApplicationDbContext context, IPSProjectService PSProjectService)        
+        //Constructor  injects context
         {
             _context = context;
-            _BTProjectService = BTProjectService;
+            _PSProjectService = PSProjectService;
         }
-
-
 
         // GET: Projects Index
         public async Task<IActionResult> Index()
@@ -35,20 +34,18 @@ namespace BugTracker.Controllers
             return View(await _context.Projects.ToListAsync());
         }
 
-
         // GET: Projects/Create
         public IActionResult Create()
         {
             return View();
         }
 
-
         // POST: Projects/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ImagePath,ImageData")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,Name,ImagePath,ImageData")] Project project) //Bind
         {
             if (ModelState.IsValid)
             {
@@ -67,12 +64,10 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
-
-
             var project = await _context.Projects
-                .Include(p => p.ProjectUsers)           //in Addition to project, bring the reference to projectuser
-                .ThenInclude(p => p.User)               //also bring the user reference
-                .FirstOrDefaultAsync(m => m.Id == id);      //go into db, go intoo projects table, find the first project with this id, grab that and only that item with that id
+                .Include(p => p.ProjectUsers)           //in Addition to project, bring the reference to project--user
+                .ThenInclude(p => p.User)               
+                .FirstOrDefaultAsync(m => m.Id == id);  //go into db, projects table, first project with this id, grab only that id
 
             project.Tickets = await _context.Tickets
                 .Where(t => t.ProjectId == id)
@@ -93,7 +88,6 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
-
         // GET: Projects/Edit
         public async Task<IActionResult> Edit(int? id)
         {
@@ -110,13 +104,12 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
-
         // POST: Projects/Edit
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImagePath,ImageData")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImagePath,ImageData")] Project project) //Bind
         {
             if (id != project.Id)
             {
@@ -165,7 +158,6 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
-
         // POST: Projects/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -183,23 +175,22 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/ManageProjectUsers
-        [Authorize(Roles = "Admin, ProjectManager")]
-        public async Task<IActionResult> AssignUsers(int id)          //By default, this is a get method//
+        [Authorize(Roles = "Administrator, ProjectManager")]
+        public async Task<IActionResult> AssignUsers(int id)        
         {
-            var model = new ManageProjectUsersViewModel();      //Newing up an instance of ManageProjectUsersViewModel
+            //New up an instance of ManageProjectUsersViewModel
+            var model = new ManageProjectUsersViewModel();      
             var project = _context.Projects.Find(id);
 
             model.Project = project;
             List<PSUser> users = await _context.Users.ToListAsync();
-            List<PSUser> members = (List<PSUser>)await _BTProjectService.UsersOnProject(id);
+            List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id);
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
 
-
-
         //POST: Projects/Assign Users To Project
-        [Authorize(Roles = "Admin, ProjectManager")]
+        [Authorize(Roles = "Administrator, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ManageProjectUsersViewModel model)
@@ -214,20 +205,19 @@ namespace BugTracker.Controllers
 
                     foreach (string id in memberIds)
                     {
-                        await _BTProjectService.RemoveUserFromProject(id, model.Project.Id);
+                        await _PSProjectService.RemoveUserFromProject(id, model.Project.Id);
                     }
 
                     foreach (string id in model.SelectedUsers)
                     {
-                        await _BTProjectService.AddUserToProject(id, model.Project.Id);
+                        await _PSProjectService.AddUserToProject(id, model.Project.Id);
                     }
                     return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
-                    //return RedirectToAction(nameof(BlogPosts), new { id = post.BlogId }); Default statement that returns to all projects: return RedirectToAction("Index", "Projects");
+                    //Default statement that returns to all projects: return RedirectToAction("Index", "Projects");
                 }
                 else
                 {
                     Debug.WriteLine("****ERROR****");
-                    //Send an error message back
                 }
             }
             return View(model);
