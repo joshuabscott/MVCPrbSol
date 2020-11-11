@@ -7,15 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
-namespace MVCPrbSol.Controllers
+namespace BugTracker.Controllers
 {
+    [Authorize]
     public class TicketCommentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;         //2) local, private reference to that service
+        private readonly UserManager<PSUser> _userManager;
 
-        public TicketCommentsController(ApplicationDbContext context)
+        public TicketCommentsController(ApplicationDbContext context, UserManager<PSUser> userManager)  // 1) Inject my service
         {
+            _userManager = userManager;     //3) assigning the value of the injection to local reference 
             _context = context;
         }
 
@@ -33,11 +38,12 @@ namespace MVCPrbSol.Controllers
             {
                 return NotFound();
             }
-
+            //Not sure about this linq statement, might not be here or be correct
             var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (ticketComment == null)
             {
                 return NotFound();
@@ -49,9 +55,12 @@ namespace MVCPrbSol.Controllers
         // GET: TicketComments/Create
         public IActionResult Create(int? id)
         {
+            var model = new TicketComment();
+            model.TicketId = (int)id;
+
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            return View(model);
         }
 
         // POST: TicketComments/Create
@@ -65,6 +74,11 @@ namespace MVCPrbSol.Controllers
             {
 
                 ticketComment.Created = DateTimeOffset.Now;
+
+                ticketComment.UserId = _userManager.GetUserId(User);
+
+
+
 
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();

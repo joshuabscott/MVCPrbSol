@@ -10,19 +10,21 @@ using MVCPrbSol.Models;
 using MVCPrbSol.Models.ViewModels;
 using MVCPrbSol.Services;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
-namespace MVCPrbSol.Controllers
+namespace BugTracker.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
 
         private readonly ApplicationDbContext _context;                 //Reference to be injected
-        private readonly IPSProjectService _PSProjectService;
+        private readonly IPSProjectService _BTProjectService;
 
-        public ProjectsController(ApplicationDbContext context, IPSProjectService PSProjectService)        //Constructor //(App... context) is injected
+        public ProjectsController(ApplicationDbContext context, IPSProjectService BTProjectService)        //Constructor //(App... context) is injected
         {
             _context = context;
-            _PSProjectService = PSProjectService;
+            _BTProjectService = BTProjectService;
         }
 
 
@@ -65,6 +67,8 @@ namespace MVCPrbSol.Controllers
                 return NotFound();
             }
 
+
+
             var project = await _context.Projects
                 .Include(p => p.ProjectUsers)           //in Addition to project, bring the reference to projectuser
                 .ThenInclude(p => p.User)               //also bring the user reference
@@ -79,6 +83,7 @@ namespace MVCPrbSol.Controllers
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
                 .ToListAsync();
+
 
             if (project == null)
             {
@@ -177,8 +182,8 @@ namespace MVCPrbSol.Controllers
             return _context.Projects.Any(e => e.Id == id);
         }
 
-
         // GET: Projects/ManageProjectUsers
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> AssignUsers(int id)          //By default, this is a get method//
         {
             var model = new ManageProjectUsersViewModel();      //Newing up an instance of ManageProjectUsersViewModel
@@ -186,7 +191,7 @@ namespace MVCPrbSol.Controllers
 
             model.Project = project;
             List<PSUser> users = await _context.Users.ToListAsync();
-            List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id);
+            List<PSUser> members = (List<PSUser>)await _BTProjectService.UsersOnProject(id);
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
@@ -194,6 +199,7 @@ namespace MVCPrbSol.Controllers
 
 
         //POST: Projects/Assign Users To Project
+        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ManageProjectUsersViewModel model)
@@ -208,12 +214,12 @@ namespace MVCPrbSol.Controllers
 
                     foreach (string id in memberIds)
                     {
-                        await _PSProjectService.RemoveUserFromProject(id, model.Project.Id);
+                        await _BTProjectService.RemoveUserFromProject(id, model.Project.Id);
                     }
 
                     foreach (string id in model.SelectedUsers)
                     {
-                        await _PSProjectService.AddUserToProject(id, model.Project.Id);
+                        await _BTProjectService.AddUserToProject(id, model.Project.Id);
                     }
                     return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
                     //return RedirectToAction(nameof(BlogPosts), new { id = post.BlogId }); Default statement that returns to all projects: return RedirectToAction("Index", "Projects");

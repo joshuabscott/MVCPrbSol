@@ -12,48 +12,68 @@
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*Need these input hidden Id's since they are not present in this view. If we dont have
+                these hidden Id's, when I try to create a ticket I get a FK constraint*@
             <input type="hidden" asp-for="@Model.ProjectId" />
+            <input type="hidden" asp-for="@Model.OwnerUserId" />
 
-            @*if a user is NOT in the role of admin or Project manager, hide the inputs fields for Ticket PriorityId and StatusId*@
-            @if (!User.IsInRole("Administrator") || !User.IsInRole("ProjectManager"))
+            @*if a user is NOT in the role of admin or Project manager, hide the inputs fields for
+                Ticket PriorityId and StatusId*@
+            @if (!User.IsInRole("Admin") && !User.IsInRole("ProjectManager"))
             {
                 <input type="hidden" asp-for="TicketPriorityId" />
                 <input type="hidden" asp-for="TicketStatusId" />
+                <input type="hidden" asp-for="DeveloperUserId" />
+                <input type="hidden" asp-for="TicketTypeId" />
+
             }
 
+            <div class="form-group">
+                <label asp-for="ProjectId" class="control-label"></label>
+                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+            </div>
 
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="Created" class="control-label"></label>
-            <input asp-for="Created" class="form-control" />
-            <span asp-validation-for="Created" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Updated" class="control-label"></label>
-            <input asp-for="Updated" class="form-control" />
-            <span asp-validation-for="Updated" class="text-danger"></span>
-        </div>*@
-            <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-            </div>
 
-            @*Ticket Type refers to the type of problem, like UX problem, Hardward fault, Software bug, Feature Request, etc*@
+
+
+            @*Form for user to submit a picture of the bug/feature/etc*@
             <div class="form-group">
-                <label asp-for="TicketTypeId" class="control-label"></label>
-                <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
+                <label for="FileName" class="control-label"></label>
+                <input name="attachment" type="file" />
             </div>
-            @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
+            @*<div class="form-group">
+                    <label asp-for="Created" class="control-label"></label>
+                    <input asp-for="Created" class="form-control" />
+                    <span asp-validation-for="Created" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Updated" class="control-label"></label>
+                    <input asp-for="Updated" class="form-control" />
+                    <span asp-validation-for="Updated" class="text-danger"></span>
+                </div>*@
+
+
+
+            @*Normal Users should not be able to see these drop-down menus. In TicketsController, if the user is not in the role of
+                Admin/PM, ticket's Type, Priority, Status, and Developer fields the default should be set to unassigned, and PM decides who is put on the ticket*@
+            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
             {
+                @*Ticket Type refers to the type of problem, like UX problem, Hardward fault, Software bug, Feature Request, etc*@
+                <div class="form-group">
+                    <label asp-for="TicketTypeId" class="control-label"></label>
+                    <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
+                </div>
                 <div class="form-group">
                     <label asp-for="TicketPriorityId" class="control-label"></label>
                     <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
@@ -62,20 +82,19 @@
                     <label asp-for="TicketStatusId" class="control-label"></label>
                     <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
                 </div>
-            }
-            <div class="form-group">
-                <label asp-for="OwnerUserId" class="control-label"></label>
-                <select asp-for="OwnerUserId" class="form-control" asp-items="ViewBag.OwnerUserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeveloperUserId" class="control-label"></label>
-                <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
-            </div>
 
-            <div class="form-group">
-                <label for="FileName" class="control-label"></label><br />
-                <input name="attachment" type="file" />
-            </div>
+
+                <div class="form-group">
+                    <label asp-for="DeveloperUserId" class="control-label"></label>
+                    <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
+                </div>
+            }
+
+            @*Need to set this up where whoever is logged in sets the ownerId as their Id*@
+            @*<div class="form-group">
+                    <label asp-for="OwnerUserId" class="control-label"></label>
+                    <select asp-for="OwnerUserId" class="form-control" asp-items="ViewBag.OwnerUserId"></select>
+                </div>*@
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

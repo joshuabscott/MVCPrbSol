@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace MVCPrbSol.Controllers
+namespace BugTracker.Controllers
 {
+    [Authorize]
     public class TicketPrioritiesController : Controller
     {
         private readonly ApplicationDbContext _context;

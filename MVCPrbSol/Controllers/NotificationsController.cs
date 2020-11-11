@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace MVCPrbSol.Controllers
+namespace BugTracker.Controllers
 {
+    [Authorize]
     public class NotificationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -50,7 +52,7 @@ namespace MVCPrbSol.Controllers
         public IActionResult Create()
         {
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -68,7 +70,7 @@ namespace MVCPrbSol.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id", notification.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.UserId);
             return View(notification);
         }
 
@@ -86,7 +88,7 @@ namespace MVCPrbSol.Controllers
                 return NotFound();
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id", notification.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.UserId);
             return View(notification);
         }
 
@@ -123,7 +125,7 @@ namespace MVCPrbSol.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
-            ViewData["UserId"] = new SelectList(_context.PSUsers, "Id", "Id", notification.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.UserId);
             return View(notification);
         }
 

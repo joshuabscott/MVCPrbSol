@@ -38,8 +38,11 @@ namespace MVCPrbSol
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
+            //Injecting dependency to other parts of this project at startup
+
             services.AddScoped<IPSRolesService, PSRolesService>();
             services.AddScoped<IPSProjectService, PSProjectService>();
+            services.AddScoped<IPSHistoryService, PSHistoryService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
