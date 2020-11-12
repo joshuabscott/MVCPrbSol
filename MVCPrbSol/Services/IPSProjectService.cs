@@ -17,6 +17,6 @@ namespace MVCPrbSol.Services
         public Task RemoveUserFromProject(string userId, int projectId);
 
         public Task<ICollection<DbContext>> UsersOnProject(int projectId);
-        public ICollection<DbContext> UsersNotOnProject(int projectId);
+        public Task<ICollection<DbContext>> UsersNotOnProject(int projectId);
     }
 }
