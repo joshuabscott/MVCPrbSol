@@ -14,15 +14,11 @@ namespace MVCPrbSol.Utilities
         {
             TicketAttachment ticketAttachment = new TicketAttachment();
 
-            // Create a variable ms that is a new instance of Memory Stream, a built-in back-end "ram". We move the attachment data into a byte array 
-            // and close the memory stream
-            var ms = new MemoryStream();
-            attachment.CopyTo(ms);
-            byte[] bytes = ms.ToArray();
-            ms.Close();
-            ms.Dispose();
-
-            // This is creating a variable binary, which is going to be converting our previously stored image into base64string (long list of characters)
+            var memoryStream = new MemoryStream();
+            attachment.CopyTo(memoryStream);
+            byte[] bytes = memoryStream.ToArray();
+            memoryStream.Close();
+            memoryStream.Dispose();
             var binary = Convert.ToBase64String(bytes);
             var ext = Path.GetExtension(attachment.FileName);
 

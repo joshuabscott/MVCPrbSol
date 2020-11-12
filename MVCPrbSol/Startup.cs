@@ -43,12 +43,13 @@ namespace MVCPrbSol
             services.AddScoped<IPSRolesService, PSRolesService>();
             services.AddScoped<IPSProjectService, PSProjectService>();
             services.AddScoped<IPSHistoryService, PSHistoryService>();
+            services.AddScoped<IPSAccessService, PSAccessService> ();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

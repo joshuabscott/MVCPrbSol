@@ -1,0 +1,32 @@
+﻿@model MVCPrbSol.Models.ViewModels.ManageProjectUsersViewModel
+
+<h1>Project: @Model.Project.Name</h1>
+
+<div class="row text-center">
+    <div class="col-md">
+        <h4>Users On Project</h4>
+        @foreach (var user in Model.UsersOnProject)
+        {
+            <p>@user.FullName</p>
+        }
+    </div>
+    <div class="col-md">
+        <form asp-controller="ProjectsUsers" asp-action="RemoveProjectUsers">
+            <div class="row">
+                <button class="btn btn-outline-dark" type="submit"> --&gt </button>
+            </div>
+        </form>
+        <form asp-controller="ProjectUsers" asp-action="AddProjectUsers">
+            <div class="row">
+                <button class="btn btn-outline-dark" type="submit"> &lt-- </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md">
+        <h4>Users Off Project</h4>
+        @foreach (var user in Model.UsersOffProject)
+        {
+            <p>@user.FullName</p>
+        }
+    </div>
+</div>

@@ -1,55 +1,23 @@
 ﻿@model MVCPrbSol.Models.ViewModels.ManageProjectUsersViewModel
 
-<div class="container">
-
-    <h2>Assign Users</h2>
-
-    <div class="cold-md-4"></div>
-
-    <div class="panel panel-green margin-bottom-40"></div>
-
-    <p>
-
-        Project Name:
-
-        <span>@Model.Project.Name</span>
-
-    </p>
+@{
+    ViewBag.Title = "Assign Users";
+}
 
 
-
-    <form asp-controller="Projects" asp-action="AssignUsers" method="post">
-
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-        <input type="hidden" asp-for="@Model.Project.Id">
-        <input type="hidden" asp-for="@Model.Project.Name">     @*These are required when creating project class*@
-        <div class="col-12">
-
-            <div class="form-group">
-
-                <label asp-for="@Model.Users" class="control-label">Assign team member to Project: @Model.Project.Name</label>
-
-                <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
-
-            </div>
-
-        </div>
-
-        <hr />
-
+<h2>Assign Users</h2>
+<div class="panel panel-green margin-bottom-40"></div>
+<p>Name: <span>@Model.Project.Name</span></p>
+<form asp-action="AssignUsers" asp-controller="Projects" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.Project.Id" />
+    <input type="hidden" asp-for="@Model.Project.Name" />
+    <div class="col-12">
         <div class="form-group">
-
-            <div class="col-lg-offset-2 col-lg-10">
-
-                <input type="submit" value="Assign Users" class="btn btn-success" />
-
-            </div>
-
+            <label asp-for="@Model.Users" class="custom-control-label">Assign team members for Project: @Model.Project.Name</label>
+            <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
         </div>
-
-    </form>
-
-
-
-</div>
+    </div>
+    <button type="submit" class="btn btn-outline-dark">Save</button>
+</form>
+@*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    Trouble with Users, SelectedUsers*@

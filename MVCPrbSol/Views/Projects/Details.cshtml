@@ -40,25 +40,27 @@
             }
         </dd>
     </dl>
+</div>
 
+<div>
     <table class="table">
         <thead>
             <tr>
                 <th>
                     Title
                 </th>
-                @*<th>
-                        Description
-                    </th>*@
+                <th>
+                    Description
+                </th>
                 <th>
                     Created
                 </th>
                 <th>
                     Updated
                 </th>
-                @*<th>
-                        Project
-                    </th>*@
+                <th>
+                    Project
+                </th>
                 <th>
                     TicketType
                 </th>
@@ -68,65 +70,63 @@
                 <th>
                     TicketStatus
                 </th>
-                @*<th>
-                        OwnerUser
-                    </th>*@
                 <th>
-                    Developer
+                    OwnerUser
+                </th>
+                <th>
+                    DeveloperUser
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @*I think the reason my table is not populating with the tickets for a specific project is due to the line below. Need to figure this out before the end of the weekend*@
-            @foreach (var item in Model.Tickets)
+            @foreach (var ticket in Model.Tickets)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Created)
+                        @ticket.Title
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Updated)
-                    </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.Project.Name)
-                        </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TicketType.Name)
+                        @ticket.Description
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TicketPriority.Name)
+                        @ticket.Created
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TicketStatus.Name)
-                    </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
-                        </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                        @ticket.Updated
                     </td>
                     <td>
-                        <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @Model.Name
+                    </td>
+                    <td>
+                        @ticket.TicketType.Name
+                    </td>
+                    <td>
+                        @ticket.TicketPriority.Name
+                    </td>
+                    <td>
+                        @ticket.TicketStatus.Name
+                    </td>
+                    <td>
+                        @ticket.OwnerUser.FullName
+                    </td>
+                    <td>
+                        @if (ticket.DeveloperUserId == null)
+                        {
+                            <p>Unassigned</p>
+                        }
+                        else
+                        {
+                            @ticket.DeveloperUser.FullName
+                        }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
-
 </div>
 <div>
-    <a asp-controller="Tickets" asp-action="Create" asp-route-id="@Model.Id">Create a Ticket</a> |
-    <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a> |
+    <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign</a> |
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

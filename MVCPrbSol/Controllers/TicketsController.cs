@@ -19,35 +19,19 @@ namespace MVCPrbSol.Controllers
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<PSUser> _userManager;
         private readonly IPSHistoryService _historyService;
-        private readonly IPSRolesService _rolesService;
-      
-        public TicketsController(ApplicationDbContext context, UserManager<PSUser> userManager, IPSHistoryService historyService, IPSRolesService rolesService)
+        private readonly UserManager<PSUser> _userManager;
+
+        public TicketsController(ApplicationDbContext context, PSHistoryService historyService, UserManager<PSUser> userManager)
         {
-            _userManager = userManager;
             _context = context;
             _historyService = historyService;
-            _rolesService = rolesService;
+            _userManager = userManager;
         }
 
-        // GET: Tickets/Index
-        public async Task<IActionResult> Index(string userId)
+        // GET: Tickets
+        public async Task<IActionResult> Index()
         {
-            var projectIds = new List<int>();
-            var model = new List<Ticket>();
-            var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
-            foreach (var record in userProjects)
-            {
-                projectIds.Add(_context.Projects.Find(record.ProjectId).Id);
-
-            }
-            foreach (var id in projectIds)
-            {
-                var tickets = _context.Tickets.Where(t => t.ProjectId == id).ToList();
-                model.AddRange(tickets);
-            }
-
             var applicationDbContext = _context.Tickets
                 .Include(t => t.DeveloperUser)
                 .Include(t => t.OwnerUser)
@@ -58,14 +42,122 @@ namespace MVCPrbSol.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Tickets/Details
+        [Authorize(Roles = "ProjectManager")]
+        public async Task<IActionResult> MyProjects()
+        {
+            var userId = _userManager.GetUserId(User);
+            var projectUserRecords = await _context.ProjectUsers
+                                    .Where(p => p.UserId == userId)
+                                    .Include(pu => pu.Project)
+                                    .ToListAsync();
+            var projects = new List<Project>();
+            foreach (var projectUserRecord in projectUserRecords)
+            {
+                projects.Add(projectUserRecord.Project);
+            }
+            return View(projects);
+        }
+
+        [Authorize(Roles = "ProjectManager,Developer")]
+        public async Task<IActionResult> ProjectTickets()
+        {
+            var userId = _userManager.GetUserId(User);
+            var projectUsers = await _context.ProjectUsers.Where(p => p.UserId == userId).ToListAsync();
+            var projectIds = new List<int>();
+            foreach (var projectUser in projectUsers)
+            {
+                projectIds.Add(projectUser.ProjectId);
+            }
+            var projects = new List<Project>();
+            foreach (var id in projectIds)
+            {
+                projects.Add(_context.Projects
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketType)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketPriority)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketStatus)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketType)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.DeveloperUser)
+                    .Include(p => p.Tickets)
+                    .ThenInclude(t => t.OwnerUser)
+                    .FirstOrDefault(p => p.Id == id));
+            }
+            return View(projects);
+        }
+
+        [Authorize(Roles = "Developer")]
+        public async Task<IActionResult> MyTickets()
+        {
+            var userId = _userManager.GetUserId(User);
+            var tickets = await _context.Tickets
+                .Where(t => t.DeveloperUserId == userId)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .ToListAsync();
+            return View(tickets);
+        }
+
+        [Authorize(Roles = "Submitter")]
+        public async Task<IActionResult> CreatedTickets()
+        {
+            var userId = _userManager.GetUserId(User);
+            var tickets = await _context.Tickets
+                .Where(t => t.OwnerUserId == userId)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .ToListAsync();
+            return View(tickets);
+        }
+
+        // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-          
+
+            var ticket = await _context.Tickets
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.Comments).ThenInclude(tc => tc.User)
+                .Include(t => t.Attachments)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            return View(ticket);
+        }
+
+        public async Task<IActionResult> ProjectTicketDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var ticket = await _context.Tickets
                 .Include(t => t.DeveloperUser)
                 .Include(t => t.OwnerUser)
@@ -84,70 +176,37 @@ namespace MVCPrbSol.Controllers
 
             return View(ticket);
         }
-        /// <summary>
-        /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
+
         // GET: Tickets/Create
-        public IActionResult Create(int? id)
+        public IActionResult Create()
         {
-            //var model = new Ticket();
-            //model.ProjectId = (int)id;
-
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["OwnerUserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
-
-            if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
-            {
-                ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
-                ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
-                ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
-                ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
-            }
-            //else
-            //{
-            //    model.TicketTypeId = _context.TicketTypes.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
-            //    model.TicketPriorityId = _context.TicketPriorities.Where(tp => tp.Name == "Pending").FirstOrDefault().Id;
-            //    model.TicketStatusId = _context.TicketStatuses.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
-            //    model.DeveloperUserId = null; //Null by default
-            //}
-            //return View(model);
+            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
+            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
             return View();
         }
 
         // POST: Tickets/Create
-        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
+            ticket.OwnerUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
-                #region Default Settings set in the Controller
-                //We don't want the ticker submitter to be able to set the date/submitter name, so we are doing it by default for them.
-                // The constructor is partly responsible for being able to reference getting user id, the ticket model, etc
-                #endregion
-                ticket.Created = DateTimeOffset.Now;
-                ticket.OwnerUserId = _userManager.GetUserId(User);
-
-                #region Using our Attachment Handler Class
-                // This block is saying "If my attachment is not null, var attachmentHandler 
-                // is a new instance of class AttachmentHandler. var ticket goes to Attachments and adds the attachment in the second line
-                #endregion
                 if (attachment != null)
                 {
                     AttachmentHandler attachmentHandler = new AttachmentHandler();
                     ticket.Attachments.Add(attachmentHandler.Attach(attachment));
                 }
-
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });      
-                //When user creates a new ticket, they will be redirected back to the Projects/Details View instead of the default, which was "Index"
-            }
-            else
-            {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
@@ -158,16 +217,10 @@ namespace MVCPrbSol.Controllers
             return View(ticket);
         }
 
+        [Authorize(Roles = "Admin,ProjectManager,Developer")]
         // GET: Tickets/Edit/5
-        [Authorize(Roles = "Administrator,ProjecManager")]
         public async Task<IActionResult> Edit(int? id)
         {
-            //Need ticket comments to show in edit view so I can edit/archive them(as AD/PM)
-            var ticketComment = await _context.TicketComments
-                .Include(t => t.Ticket)
-                .Include(t => t.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
             if (id == null)
             {
                 return NotFound();
@@ -178,7 +231,6 @@ namespace MVCPrbSol.Controllers
             {
                 return NotFound();
             }
-
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.DeveloperUserId);
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "FullName", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
@@ -188,29 +240,28 @@ namespace MVCPrbSol.Controllers
             return View(ticket);
         }
 
-        // POST: Tickets/Edit
-        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
+        // POST: Tickets/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket, IFormFile attachment)
         {
-            ticket.Updated = DateTimeOffset.Now;
-
             if (id != ticket.Id)
             {
                 return NotFound();
             }
-
-            //Id of the old ticket
-            Ticket oldTicket = await _context.Tickets
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == ticket.Id);
-
+            // snapshot of record. AsNoTracking gives the data in the DB right now.
+            Ticket oldTic = await _context.Tickets.AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (attachment != null)
+                    {
+                        AttachmentHandler attachmentHandler = new AttachmentHandler();
+                        ticket.Attachments.Add(attachmentHandler.Attach(attachment));
+                    }
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }
@@ -225,11 +276,9 @@ namespace MVCPrbSol.Controllers
                         throw;
                     }
                 }
-
-                //Add history; 
-                string userId = _userManager.GetUserId(User);
-                await _historyService.AddHistory(oldTicket, ticket, userId);
-
+                // Add History
+                var userId = _userManager.GetUserId(User);
+                await _historyService.AddHistory(oldTic, ticket, userId);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
@@ -240,9 +289,8 @@ namespace MVCPrbSol.Controllers
             ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
             return View(ticket);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager,Developer")]
         // GET: Tickets/Delete/5
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -274,8 +322,7 @@ namespace MVCPrbSol.Controllers
             var ticket = await _context.Tickets.FindAsync(id);
             _context.Tickets.Remove(ticket);
             await _context.SaveChangesAsync();
-
-            return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
+            return RedirectToAction(nameof(Index));
         }
 
         private bool TicketExists(int id)

@@ -13,36 +13,33 @@ namespace MVCPrbSol.Services
 {
     public class PSProjectService : IPSProjectService
     {
-
-        private readonly ApplicationDbContext _context;         //Creating the variable to be used in Constructor; Constructor (public BTProjectService) injects reference and variable we wish to use throughout this file
+        private readonly ApplicationDbContext _context;   
 
         public PSProjectService(ApplicationDbContext context)
         {
 
-            _context = context;                                 //assigning the injection to the variable
+            _context = context;                       
         }
 
-        //Methods implemented from Interface(IBTProjectService)
-        public async Task<bool> IsUserOnProject(string userId, int projectId)      //This method is querying the database, asking "Is the user on a particular project?"
+        public async Task<bool> IsUserOnProject(string userId, int projectId)     
         {
-            Project project = await _context.Projects                              //userful to have an instance of project since we're asking IsUserOnPROJECT (part of the method name)
-                .Include(u => u.ProjectUsers)                                      //include project users, then include users. Where is a query;
+            Project project = await _context.Projects                           
+                .Include(u => u.ProjectUsers)                                     
                 .ThenInclude(u => u.User)
-                .FirstOrDefaultAsync(u => u.Id == projectId);                      //In car scenario, this statement is saying "okay, i've picked up enough passengers (include, theninclude)
+                .FirstOrDefaultAsync(u => u.Id == projectId);                     
 
             bool result = project.ProjectUsers.Any(u => u.UserId == userId);
             return result;
 
-            //Alternate way to do this:
             //return _context.ProjectUsers.Where(pu => pu.UserId == userId && pu.ProjectId == projectId).Any();
         }
 
         public async Task<ICollection<Project>> ListUserProjects(string userId)
         {
-            PSUser user = await _context.Users          //user table is created by default thanks to Microsoft; 
+            PSUser user = await _context.Users        
                 .Include(p => p.ProjectUsers)
                 .ThenInclude(p => p.Project)
-                .FirstOrDefaultAsync(p => p.Id == userId);      //firstordefault is grabbing the first instance of parameters defined, or defaults 
+                .FirstOrDefaultAsync(p => p.Id == userId);      
 
             List<Project> projects = user.ProjectUsers.SelectMany(p => (IEnumerable<Project>)p.Project).ToList();
             return projects;
@@ -76,25 +73,6 @@ namespace MVCPrbSol.Services
 
                     _context.ProjectUsers.Remove(projectUser);
                     await _context.SaveChangesAsync();
-
-
-
-                    //ProjectUser projectUser = new ProjectUser() /*_context.ProjectUsers.Where(m => m.UserId == userId && m.ProjectId == projectId).FirstOrDefault;*/
-                    //{
-                    //    ProjectId = projectId,
-                    //    UserId = userId
-                    //};
-                    //_context.ProjectUsers.Remove(projectUser);
-                    //await _context.SaveChangesAsync();
-
-
-
-                    //This also works in place of what's above
-                    //ProjectUser projectUser = await _context.ProjectUsers
-                    //    .Where(pu => pu.UserId == userId && pu.ProjectId == projectId)
-                    //    .FirstOrDefaultAsync();
-                    //_context.ProjectUsers.Remove(projectUser);
-                    //await _context.SaveChangesAsync();
 
                 }
                 catch (Exception ex)

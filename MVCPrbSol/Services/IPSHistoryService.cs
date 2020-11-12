@@ -9,6 +9,5 @@ namespace MVCPrbSol.Services
     public interface IPSHistoryService
     {
         Task AddHistory(Ticket oldTicket, Ticket newTicket, string userId);
-
     }
 }

@@ -57,7 +57,7 @@ namespace MVCPrbSol.Services
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
-                    Property = "Ticket Type",
+                    Property = "TicketTypeId",
                     OldValue = _context.TicketTypes.Find(oldTicket.TicketTypeId).Name,
                     NewValue = _context.TicketTypes.Find(newTicket.TicketTypeId).Name,
                     Created = DateTimeOffset.Now,
@@ -72,7 +72,7 @@ namespace MVCPrbSol.Services
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
-                    Property = "Ticket Priority",
+                    Property = "TicketPriorityId",
                     OldValue = _context.TicketPriorities.Find(oldTicket.TicketPriorityId).Name,
                     NewValue = _context.TicketPriorities.Find(newTicket.TicketPriorityId).Name,
                     Created = DateTimeOffset.Now,
@@ -87,7 +87,7 @@ namespace MVCPrbSol.Services
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
-                    Property = "Ticket Status",
+                    Property = "TicketStatusId",
                     OldValue = _context.TicketStatuses.Find(oldTicket.TicketStatusId).Name,
                     NewValue = _context.TicketStatuses.Find(newTicket.TicketStatusId).Name,
                     Created = DateTimeOffset.Now,
@@ -101,10 +101,11 @@ namespace MVCPrbSol.Services
             {
                 if (String.IsNullOrWhiteSpace(oldTicket.DeveloperUserId))
                 {
+                    var oldval = oldTicket.DeveloperUserId == null ? "Unassigned" : _context.Users.Find(oldTicket.DeveloperUserId).FullName;
                     TicketHistory history = new TicketHistory
                     {
                         TicketId = newTicket.Id,
-                        Property = "Developer",
+                        Property = "DeveloperUserId",
                         OldValue = "No Developer Assigned",
                         NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
                         Created = DateTimeOffset.Now,
@@ -115,42 +116,38 @@ namespace MVCPrbSol.Services
 
                 }
 
-                else if (String.IsNullOrWhiteSpace(newTicket.DeveloperUserId))
-                {
-                    TicketHistory history = new TicketHistory
-                    {
-                        TicketId = newTicket.Id,
-                        Property = "Developer",
-                        OldValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
-                        NewValue = "No Developer Assigned",
-                        Created = DateTimeOffset.Now,
-                        UserId = userId
+                //else if (String.IsNullOrWhiteSpace(newTicket.DeveloperUserId))
+                //{
+                //    TicketHistory history = new TicketHistory
+                //    {
+                //        TicketId = newTicket.Id,
+                //        Property = "Developer",
+                //        OldValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
+                //        NewValue = "No Developer Assigned",
+                //        Created = DateTimeOffset.Now,
+                //        UserId = userId
 
-                    };
-                    await _context.TicketHistorys.AddAsync(history);
+                //    };
+                //    await _context.TicketHistorys.AddAsync(history);
 
-                }
-                else
-                {
-                    TicketHistory history = new TicketHistory
-                    {
-                        TicketId = newTicket.Id,
-                        Property = "Developer",
-                        OldValue = _context.Users.Find(oldTicket.DeveloperUserId).FullName,
-                        NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
-                        Created = DateTimeOffset.Now,
-                        UserId = userId
+                //}
+                //else
+                //{
+                //    TicketHistory history = new TicketHistory
+                //    {
+                //        TicketId = newTicket.Id,
+                //        Property = "Developer",
+                //        OldValue = _context.Users.Find(oldTicket.DeveloperUserId).FullName,
+                //        NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
+                //        Created = DateTimeOffset.Now,
+                //        UserId = userId
 
-                    };
-                    await _context.TicketHistorys.AddAsync(history);
-                }
+                //    };
+                //    await _context.TicketHistorys.AddAsync(history);
+                //}
             }
             await _context.SaveChangesAsync();
 
-            //Do I need more fields here? Plus, the Dev field (last method in this list) might not be 100% right...
-
-
         }
-
     }
 }

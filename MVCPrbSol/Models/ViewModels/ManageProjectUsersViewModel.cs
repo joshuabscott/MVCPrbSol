@@ -11,9 +11,13 @@ namespace MVCPrbSol.Models.ViewModels
     {
         public Project Project { get; set; }
 
-        public MultiSelectList Users { get; set; }  //Populates list box
+        public MultiSelectList MultiSelectUsersOnProject { get; set; }
+        public MultiSelectList MultiSelectUsersOffProject { get; set; }
 
-        public string[] SelectedUsers { get; set; } //receives selected users
+        public string[] SelectedUsersOnProject { get; set; }
+        public string[] SelectedUsersOffProject { get; set; }
 
+        public List<PSUser> UsersOnProject { get; set; }
+        public List<PSUser> UsersOffProject { get; set; }
     }
 }

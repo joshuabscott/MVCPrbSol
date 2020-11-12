@@ -11,10 +11,10 @@ namespace MVCPrbSol.Services
 {
     public class PSRolesService : IPSRolesService
     {
-        private readonly RoleManager<IdentityRole> _roleManager;        //Like empty shells, need contructor to fill these containers with "the goods" -Denis Jojot
+        private readonly RoleManager<IdentityRole> _roleManager;    
         private readonly UserManager<PSUser> _userManager;
 
-        public PSRolesService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager)  //Contructor. When these method reference variables _roleManager and _userManager, 
+        public PSRolesService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager)  
         {
             _roleManager = roleManager;
             _userManager = userManager;
