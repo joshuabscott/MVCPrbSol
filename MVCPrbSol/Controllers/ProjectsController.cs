@@ -182,10 +182,7 @@ namespace MVCPrbSol.Controllers
             {
                 if (model.SelectedUsers != null)
                 {
-                    var currentMembers = await _context.Projects
-                        .Include(p => p.ProjectUsers)
-                        .FirstOrDefaultAsync(p => p.Id == model.Project.Id);
-
+                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
                     List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
             
                     foreach (string id in memberIds)

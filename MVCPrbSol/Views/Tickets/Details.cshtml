@@ -10,94 +10,69 @@
     <h4>Ticket</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Attachments)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var attachment in Model.Attachments)
-            {
-                <img class="img-thumbnail" src="@attachment.FilePath" style="width:200px;height:200px;" />
-            }
-        </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Created)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Created)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Updated)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Updated)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Project)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Project.Name)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TicketType)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TicketType.Name)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TicketType.Id)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TicketPriority)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TicketPriority.Name)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TicketPriority.Id)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TicketStatus)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TicketStatus.Name)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TicketStatus.Id)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.OwnerUser)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.OwnerUser.FullName)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OwnerUser.Id)
         </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DeveloperUser)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DeveloperUser.FullName)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DeveloperUser.Id)
         </dd>
-
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Comments)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
-            {
-                @comment.Created.ToString("MMM dd h:m tt")
-                <span> : </span>
-                @comment.User?.FullName
-                <span> : </span>
-                @comment.Comment
-            }
-        </dd>
-
     </dl>
 </div>
 <div>
-    <a asp-controller="TicketComments" asp-action="Create" asp-route-id="@Model.Id">Leave a Comment</a> |
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

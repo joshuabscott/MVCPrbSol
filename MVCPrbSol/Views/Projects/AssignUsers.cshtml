@@ -3,24 +3,21 @@
 @{
     ViewBag.Title = "Assign Users";
 }
+
+
 <h2>Assign Users</h2>
-    <div class="panel panel-green margin-bottom-40"></div>
-
-    <p>Name: <span>@Model.Project.Name</span></p>
-
-    <form asp-action="AssignUsers" asp-controller="Projects" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="@Model.Project.Id" />
-        <input type="hidden" asp-for="@Model.Project.Name" />
-        @*<input type="hidden" asp-for="@Model.Project.Summmary" />*@
-
-        <div class="col-12">
-            <div class="form-group">
-                <label asp-for="@Model.Users" class="custom-control-label">Assign team members for Project: @Model.Project.Name</label>
-                <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
-            </div>
+<div class="panel panel-green margin-bottom-40"></div>
+<p>Name: <span>@Model.Project.Name</span></p>
+<form asp-action="AssignUsers" asp-controller="Projects" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.Project.Id" />
+    <input type="hidden" asp-for="@Model.Project.Name" />
+    <div class="col-12">
+        <div class="form-group">
+            <label asp-for="@Model.Users" class="custom-control-label">Assign team members for Project: @Model.Project.Name</label>
+            <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
         </div>
-        <button type="submit" class="btn btn-outline-dark">Save</button>
-    </form>
+    </div>
+    <button type="submit" class="btn btn-outline-dark">Save</button>
+</form>
 @*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    Trouble with Users, SelectedUsers*@
-

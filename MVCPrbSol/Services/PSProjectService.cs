@@ -30,6 +30,8 @@ namespace MVCPrbSol.Services
 
             bool result = project.ProjectUsers.Any(u => u.UserId == userId);
             return result;
+
+            //return _context.ProjectUsers.Where(pu => pu.UserId == userId && pu.ProjectId == projectId).Any();
         }
 
         public async Task<ICollection<Project>> ListUserProjects(string userId)
@@ -66,6 +68,7 @@ namespace MVCPrbSol.Services
             {
                 try
                 {
+
                     ProjectUser projectUser = _context.ProjectUsers.Where(m => m.UserId == userId && m.ProjectId == projectId).FirstOrDefault();
 
                     _context.ProjectUsers.Remove(projectUser);
@@ -101,7 +104,7 @@ namespace MVCPrbSol.Services
             throw new NotImplementedException();
         }
 
-        Task<ICollection<DbContext>> IPSProjectService.UsersNotOnProject(int projectId)
+        ICollection<DbContext> IPSProjectService.UsersNotOnProject(int projectId)
         {
             throw new NotImplementedException();
         }
