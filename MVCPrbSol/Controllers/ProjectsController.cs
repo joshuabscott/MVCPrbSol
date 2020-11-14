@@ -159,14 +159,18 @@ namespace MVCPrbSol.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Get: AssignUsers
         [HttpGet]
         public async Task<IActionResult> AssignUsers(int id)
         {
             var model = new ProjectUsersViewModel();
             var project = _context.Projects.Find(id);
 
+            //1.) find this project and get it from the model
             model.Project = project;
+            //2.) find unfiltered list of all users
             List<PSUser> users = await _context.Users.ToListAsync();
+            //3. find any members "users" already on the project in the PSProjectServicve
             List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id);
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
@@ -182,7 +186,9 @@ namespace MVCPrbSol.Controllers
             {
                 if (model.SelectedUsers != null)
                 {
-                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
+                    var currentMembers = await _context.Projects
+                        .Include(p => p.ProjectUsers)
+                        .FirstOrDefaultAsync(p => p.Id == model.Project.Id);
                     List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
             
                     foreach (string id in memberIds)

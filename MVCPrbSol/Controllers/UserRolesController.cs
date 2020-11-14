@@ -13,21 +13,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCPrbSol.Controllers
 {
-    [Authorize(Roles = "Administrator, ProjectManager")]
+    [Authorize/*(Roles = "Administrator, ProjectManager")*/]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IPSRolesService _rolesService;
-        private readonly UserManager<PSUser> _usermanager;
+        private readonly UserManager<PSUser> _userManager;
 
         public UserRolesController(ApplicationDbContext context, IPSRolesService rolesService, UserManager<PSUser> userManager)     
             //Constructor, need to read/learn more about this
         {
             _context = context;
             _rolesService = rolesService;
-            _usermanager = userManager;
+            _userManager = userManager;
         }
-
 
         public IActionResult Index()
         {
@@ -57,7 +56,6 @@ namespace MVCPrbSol.Controllers
 
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel btuser)
@@ -65,7 +63,7 @@ namespace MVCPrbSol.Controllers
             PSUser user = _context.Users.Find(btuser.User.Id);
 
             IEnumerable<string> roles = await _rolesService.ListUserRoles(user);
-            await _usermanager.RemoveFromRolesAsync(user, roles);
+            await _userManager.RemoveFromRolesAsync(user, roles);
             string userRole = btuser.SelectedRoles.FirstOrDefault();
 
             if (Enum.TryParse(userRole, out Roles roleValue))

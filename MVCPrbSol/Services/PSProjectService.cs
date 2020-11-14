@@ -20,7 +20,7 @@ namespace MVCPrbSol.Services
 
             _context = context;                       
         }
-
+        //IsUserOnProject
         public async Task<bool> IsUserOnProject(string userId, int projectId)     
         {
             Project project = await _context.Projects                           
@@ -33,7 +33,8 @@ namespace MVCPrbSol.Services
 
             //return _context.ProjectUsers.Where(pu => pu.UserId == userId && pu.ProjectId == projectId).Any();
         }
-
+       
+        //ListUserProjects
         public async Task<ICollection<Project>> ListUserProjects(string userId)
         {
             PSUser user = await _context.Users        
@@ -44,7 +45,8 @@ namespace MVCPrbSol.Services
             List<Project> projects = user.ProjectUsers.SelectMany(p => (IEnumerable<Project>)p.Project).ToList();
             return projects;
         }
-
+        
+        //AddUserToProject
         public async Task AddUserToProject(string userId, int projectId)
         {
             if (!await IsUserOnProject(userId, projectId))
@@ -61,7 +63,8 @@ namespace MVCPrbSol.Services
                 }
             }
         }
-
+        
+        //RemoveUserFromProject
         public async Task RemoveUserFromProject(string userId, int projectId)
         {
             if (await IsUserOnProject(userId, projectId))
@@ -82,18 +85,22 @@ namespace MVCPrbSol.Services
                 }
             }
         }
-
+        
+        //UsersOnProject
+        //------------------------is there another way of doing this?
+        //jump here from ProjectsController .174..... look for a 1 on projectId hover while running to confirm the bind
         public async Task<ICollection<PSUser>> UsersOnProject(int projectId)
         {
             Project project = await _context.Projects
                 .Include(u => u.ProjectUsers)
                 .ThenInclude(u => u.User)
                 .FirstOrDefaultAsync(u => u.Id == projectId);
-
+            //Pass back the users.....for the .ThenInclude(users)
             List<PSUser> projectusers = project.ProjectUsers.Select(p => p.User).ToList();
             return projectusers;
         }
-
+        
+        //UsersNotOnProject
         public async Task<ICollection<PSUser>> UsersNotOnProject(int projectId)
         {
             return await _context.Users.Where(u => IsUserOnProject(u.Id, projectId).Result == false).ToListAsync();
@@ -104,7 +111,7 @@ namespace MVCPrbSol.Services
             throw new NotImplementedException();
         }
 
-        ICollection<DbContext> IPSProjectService.UsersNotOnProject(int projectId)
+        Task<ICollection<DbContext>> IPSProjectService.UsersNotOnProject(int projectId)
         {
             throw new NotImplementedException();
         }

@@ -1,11 +1,11 @@
-﻿using MVCPrbSol.Data;
-using MVCPrbSol.Models;
-using Microsoft.AspNetCore.Identity;
-using SQLitePCL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
+using MVCPrbSol.Data;
+using MVCPrbSol.Models;
 
 namespace MVCPrbSol.Services
 {
@@ -113,41 +113,9 @@ namespace MVCPrbSol.Services
 
                     };
                     await _context.TicketHistorys.AddAsync(history);
-
                 }
-
-                //else if (String.IsNullOrWhiteSpace(newTicket.DeveloperUserId))
-                //{
-                //    TicketHistory history = new TicketHistory
-                //    {
-                //        TicketId = newTicket.Id,
-                //        Property = "Developer",
-                //        OldValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
-                //        NewValue = "No Developer Assigned",
-                //        Created = DateTimeOffset.Now,
-                //        UserId = userId
-
-                //    };
-                //    await _context.TicketHistorys.AddAsync(history);
-
-                //}
-                //else
-                //{
-                //    TicketHistory history = new TicketHistory
-                //    {
-                //        TicketId = newTicket.Id,
-                //        Property = "Developer",
-                //        OldValue = _context.Users.Find(oldTicket.DeveloperUserId).FullName,
-                //        NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
-                //        Created = DateTimeOffset.Now,
-                //        UserId = userId
-
-                //    };
-                //    await _context.TicketHistorys.AddAsync(history);
-                //}
             }
             await _context.SaveChangesAsync();
-
         }
     }
 }

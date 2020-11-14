@@ -42,7 +42,7 @@ namespace MVCPrbSol.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        [Authorize(Roles = "ProjectManager")]
+        //[Authorize(Roles = "ProjectManager")]
         public async Task<IActionResult> MyProjects()
         {
             var userId = _userManager.GetUserId(User);
@@ -58,7 +58,7 @@ namespace MVCPrbSol.Controllers
             return View(projects);
         }
 
-        [Authorize(Roles = "ProjectManager,Developer")]
+        //[Authorize(Roles = "ProjectManager,Developer")]
         public async Task<IActionResult> ProjectTickets()
         {
             var userId = _userManager.GetUserId(User);
@@ -89,7 +89,7 @@ namespace MVCPrbSol.Controllers
             return View(projects);
         }
 
-        [Authorize(Roles = "Developer")]
+        //[Authorize(Roles = "Developer")]
         public async Task<IActionResult> MyTickets()
         {
             var userId = _userManager.GetUserId(User);
@@ -107,7 +107,7 @@ namespace MVCPrbSol.Controllers
             return View(tickets);
         }
 
-        [Authorize(Roles = "Submitter")]
+        //[Authorize(Roles = "Submitter")]
         public async Task<IActionResult> CreatedTickets()
         {
             var userId = _userManager.GetUserId(User);
@@ -176,7 +176,10 @@ namespace MVCPrbSol.Controllers
 
             return View(ticket);
         }
-
+        /// <summary>
+        /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+    
         // GET: Tickets/Create
         public IActionResult Create()
         {
@@ -190,7 +193,7 @@ namespace MVCPrbSol.Controllers
         }
 
         // POST: Tickets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -217,7 +220,7 @@ namespace MVCPrbSol.Controllers
             return View(ticket);
         }
 
-        [Authorize(Roles = "Admin,ProjectManager,Developer")]
+        //[Authorize(Roles = "Admin,ProjectManager,Developer")]
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -289,7 +292,7 @@ namespace MVCPrbSol.Controllers
             ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
             return View(ticket);
         }
-        [Authorize(Roles = "Admin,ProjectManager,Developer")]
+        //[Authorize(Roles = "Admin,ProjectManager,Developer")]
         // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

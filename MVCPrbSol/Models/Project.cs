@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace MVCPrbSol.Models
 {
     public class Project
-        //prob tab tab gives this code
     {
         public Project()
         {
@@ -22,7 +21,7 @@ namespace MVCPrbSol.Models
         public string Name { get; set; }
 
      
-        [Display(Name = "Project Image")]
+        [Display(Name = "Image Path")]
         public string ImagePath { get; set; }
         public byte [] ImageData { get; set; }
 

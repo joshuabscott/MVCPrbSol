@@ -18,31 +18,31 @@ namespace MVCPrbSol.Data
         NewUser
     }
 
-    public enum TicketTypes
-    {
-        UI,
-        Calculation,
-        Logic,
-        Security
-    }
+    //public enum TicketTypes
+    //{
+    //    UI,
+    //    Calculation,
+    //    Logic,
+    //    Security
+    //}
 
-    public enum TicketPriorities
-    {
-        Low,
-        Moderate,
-        Major,
-        Critical
-    }
+    //public enum TicketPriorities
+    //{
+    //    Low,
+    //    Moderate,
+    //    Major,
+    //    Critical
+    //}
 
-    public enum TicketStatuses
-    {
-        Opened,
-        Testing,
-        Development,
-        QA,
-        FinalPass,
-        Closed
-    }
+    //public enum TicketStatuses
+    //{
+    //    Opened,
+    //    Testing,
+    //    Development,
+    //    QA,
+    //    FinalPass,
+    //    Closed
+    //}
     public static class ContextSeed
     {
         //Seed Roles
@@ -59,6 +59,50 @@ namespace MVCPrbSol.Data
 
         //In order to have default values in place for our Ticket types, statuses, and priorities, we need to seed
         //default values in place.
+
+
+        #region Seed Default Ticket Types
+        public static async Task SeedDefaultTicketTypesAsync(ApplicationDbContext context)
+        {
+            try
+            {
+                if (!context.TicketTypes.Any(tt => tt.Name == "Runtime"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Runtime" });
+                }
+
+                if (!context.TicketTypes.Any(tt => tt.Name == "User-Interface"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "User-Interface" });
+                }
+
+                if (!context.TicketTypes.Any(tt => tt.Name == "Front-End"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Front-End" });
+                }
+
+                if (!context.TicketTypes.Any(tt => tt.Name == "Back-End"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Back-End" });
+                }
+
+                if (!context.TicketTypes.Any(tt => tt.Name == "Miscellaneous"))
+                {
+                    await context.TicketTypes.AddAsync(new TicketType { Name = "Miscellaneous" });
+                }
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("**************** ERROR ****************");
+                Debug.WriteLine("Error Seeding Ticket Types");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("************************************************");
+                throw;
+            }
+        }
+        #endregion
+
         #region Seed Default Ticket Priorities
         public static async Task SeedDefaultTicketPrioritiesAsync(ApplicationDbContext context)
         {
@@ -67,22 +111,21 @@ namespace MVCPrbSol.Data
                 if (!context.TicketPriorities.Any(tp => tp.Name == "Low"))
                 {
                     await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Low" });
-
                 }
+
                 if (!context.TicketPriorities.Any(tp => tp.Name == "High"))
                 {
                     await context.TicketPriorities.AddAsync(new TicketPriority { Name = "High" });
-
                 }
-                if (!context.TicketPriorities.Any(tp => tp.Name == "Blocker"))
+
+                if (!context.TicketPriorities.Any(tp => tp.Name == "Urgent"))
                 {
-                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Blocker" });
-
+                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Urgent" });
                 }
+
                 if (!context.TicketPriorities.Any(tp => tp.Name == "Pending"))
                 {
                     await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Pending" });
-
                 }
                 context.SaveChanges();
             }
@@ -102,20 +145,19 @@ namespace MVCPrbSol.Data
         {
             try
             {
-                if (!context.TicketStatuses.Any(ts => ts.Name == "Pending"))
+                if (!context.TicketStatuses.Any(ts => ts.Name == "New"))
                 {
-                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "Pending" });
-
+                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "New" });
                 }
+
                 if (!context.TicketStatuses.Any(ts => ts.Name == "In-Progress"))
                 {
                     await context.TicketStatuses.AddAsync(new TicketStatus { Name = "In-Progress" });
-
                 }
+
                 if (!context.TicketStatuses.Any(ts => ts.Name == "Completed"))
                 {
                     await context.TicketStatuses.AddAsync(new TicketStatus { Name = "Completed" });
-
                 }
 
                 context.SaveChanges();
@@ -131,46 +173,13 @@ namespace MVCPrbSol.Data
         }
         #endregion
 
-        #region Seed Default Ticket Types
-        public static async Task SeedDefaultTicketTypesAsync(ApplicationDbContext context)
-        {
-            try
-            {
-                if (!context.TicketTypes.Any(tt => tt.Name == "Front-End"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "Front-End" });
-
-                }
-                if (!context.TicketTypes.Any(tt => tt.Name == "Back-End"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "Back-End" });
-
-                }
-                if (!context.TicketTypes.Any(tt => tt.Name == "Miscellaneous"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "Miscellaneous" });
-
-                }
-                context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("**************** ERROR ****************");
-                Debug.WriteLine("Error Seeding Ticket Types");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("************************************************");
-                throw;
-            }
-        }
-        #endregion
-
 
 
         //Seed Users
         public static async Task SeedDefaultUsersAsync(UserManager<PSUser> userManager)
         {
-            #region SeedAdmin
-            //SeedDefault Admin User
+            #region SeedAdministrator
+            //SeedDefault Administrator User
             var defaultAdmin = new PSUser
             {
                 UserName = "TaliaalGhul@email.com",

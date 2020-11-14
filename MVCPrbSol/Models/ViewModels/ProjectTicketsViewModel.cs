@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCPrbSol.Models.ViewModels
 {
-    public class ProjectUsersViewModel
+    public class ProjectTicketsViewModel
     {
         public Project Project { get; set; }
-        public MultiSelectList Users { get; set; } 
-        public string[] SelectedUsers { get; set; } 
+        public Ticket Ticket { get; set; }
+        public List<Ticket> Tickets { get; set; }
     }
 }
