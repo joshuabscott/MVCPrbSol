@@ -15,6 +15,7 @@ using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Services;
 using MVCProbsol.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 /// <summary>
 /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// </summary>
@@ -37,7 +38,7 @@ namespace MVCPrbSol
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
@@ -49,6 +50,8 @@ namespace MVCPrbSol
             services.AddScoped<IPSProjectService, PSProjectService>();
             services.AddScoped<IPSHistoryService, PSHistoryService>();
             services.AddScoped<IPSAccessService, PSAccessService>();
+
+            services.AddTransient<IEmailSender, PSEmailService>;
 
             services.AddControllersWithViews();
             services.AddRazorPages();

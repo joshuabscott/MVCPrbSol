@@ -7,13 +7,14 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using MVCPrbSol.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MVCPrbSol.Data;
+using MVCPrbSol.Models;
 
 namespace MVCPrbSol.Areas.Identity.Pages.Account
 {
@@ -96,6 +97,12 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+
+                    // -- Add new registrant a role of "NewUser" -- //
+                    await _userManager.AddToRoleAsync(user, Roles.NewUser.ToString());
+                   // ----------------------------------------------------------------------------------------------------------------------------------------
+
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
