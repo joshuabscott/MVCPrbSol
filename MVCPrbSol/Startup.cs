@@ -8,15 +8,20 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
-using MVCPrbSol.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Services;
-
+using MVCProbsol.Services;
+/// <summary>
+/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// </summary>
 namespace MVCPrbSol
 {
+
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -43,7 +48,7 @@ namespace MVCPrbSol
             services.AddScoped<IPSRolesService, PSRolesService>();
             services.AddScoped<IPSProjectService, PSProjectService>();
             services.AddScoped<IPSHistoryService, PSHistoryService>();
-            services.AddScoped<IPSAccessService, PSAccessService> ();
+            services.AddScoped<IPSAccessService, PSAccessService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

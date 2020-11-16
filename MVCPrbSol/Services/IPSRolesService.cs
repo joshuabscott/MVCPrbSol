@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MVCPrbSol.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using MVCPrbSol.Models;
 
 namespace MVCPrbSol.Services
 {
@@ -16,6 +16,7 @@ namespace MVCPrbSol.Services
         public Task<bool> RemoveUserFromRole(PSUser user, string roleName);
 
         public Task<ICollection<PSUser>> UsersInRole(string roleName);
-        public Task<ICollection<PSUser>> UsersNotInRole(IdentityRole role);
+        //public Task<ICollection<PSUser>> UsersNotInRole(IdentityRole role);
+        public Task<IEnumerable<PSUser>> UsersNotInRole(string roleName);
     }
 }

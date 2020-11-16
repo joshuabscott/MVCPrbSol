@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Create";
 }
-<h1>Create</h1>
 
+<h1>Create</h1>
 
 <h4>Ticket</h4>
 <hr />
@@ -24,6 +24,7 @@
                 @Html.Hidden("ProjectId", Model.ProjectId)
             }
 
+
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -34,20 +35,7 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                    <label asp-for="Created" class="control-label"></label>
-                    <input asp-for="Created" class="form-control" />
-                    <span asp-validation-for="Created" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Updated" class="control-label"></label>
-                    <input asp-for="Updated" class="form-control" />
-                    <span asp-validation-for="Updated" class="text-danger"></span>
-                </div>
-                @*<div class="form-group">
-                    <label asp-for="ProjectId" class="control-label"></label>
-                    <select asp-for="ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
-                </div>*@
+           
             <div class="form-group">
                 <label asp-for="TicketTypeId" class="control-label"></label>
                 <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
@@ -62,7 +50,7 @@
             }
 
 
-            @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
+            @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
             {
                 <div class="form-group">
                     <label asp-for="TicketPriorityId" class="control-label"></label>
@@ -93,95 +81,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-
-
-@*-----------------------------------or------------------------------*@
-@*<h4>Ticket</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Create" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                <input type="hidden" asp-for="@Model.Id" />
-
-                <input type="hidden" asp-for="@Model.OwnerUserId" />
-
-                @if (!User.IsInRole("Admin") && !User.IsInRole("ProjectManager"))
-                {
-                    <input type="hidden" asp-for="TicketPriorityId" />
-                    <input type="hidden" asp-for="TicketStatusId" />
-                    <input type="hidden" asp-for="DeveloperUserId" />
-                    <input type="hidden" asp-for="TicketTypeId" />
-                }
-
-                @if (Model.ProjectId != 0)
-                {
-                    <input type="hidden" asp-for="@Model.ProjectId" />
-                }
-                else
-                {
-                    <div class="form-group">
-                        <label asp-for="ProjectId" class="control-label"></label>
-                        <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                    </div>
-                }
-
-
-                <div class="form-group">
-                    <label asp-for="Title" class="control-label"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-
-
-
-                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                {
-
-                    <div class="form-group">
-                        <label asp-for="TicketTypeId" class="control-label"></label>
-                        <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="TicketPriorityId" class="control-label"></label>
-                        <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="TicketStatusId" class="control-label"></label>
-                        <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label asp-for="DeveloperUserId" class="control-label"></label>
-                        <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
-                    </div>
-                }
-
-                <div class="form-group">
-                    <label for="FileName" class="control-label"></label>
-                    <input name="attachment" type="file" />
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
-
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }*@

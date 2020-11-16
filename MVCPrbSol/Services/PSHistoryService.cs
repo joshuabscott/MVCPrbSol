@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Services
 {
@@ -34,7 +36,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistorys.AddAsync(history);
+                await _context.TicketHistories.AddAsync(history);
             }
 
             if (oldTicket.Description != newTicket.Description)
@@ -49,7 +51,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistorys.AddAsync(history);
+                await _context.TicketHistories.AddAsync(history);
             }
 
             if (oldTicket.TicketTypeId != newTicket.TicketTypeId)
@@ -64,7 +66,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistorys.AddAsync(history);
+                await _context.TicketHistories.AddAsync(history);
             }
 
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
@@ -79,7 +81,7 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistorys.AddAsync(history);
+                await _context.TicketHistories.AddAsync(history);
             }
 
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
@@ -94,14 +96,14 @@ namespace MVCPrbSol.Services
                     UserId = userId
 
                 };
-                await _context.TicketHistorys.AddAsync(history);
+                await _context.TicketHistories.AddAsync(history);
             }
 
             if (oldTicket.DeveloperUserId != newTicket.DeveloperUserId)
             {
                 if (String.IsNullOrWhiteSpace(oldTicket.DeveloperUserId))
                 {
-                    var oldval = oldTicket.DeveloperUserId == null ? "Unassigned" : _context.Users.Find(oldTicket.DeveloperUserId).FullName;
+                    var oldvalue = oldTicket.DeveloperUserId == null ? "Unassigned" : _context.Users.Find(oldTicket.DeveloperUserId).FullName;
                     TicketHistory history = new TicketHistory
                     {
                         TicketId = newTicket.Id,
@@ -112,7 +114,7 @@ namespace MVCPrbSol.Services
                         UserId = userId
 
                     };
-                    await _context.TicketHistorys.AddAsync(history);
+                    await _context.TicketHistories.AddAsync(history);
                 }
             }
             await _context.SaveChangesAsync();

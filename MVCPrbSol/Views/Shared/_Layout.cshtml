@@ -3,12 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Problem Solver</title>
+    <title>@ViewData["Title"] Problem Solver</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <!--DataTables CSS-->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+
+    <img src="~/favicon.ico" />
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -21,35 +25,30 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Projects" asp-action="Index">Projects</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
                         </li>
-
-
-
-                        <!--Admin Quick Links-->
-                        @if (User.IsInRole("Admin"))
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="MyTickets">My Tickets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="UserTickets">User Tickets</a>
+                        </li>
+                        @if (User.IsInRole("Administrator"))
                         {
-                            <li class="nav-item px-1 dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-                                <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">User Roles</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">All Projects</a>
-
-                                    <!--<a class="dropdown-item" href="post.html">Post</a>-->
-                                </div>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles">Manage User Roles</a>
                             </li>
                         }
-
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -58,21 +57,25 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Problem Solver - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - SJBugTracker - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @*DataTables*@
-    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    @RenderSection("Scripts", required: false)
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#myTable').DataTable();
+            $('.myTable').DataTable({
+                searching: true
+            });
+            $('#anotherTable').DataTable({
+                searching: false
+            });
         });
     </script>
-
-    @RenderSection("Scripts", required: false)
 </body>
 </html>
+

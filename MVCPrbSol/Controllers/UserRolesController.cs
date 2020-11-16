@@ -27,40 +27,34 @@ namespace MVCPrbSol.Controllers
             _rolesService = rolesService;
             _userManager = userManager;
         }
-
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ManageUserRoles()          
-            //By default, this is a get method
+
+        public async Task<IActionResult> ManageUserRoles()
         {
-            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();        
-            //List so we can list all of our users
+            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
             List<PSUser> users = _context.Users.ToList();
 
             foreach (var user in users)
             {
-                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();           
-                //Creating drop-down
+                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();
                 vm.User = user;
                 var selected = await _rolesService.ListUserRoles(user);
-                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);      
-                //Overload example
+                vm.Roles = new Microsoft.AspNetCore.Mvc.Rendering.MultiSelectList(_context.Roles, "Name", "Name", selected);
                 model.Add(vm);
             }
 
             return View(model);
-
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel btuser)
         {
-            PSUser user = _context.Users.Find(btuser.User.Id);
+            PSUser user = await _context.Users.FindAsync(btuser.User.Id);
 
             IEnumerable<string> roles = await _rolesService.ListUserRoles(user);
             await _userManager.RemoveFromRolesAsync(user, roles);

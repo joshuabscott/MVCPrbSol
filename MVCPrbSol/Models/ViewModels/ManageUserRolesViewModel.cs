@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using MVCPrbSol.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MVCPrbSol.Models;
+using MVCPrbSol.Data;
+using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Models.ViewModels
 {

@@ -9,7 +9,7 @@
 @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
 {
     <p>
-        <a class="btn btn-success" asp-action="Create">Create New Ticket</a>
+        <a class="btn btn-primary" asp-action="Create">Create New Ticket</a>
     </p>
 }
 <table class="myTable table table-striped table-bordered">
@@ -51,11 +51,11 @@
                 <td>
 
                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
+                    @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
                     {
-                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     }
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
                     {
                         <a class="btn btn-danger text-light" data-target="#deleteModal-@item.Id" data-toggle="modal">Delete</a>
                     }
