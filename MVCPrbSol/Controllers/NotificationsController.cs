@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using MVCPrbSol.Data;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
 using MVCPrbSol.Models;
-
+using MVCPrbSol.Data;
 
 namespace MVCPrbSol.Controllers
 {
@@ -25,7 +26,7 @@ namespace MVCPrbSol.Controllers
         // GET: Notifications
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Notifications.Include(n => n.Ticket).Include(n => n.User);
+            var applicationDbContext = _context.Notifications.Include(n => n.Ticket).Include(n => n.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -39,7 +40,7 @@ namespace MVCPrbSol.Controllers
 
             var notification = await _context.Notifications
                 .Include(n => n.Ticket)
-                .Include(n => n.User)
+                .Include(n => n.Id)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (notification == null)
             {
@@ -71,7 +72,7 @@ namespace MVCPrbSol.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.Id);
             return View(notification);
         }
 
@@ -89,7 +90,7 @@ namespace MVCPrbSol.Controllers
                 return NotFound();
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.Id);
             return View(notification);
         }
 
@@ -126,7 +127,7 @@ namespace MVCPrbSol.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", notification.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notification.Id);
             return View(notification);
         }
 
@@ -140,7 +141,7 @@ namespace MVCPrbSol.Controllers
 
             var notification = await _context.Notifications
                 .Include(n => n.Ticket)
-                .Include(n => n.User)
+                .Include(n => n.Id)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (notification == null)
             {

@@ -8,7 +8,7 @@ using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Services;
 
-namespace MVCProbsol.Services
+namespace MVCPrbSol.Services
 {
     public class PSProjectService : IPSProjectService
     {
@@ -18,7 +18,7 @@ namespace MVCProbsol.Services
         {
             _context = context;
         }
-        //Methods = Actions of Controller
+       
         public async Task<bool> IsUserOnProject(string userId, int projectId)
         {
             var user = await _context.ProjectUsers.FirstOrDefaultAsync(pu => pu.UserId == userId && pu.ProjectId == projectId);
@@ -37,6 +37,12 @@ namespace MVCProbsol.Services
             PSUser user = await _context.Users
                 .Include(p => p.ProjectUsers)
                 .ThenInclude(p => p.Project)
+                //.ThenInclude(p => p.Project).ThenInclude(p => p.Id == p.Tickets).ThenInclude(p => p.TicketPriority)
+                //.ThenInclude(p => p.ProjectUsers)
+                //.ThenInclude(p => p.Project).ThenInclude(p => p.Id == p.Tickets).ThenInclude(p => p.TicketStatus)
+                //.ThenInclude(p => p.ProjectUsers)
+                //.ThenInclude(p => p.Project).ThenInclude(p => p.Id == p.Tickets).ThenInclude(p => p.TicketType)
+                //.ThenInclude(p => p.ProjectUsers)
                 .FirstOrDefaultAsync(p => p.Id == userId);
 
             List<Project> project = user.ProjectUsers.SelectMany(p => (IEnumerable<Project>)p.Project).ToList();
@@ -118,10 +124,10 @@ namespace MVCProbsol.Services
             throw new NotImplementedException();
         }
     }
-}
+}//making the ability to determine which roles have access to which projects
 
 
-//------------------------------------------------old-------------------------
+//------------------------------------------I don't understand-------------------------
 
 //using MVCPrbSol.Data;
 //using MVCPrbSol.Models;

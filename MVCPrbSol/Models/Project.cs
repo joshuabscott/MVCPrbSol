@@ -29,4 +29,5 @@ namespace MVCPrbSol.Models
         public virtual ICollection<Ticket> Tickets { get; set; }
 
     }
-}
+}//Data to be used when creating an Instance of a Project Object of this class
+//Updated 11/15/2020

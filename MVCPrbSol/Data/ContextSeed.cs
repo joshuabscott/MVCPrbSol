@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MVCPrbSol.Models;
-using NuGet.Frameworks;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using MVCPrbSol.Models;
+using NuGet.Frameworks;
 
 namespace MVCPrbSol.Data
 {
@@ -15,7 +15,8 @@ namespace MVCPrbSol.Data
         ProjectManager,
         Developer,
         Submitter,
-        NewUser
+        NewUser,
+        Demo
     }
 
     //public enum TicketTypes
@@ -53,6 +54,7 @@ namespace MVCPrbSol.Data
             await roleManager.CreateAsync(new IdentityRole(Roles.Developer.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Submitter.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.NewUser.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Demo.ToString()));
         }
 
 
@@ -178,8 +180,8 @@ namespace MVCPrbSol.Data
         //Seed Users
         public static async Task SeedDefaultUsersAsync(UserManager<PSUser> userManager)
         {
+            //SeedDefault Administrator
             #region SeedAdministrator
-            //SeedDefault Administrator User
             var defaultAdmin = new PSUser
             {
                 UserName = "TaliaalGhul@email.com",
@@ -237,7 +239,7 @@ namespace MVCPrbSol.Data
             }
             #endregion
 
-            //SeedDefault Developer User
+            //SeedDefault Developer
             #region SeedDeveloper        
 
             var defaultDeveloper = new PSUser
@@ -1006,14 +1008,161 @@ namespace MVCPrbSol.Data
             }
             #endregion
 
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine("*********** ERROR **********");
-            //    Debug.WriteLine("Error Seeding Ticket Priorities.");
-            //    Debug.WriteLine(ex.Message);
-            //    Debug.WriteLine("****************************");
-            //    throw;
-            //}
+
+
+            //Seed Demo Administrator
+            #region Demo Administrator
+            var demoAdmin = new PSUser
+            {
+                UserName = "demoAdmin@mailinator.com",
+                Email = "demoAdmin@mailinator.com",
+                FirstName = "DemoA",
+                LastName = "Admin",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(demoAdmin.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(demoAdmin, "g9N88.se!");
+                    await userManager.AddToRoleAsync(demoAdmin, Roles.Administrator.ToString());
+                    await userManager.AddToRoleAsync(demoAdmin, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default Administrator.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("********************************");
+                throw;
+            }
+            #endregion
+
+            //Seed Demo PM User
+            #region Demo SeedPM        
+
+            var demoPM = new PSUser
+            {
+                UserName = "demoPM@mailinator.com",
+                Email = "demoaPM@mailinator.com",
+                FirstName = "DemoPM",
+                LastName = "PM",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(demoPM.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(demoPM, "g9N88.se!");
+                    await userManager.AddToRoleAsync(demoPM, Roles.ProjectManager.ToString());
+                    await userManager.AddToRoleAsync(demoPM, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default ProjectManager User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("********************************");
+                throw;
+            }
+            #endregion
+
+            //Seed Demo Developer User
+            #region Demo Developer        
+
+            var demoDeveloper = new PSUser
+            {
+                UserName = "demoaDev@mailinator.com",
+                Email = "demoDev@mailinator.com",
+                FirstName = "DemoDev",
+                LastName = "Dev",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(demoDeveloper.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(demoDeveloper, "g9N88.se!");
+                    await userManager.AddToRoleAsync(demoDeveloper, Roles.Developer.ToString());
+                    await userManager.AddToRoleAsync(demoDeveloper, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default Developer User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("********************************");
+                throw;
+            }
+            #endregion
+
+            //Seed Demo Submitter User
+            #region Demo Submitter
+
+            var demoSubmitter = new PSUser
+            {
+                UserName = "demoSub@mailinator.com",
+                Email = "demoSub@mailinator.com",
+                FirstName = "DemoSub",
+                LastName = "Sub",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(demoSubmitter.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(demoSubmitter, "g9N88.se!");
+                    await userManager.AddToRoleAsync(demoSubmitter, Roles.Submitter.ToString());
+                    await userManager.AddToRoleAsync(demoSubmitter, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default Submitter User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("********************************");
+                throw;
+            }
+            #endregion
+
+            //Seed Demo NewUser User
+            #region Demo NewUser
+
+            var demoNewUser = new PSUser
+            {
+                UserName = "demoUser@mailinator.com",
+                Email = "demoUser@mailinator.com",
+                FirstName = "DemoNU",
+                LastName = "NewUser",
+                EmailConfirmed = true
+            };
+            try
+            {
+                var user = await userManager.FindByEmailAsync(demoNewUser.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(demoNewUser, "g9N88.se!");
+                    await userManager.AddToRoleAsync(demoNewUser, Roles.NewUser.ToString());
+                    await userManager.AddToRoleAsync(demoNewUser, Roles.Demo.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************ ERROR  ************");
+                Debug.WriteLine("Error Seeding Default NewUser User.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("********************************");
+                throw;
+            }
+            #endregion
         }
     }
 }

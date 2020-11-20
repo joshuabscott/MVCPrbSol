@@ -11,18 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Services;
-using MVCProbsol.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
-/// <summary>
-/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// </summary>
+
 namespace MVCPrbSol
 {
-
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -38,26 +33,27 @@ namespace MVCPrbSol
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
-            //Injecting dependency to other parts of this project at startup
-
             services.AddScoped<IPSRolesService, PSRolesService>();
             services.AddScoped<IPSProjectService, PSProjectService>();
             services.AddScoped<IPSHistoryService, PSHistoryService>();
             services.AddScoped<IPSAccessService, PSAccessService>();
+            //services.AddScoped<IPSTicketService, PSTicketService>();
+            //services.AddScoped<IPSNotificationService, PSNotificationService>();
 
-            services.AddTransient<IEmailSender, PSEmailService>;
+            //Email Service
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IEmailSender, EmailService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
-        // Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

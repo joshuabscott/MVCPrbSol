@@ -1,12 +1,11 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using MVCPrbSol.Data;
-using SQLitePCL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using MVCPrbSol.Data;
 
 namespace MVCPrbSol.Services
 {
@@ -66,4 +65,4 @@ namespace MVCPrbSol.Services
             return result;
         }
     }
-}
+}//Allowing the access of the different roles of Administrator, Project Manager, Developer, Submitter with Project and Ticket

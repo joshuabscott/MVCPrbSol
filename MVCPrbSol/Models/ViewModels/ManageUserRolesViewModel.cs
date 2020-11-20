@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MVCPrbSol.Models;
-using MVCPrbSol.Data;
-using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Models.ViewModels
 {
     public class ManageUserRolesViewModel
     {
         public PSUser User { get; set; }
-
         public MultiSelectList Roles { get; set; }
-
         public string[] SelectedRoles { get; set; }
     }
-}
+}//Manage the Roles of the Users

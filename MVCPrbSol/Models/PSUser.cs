@@ -11,11 +11,11 @@ namespace MVCPrbSol.Models
     public class PSUser : IdentityUser
     {
         [Required]
-        [StringLength(50)]
+        [StringLength(30)]
         public string FirstName { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(30)]
         public string LastName { get; set; }
 
         [Display(Name = "Full Name")]
@@ -29,4 +29,4 @@ namespace MVCPrbSol.Models
         public List<ProjectUser> ProjectUsers { get; set; }
 
     }
-}
+}//Data of User

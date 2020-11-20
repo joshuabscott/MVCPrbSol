@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Services;
@@ -15,13 +16,19 @@ namespace MVCPrbSol.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<PSUser> _userManager;
+        private readonly IEmailSender _emailSender;
+        //private readonly IEmailSender _emailService;
+        //private readonly IPSNotificationService _notificationService;
 
-        public PSHistoryService(ApplicationDbContext context, UserManager<PSUser> userManager)
+        public PSHistoryService(ApplicationDbContext context, UserManager<PSUser> userManager, IEmailSender emailSender/*, IPSNotificationService notificationService*/)
         {
             _context = context;
             _userManager = userManager;
-        }
+            _emailSender = emailSender;
+            //_emailService = emailService;
+            //_notificationService = notificationService;
 
+        }
         public async Task AddHistory(Ticket oldTicket, Ticket newTicket, string userId)
         {
             if (oldTicket.Title != newTicket.Title)
@@ -34,7 +41,6 @@ namespace MVCPrbSol.Services
                     NewValue = newTicket.Title,
                     Created = DateTimeOffset.Now,
                     UserId = userId
-
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
@@ -49,7 +55,6 @@ namespace MVCPrbSol.Services
                     NewValue = newTicket.Description,
                     Created = DateTimeOffset.Now,
                     UserId = userId
-
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
@@ -64,7 +69,6 @@ namespace MVCPrbSol.Services
                     NewValue = _context.TicketTypes.Find(newTicket.TicketTypeId).Name,
                     Created = DateTimeOffset.Now,
                     UserId = userId
-
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
@@ -75,26 +79,24 @@ namespace MVCPrbSol.Services
                 {
                     TicketId = newTicket.Id,
                     Property = "TicketPriorityId",
-                    OldValue = _context.TicketPriorities.Find(oldTicket.TicketPriorityId).Name,
-                    NewValue = _context.TicketPriorities.Find(newTicket.TicketPriorityId).Name,
+                    OldValue = _context.TicketTypes.Find(oldTicket.TicketPriorityId).Name,
+                    NewValue = _context.TicketTypes.Find(newTicket.TicketPriorityId).Name,
                     Created = DateTimeOffset.Now,
                     UserId = userId
-
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
 
-            if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
+            if (oldTicket.TicketStatusId != newTicket.TicketStatusId)
             {
                 TicketHistory history = new TicketHistory
                 {
                     TicketId = newTicket.Id,
                     Property = "TicketStatusId",
-                    OldValue = _context.TicketStatuses.Find(oldTicket.TicketStatusId).Name,
-                    NewValue = _context.TicketStatuses.Find(newTicket.TicketStatusId).Name,
+                    OldValue = _context.TicketTypes.Find(oldTicket.TicketStatusId).Name,
+                    NewValue = _context.TicketTypes.Find(newTicket.TicketStatusId).Name,
                     Created = DateTimeOffset.Now,
                     UserId = userId
-
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
@@ -103,21 +105,59 @@ namespace MVCPrbSol.Services
             {
                 if (String.IsNullOrWhiteSpace(oldTicket.DeveloperUserId))
                 {
-                    var oldvalue = oldTicket.DeveloperUserId == null ? "Unassigned" : _context.Users.Find(oldTicket.DeveloperUserId).FullName;
                     TicketHistory history = new TicketHistory
                     {
                         TicketId = newTicket.Id,
                         Property = "DeveloperUserId",
-                        OldValue = "No Developer Assigned",
+                        OldValue = "No developer assigned.",
                         NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
                         Created = DateTimeOffset.Now,
                         UserId = userId
-
                     };
                     await _context.TicketHistories.AddAsync(history);
+                }
+                else if (String.IsNullOrWhiteSpace(newTicket.DeveloperUserId))
+                {
+                    TicketHistory history = new TicketHistory
+                    {
+                        TicketId = newTicket.Id,
+                        Property = "DeveloperUserId",
+                        OldValue = _context.Users.Find(oldTicket.DeveloperUserId).FullName,
+                        NewValue = "No developer assigned.",
+                        Created = DateTimeOffset.Now,
+                        UserId = userId
+                    };
+                    await _context.TicketHistories.AddAsync(history);
+                }
+                else
+                {
+                    TicketHistory history = new TicketHistory
+                    {
+                        TicketId = newTicket.Id,
+                        Property = "Developer",
+                        OldValue = _context.Users.Find(oldTicket.DeveloperUserId).FullName,
+                        NewValue = _context.Users.Find(newTicket.DeveloperUserId).FullName,
+                        Created = DateTimeOffset.Now,
+                        UserId = userId
+                    };
+                    await _context.TicketHistories.AddAsync(history);
+                    Notification notification = new Notification
+                    {
+                        TicketId = newTicket.Id,
+                        Description = "You have a new ticket.",
+                        Created = DateTimeOffset.Now,
+                        SenderId = userId,
+                        RecipientId = newTicket.DeveloperUserId
+                    };
+                    await _context.Notifications.AddAsync(notification);
+                    //Send an email
+                    string devEmail = newTicket.DeveloperUser.Email;
+                    string subject = "New Ticket Assignment";
+                    string message = $"You have a new ticket for project: {newTicket.Project.Name}";
+                    await _emailSender.SendEmailAsync(devEmail, subject, message);
                 }
             }
             await _context.SaveChangesAsync();
         }
     }
-}
+}//keeping track of a tickets data and tracking it as it is changed and updated, and Sending an email if New Assignment

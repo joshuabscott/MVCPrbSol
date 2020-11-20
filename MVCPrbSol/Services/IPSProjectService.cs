@@ -19,4 +19,4 @@ namespace MVCPrbSol.Services
         public Task<ICollection<DbContext>> UsersOnProject(int projectId);
         public Task<ICollection<DbContext>> UsersNotOnProject(int projectId);
     }
-}
+}//How we search the list of projects to determine what user is already on a project team or not

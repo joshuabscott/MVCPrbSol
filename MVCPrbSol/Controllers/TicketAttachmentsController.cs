@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using MVCPrbSol.Services;
 
 
 namespace MVCPrbSol.Controllers
@@ -16,10 +20,14 @@ namespace MVCPrbSol.Controllers
     public class TicketAttachmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<PSUser> _userManager;
+        //private readonly IPSNotificationService _notificationService;
 
-        public TicketAttachmentsController(ApplicationDbContext context)
+        public TicketAttachmentsController(ApplicationDbContext context, UserManager<PSUser> userManager/*, IPSNotificationService notificationService*/)
         {
             _context = context;
+            _userManager = userManager;
+            //_notificationService = notificationService;
         }
 
         // GET: TicketAttachments
@@ -62,13 +70,40 @@ namespace MVCPrbSol.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment)
+        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ticketAttachment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (attachment != null)
+                {
+                    var memoryStream = new MemoryStream();
+                    attachment.CopyTo(memoryStream);
+                    byte[] bytes = memoryStream.ToArray();
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                    var binary = Convert.ToBase64String(bytes);
+                    var ext = Path.GetExtension(attachment.FileName);
+
+                    ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+                    ticketAttachment.FileData = bytes;
+                    ticketAttachment.Description = attachment.FileName;
+                    ticketAttachment.Created = DateTime.Now;
+
+                    _context.Add(ticketAttachment);
+                    await _context.SaveChangesAsync();
+
+                    var ticket = await _context.Tickets
+                        .Include(t => t.TicketPriority)
+                        .Include(t => t.TicketStatus)
+                        .Include(t => t.TicketType)
+                        .Include(t => t.DeveloperUser)
+                        .Include(t => t.Project)
+                        .FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
+
+                    //await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
+                    return RedirectToAction(nameof(Index));
+                }
+                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);

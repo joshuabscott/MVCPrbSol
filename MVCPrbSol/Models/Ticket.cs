@@ -52,5 +52,4 @@ namespace MVCPrbSol.Models
         public virtual ICollection<TicketHistory> Histories { get; set; }
 
     }
-
-}
+}//Data to be used when creating an Instance of a Ticket Object of this class

@@ -10,6 +10,8 @@ namespace MVCPrbSol.Models.ViewModels
     {
         public Project Project { get; set; }
         public Ticket Ticket { get; set; }
+        public List<PSUser> Roles { get; set; }
+
         public List<Ticket> Tickets { get; set; }
     }
-}
+}//Manage what tickets are on which projects

@@ -54,16 +54,11 @@ namespace MVCPrbSol.Services
             var users = await _userManager.Users.ToListAsync();
             return users.Except(inRole);
         }
-
-        //public Task<ICollection<PSUser>> UsersNotInRole(IdentityRole role)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }
 
 
-
+///////--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //private readonly RoleManager<IdentityRole> _roleManager;    
 //private readonly UserManager<PSUser> _userManager;
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.AspNetCore.Identity;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Models.ViewModels;
@@ -20,18 +21,30 @@ namespace MVCPrbSol.Controllers
     {
 
         private readonly ApplicationDbContext _context;                 
-        private readonly IPSProjectService _PSProjectService;
+        private readonly IPSProjectService _projectService;
+        private readonly UserManager<PSUser> _userManager;
+        private readonly IPSRolesService _rolesService;
 
-        public ProjectsController(ApplicationDbContext context, IPSProjectService PSProjectService)        
+        public ProjectsController(ApplicationDbContext context, IPSProjectService projectService, UserManager<PSUser> userManager, IPSRolesService rolesService)        
         {
             _context = context;
-            _PSProjectService = PSProjectService;
+            _projectService = projectService;
+            _userManager = userManager;
+            _rolesService = rolesService;
         }
 
         // GET: Projects
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());
+        }
+
+        // GET: MyProjects
+        public async Task<IActionResult> MyProjects()
+        {
+            var userId = _userManager.GetUserId(User);
+            var myProjects = await _projectService.ListUserProjects(userId);
+            return View(myProjects);
         }
 
         // GET: Projects/Details/5
@@ -69,7 +82,7 @@ namespace MVCPrbSol.Controllers
         }
 
         // GET: Projects/Create
-        //[Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -92,7 +105,7 @@ namespace MVCPrbSol.Controllers
         }
 
         // GET: Projects/Edit/5
-        //[Authorize(Roles = "Admin, ProjectManager")]
+        //[Authorize(Roles = "Administrator, ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -144,7 +157,7 @@ namespace MVCPrbSol.Controllers
         }
 
         // GET: Projects/Delete/5
-        //[Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -186,7 +199,7 @@ namespace MVCPrbSol.Controllers
 
             model.Project = project;
             List<PSUser> users = await _context.Users.ToListAsync();
-            List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id);
+            List<PSUser> members = (List<PSUser>)await _projectService.UsersOnProject(id);
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
@@ -205,12 +218,12 @@ namespace MVCPrbSol.Controllers
 
                     foreach (string id in memberIds)
                     {
-                        await _PSProjectService.RemoveUserFromProject(id, model.Project.Id);
+                        await _projectService.RemoveUserFromProject(id, model.Project.Id);
                     }
 
                     foreach (string id in model.SelectedUsers)
                     {
-                        await _PSProjectService.AddUserToProject(id, model.Project.Id);
+                        await _projectService.AddUserToProject(id, model.Project.Id);
                     }
                     return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
                 }
@@ -232,7 +245,7 @@ namespace MVCPrbSol.Controllers
 
             var model = new ManageProjectUsersViewModel();
             model.Project = await _context.Projects.FindAsync((int)id);
-            var users = await _context.Users.Where(u => _PSProjectService.IsUserOnProject(u.Id, (int)id).Result).ToListAsync();
+            var users = await _context.Users.Where(u => _projectService.IsUserOnProject(u.Id, (int)id).Result).ToListAsync();
             model.Users = new MultiSelectList(users, "Id", "FullName");
 
             return View(model);
@@ -245,198 +258,12 @@ namespace MVCPrbSol.Controllers
         {
             foreach (var userId in model.SelectedUsers)
             {
-                if (!await _PSProjectService.IsUserOnProject(userId, model.Project.Id))
+                if (!await _projectService.IsUserOnProject(userId, model.Project.Id))
                 {
-                    await _PSProjectService.RemoveUserFromProject(userId, model.Project.Id);
+                    await _projectService.RemoveUserFromProject(userId, model.Project.Id);
                 }
             }
             return RedirectToAction("RemoveUserFromProject");
         }
     }
-}
-
-//-------------------------------------------------------old---------------------------------------------------
-//        // GET: Projects
-//        public async Task<IActionResult> Index()
-//        {
-//            return View(await _context.Projects.ToListAsync());
-//        }
-
-//        // GET: Projects/Details/5
-//        public async Task<IActionResult> Details(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
-
-//            var project = await _context.Projects
-//                .Include(p => p.ProjectUsers).ThenInclude(p => p.User)
-//                .Include(p => p.Tickets).ThenInclude(p => p.TicketType)
-//                .Include(p => p.Tickets).ThenInclude(p => p.TicketPriority)
-//                .Include(p => p.Tickets).ThenInclude(p => p.TicketStatus)
-//                .Include(p => p.Tickets).ThenInclude(p => p.OwnerUser)
-//                .Include(p => p.Tickets).ThenInclude(p => p.DeveloperUser)
-//                .FirstOrDefaultAsync(m => m.Id == id);
-//            if (project == null)
-//            {
-//                return NotFound();
-//            }
-
-//            return View(project);
-//        }
-
-//        // GET: Projects/Create
-//        public IActionResult Create()
-//        {
-//            return View();
-//        }
-
-//        // POST: Projects/Create
-//        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
-//        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Create([Bind("Id,Name,ImagePath,ImageData")] Project project)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                _context.Add(project);
-//                await _context.SaveChangesAsync();
-//                return RedirectToAction(nameof(Index));
-//            }
-//            return View(project);
-//        }
-
-//        // GET: Projects/Edit/5
-//        public async Task<IActionResult> Edit(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
-
-//            var project = await _context.Projects.FindAsync(id);
-//            if (project == null)
-//            {
-//                return NotFound();
-//            }
-//            return View(project);
-//        }
-
-//        // POST: Projects/Edit/5
-//        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
-//        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImagePath,ImageData")] Project project)
-//        {
-//            if (id != project.Id)
-//            {
-//                return NotFound();
-//            }
-
-//            if (ModelState.IsValid)
-//            {
-//                try
-//                {
-//                    _context.Update(project);
-//                    await _context.SaveChangesAsync();
-//                }
-//                catch (DbUpdateConcurrencyException)
-//                {
-//                    if (!ProjectExists(project.Id))
-//                    {
-//                        return NotFound();
-//                    }
-//                    else
-//                    {
-//                        throw;
-//                    }
-//                }
-//                return RedirectToAction(nameof(Index));
-//            }
-//            return View(project);
-//        }
-
-//        // GET: Projects/Delete/5
-//        public async Task<IActionResult> Delete(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
-
-//            var project = await _context.Projects
-//                .FirstOrDefaultAsync(m => m.Id == id);
-//            if (project == null)
-//            {
-//                return NotFound();
-//            }
-
-//            return View(project);
-//        }
-
-//        // POST: Projects/Delete/5
-//        [HttpPost, ActionName("Delete")]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> DeleteConfirmed(int id)
-//        {
-//            var project = await _context.Projects.FindAsync(id);
-//            _context.Projects.Remove(project);
-//            await _context.SaveChangesAsync();
-//            return RedirectToAction(nameof(Index));
-//        }
-
-//        //Get: AssignUsers
-//        [HttpGet]
-//        public async Task<IActionResult> AssignUsers(int id)
-//        {
-//            var model = new ProjectUsersViewModel();
-//            var project = _context.Projects.Find(id);
-
-//            //1.) find this project and get it from the model
-//            model.Project = project;
-//            //2.) find unfiltered list of all users
-//            List<PSUser> users = await _context.Users.ToListAsync();
-//            //3. find any members "users" already on the project in the PSProjectServicve
-//            List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id);
-//            model.Users = new MultiSelectList(users, "Id", "FullName", members);
-//            return View(model);
-//        }
-//        /// <summary>
-//        /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Trouble
-//        /// </summary>
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> AssignUsers(ProjectUsersViewModel model)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                if (model.SelectedUsers != null)
-//                {
-//                    var currentMembers = await _context.Projects
-//                        .Include(p => p.ProjectUsers)
-//                        .FirstOrDefaultAsync(p => p.Id == model.Project.Id);
-//                    List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
-
-//                    foreach (string id in memberIds)
-//                    {
-//                        await _PSProjectService.RemoveUserFromProject(id, model.Project.Id);
-//                    }
-//                    foreach (string id in model.SelectedUsers)
-//                    {
-//                        await _PSProjectService.AddUserToProject(id, model.Project.Id);
-//                    }
-//                    return RedirectToAction("Index", "Projects");
-//                }
-//            }
-//            return View(model);
-//        }
-
-//        private bool ProjectExists(int id)
-//        {
-//            return _context.Projects.Any(e => e.Id == id);
-//        }
-//    }
-//}
+}//The Logic to create an instance of an Object : Project

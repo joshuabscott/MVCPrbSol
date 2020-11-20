@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Models.ViewModels;
 using MVCPrbSol.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCPrbSol.Controllers
 {
@@ -21,7 +20,6 @@ namespace MVCPrbSol.Controllers
         private readonly UserManager<PSUser> _userManager;
 
         public UserRolesController(ApplicationDbContext context, IPSRolesService rolesService, UserManager<PSUser> userManager)     
-            //Constructor, need to read/learn more about this
         {
             _context = context;
             _rolesService = rolesService;
@@ -31,7 +29,6 @@ namespace MVCPrbSol.Controllers
         {
             return View();
         }
-
 
         public async Task<IActionResult> ManageUserRoles()
         {
@@ -46,7 +43,6 @@ namespace MVCPrbSol.Controllers
                 vm.Roles = new Microsoft.AspNetCore.Mvc.Rendering.MultiSelectList(_context.Roles, "Name", "Name", selected);
                 model.Add(vm);
             }
-
             return View(model);
         }
 
