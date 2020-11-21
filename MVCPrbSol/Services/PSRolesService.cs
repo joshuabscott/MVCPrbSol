@@ -14,6 +14,7 @@ namespace MVCPrbSol.Services
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<PSUser> _userManager;
+
         public PSRolesService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager)
         {
             _roleManager = roleManager;
@@ -55,50 +56,4 @@ namespace MVCPrbSol.Services
             return users.Except(inRole);
         }
     }
-}
-
-
-///////--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//private readonly RoleManager<IdentityRole> _roleManager;    
-//private readonly UserManager<PSUser> _userManager;
-
-//public PSRolesService(RoleManager<IdentityRole> roleManager, UserManager<PSUser> userManager)  
-//{
-//    _roleManager = roleManager;
-//    _userManager = userManager;
-//}
-
-//public async Task<bool> AddUserToRole(PSUser user, string roleName)
-//{
-//    var result = await _userManager.AddToRoleAsync(user, roleName);
-//    return result.Succeeded;
-//}
-
-//public async Task<bool> IsUserInRole(PSUser user, string roleName)
-//{
-//    return await _userManager.IsInRoleAsync(user, roleName);
-//}
-
-
-//public async Task<IEnumerable<string>> ListUserRoles(PSUser user)
-//{
-//    return await _userManager.GetRolesAsync(user);
-//}
-
-//public Task<IEnumerable<string>> LIstUserRoles(PSUser user)
-//{
-//    throw new NotImplementedException();
-//}
-
-//public async Task<bool> RemoveUserFromRole(PSUser user, string roleName)
-//{
-//    var result = await _userManager.RemoveFromRoleAsync(user, roleName);
-//    return result.Succeeded;
-//}
-
-//public async Task<ICollection<PSUser>> UsersInRole(string roleName)
-//{
-//    var inRole = await _userManager.GetUsersInRoleAsync(roleName);
-//    var users = await _userManager.GetUsersInRoleAsync(roleName);
-//    return users;
-//}
+}//Sat

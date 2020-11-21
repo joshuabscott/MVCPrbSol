@@ -32,8 +32,9 @@ namespace MVCPrbSol.Data
         public DbSet<TicketStatus> TicketStatuses { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
 
-        public DbSet<PSUser> PSUsers { get; set; }
+        //public DbSet<PSUser> PSUsers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
     }
 }
+//SAT

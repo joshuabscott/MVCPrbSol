@@ -20,3 +20,4 @@ namespace MVCPrbSol.Services
         public Task<IEnumerable<PSUser>> UsersNotInRole(string roleName);
     }
 }// the methods allow for roles to be added and removed
+//Sat

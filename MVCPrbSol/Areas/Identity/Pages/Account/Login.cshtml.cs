@@ -75,14 +75,12 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
 
             ReturnUrl = returnUrl;
         }
-        /// <summary>
-        /// //////////////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
-       
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null, string demoEmail = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            if (!string.IsNullOrWhiteSpace(demoEmail))
+
+            if (!String.IsNullOrWhiteSpace(demoEmail))
             {
                 var email = _configuration[demoEmail];
                 var password = _configuration["DemoPassword"];
@@ -91,16 +89,20 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToAction("Index", "Home"); //or "Dashboard"
+                    //This return depends on what my homepage is. I might need to change this once I implement template
+                    return RedirectToAction("Index", "Home");
+                    //return LocalRedirect(returnUrl);
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
+
             }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
+
+
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -109,7 +111,8 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "Home");
+                    //return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -131,4 +134,4 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
             return Page();
         }
     }
-}
+}/*//Sat*/

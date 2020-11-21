@@ -34,20 +34,18 @@ namespace MVCPrbSol.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageUserRoles()
         {
-            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();        //List so we can list all of our users
+            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
             List<PSUser> users = _context.Users.ToList();
 
             foreach (var user in users)
             {
-                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();           //Creating dropdown
+                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();   
                 vm.User = user;
                 var selected = await _rolesService.ListUserRoles(user);
                 vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);      //Overload example
                 model.Add(vm);
             }
-
             return View(model);
-
         }
 
 
@@ -86,3 +84,4 @@ namespace MVCPrbSol.Controllers
         }
     }
 }//Friday
+//Sat

@@ -26,15 +26,11 @@ namespace MVCPrbSol.Controllers
         }
 
 
-
-
         [AllowAnonymous]
         public IActionResult LandingPage()
         {
             return View();
         }
-
-
 
         public IActionResult Privacy()
         {
@@ -48,3 +44,4 @@ namespace MVCPrbSol.Controllers
         }
     }
 }//Friday
+//Sat

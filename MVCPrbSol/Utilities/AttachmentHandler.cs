@@ -1,10 +1,10 @@
-﻿using MVCPrbSol.Models;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using MVCPrbSol.Models;
 
 namespace MVCPrbSol.Utilities
 {
@@ -19,6 +19,7 @@ namespace MVCPrbSol.Utilities
             byte[] bytes = memoryStream.ToArray();
             memoryStream.Close();
             memoryStream.Dispose();
+
             var binary = Convert.ToBase64String(bytes);
             var ext = Path.GetExtension(attachment.FileName);
 
@@ -29,4 +30,4 @@ namespace MVCPrbSol.Utilities
             return ticketAttachment;
         }
     }
-}
+}//Sat

@@ -13,3 +13,4 @@ namespace MVCPrbSol.Models.ViewModels
         public string[] SelectedRoles { get; set; }
     }
 }//Manage the Roles of the Users
+//Sat

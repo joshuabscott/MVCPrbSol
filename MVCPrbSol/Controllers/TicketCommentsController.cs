@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
-using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Controllers
 {
@@ -44,11 +43,12 @@ namespace MVCPrbSol.Controllers
             {
                 return NotFound();
             }
-
+            //Not sure about this link statement, might not be here or be correct
             var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (ticketComment == null)
             {
                 return NotFound();
@@ -58,11 +58,14 @@ namespace MVCPrbSol.Controllers
         }
 
         // GET: TicketComments/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
+            var model = new TicketComment();
+            model.TicketId = (int)id;
+
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName");
-            return View();
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            return View(model);
         }
 
         // POST: TicketComments/Create
@@ -70,33 +73,23 @@ namespace MVCPrbSol.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment, string content, int ticketId)
+        public async Task<IActionResult> Create([Bind("Comment,Created,TicketId,UserId")] TicketComment ticketComment)
         {
-            var userId = _userManager.GetUserId(User);
-            ticketComment.UserId = userId;
-            if (content != null)
-            {
-                ticketComment.Comment = content;
-                ticketComment.TicketId = ticketId;
-                ticketComment.Created = DateTime.Now;
-            }
             if (ModelState.IsValid)
             {
+                ticketComment.Created = DateTimeOffset.Now;
+                ticketComment.UserId = _userManager.GetUserId(User);
+
+
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
-                var ticket = await _context.Tickets
-                    .Include(t => t.TicketPriority)
-                    .Include(t => t.TicketStatus)
-                    .Include(t => t.TicketType)
-                    .Include(t => t.DeveloperUser)
-                    .Include(t => t.Project)
-                    .FirstOrDefaultAsync(t => t.Id == ticketId);
-                //await _notificationService.NotifyOfComment(userId, ticket, ticketComment);
-                return RedirectToAction("Details", "Tickets", new { id = ticketId });
+                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
+
             }
-            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
-            return View(ticketComment);
+            else
+            {
+                return NotFound();
+            }
         }
 
         // GET: TicketComments/Edit/5
@@ -190,4 +183,6 @@ namespace MVCPrbSol.Controllers
             return _context.TicketComments.Any(e => e.Id == id);
         }
     }
-}//Friday
+}
+ //Friday
+ //Sat

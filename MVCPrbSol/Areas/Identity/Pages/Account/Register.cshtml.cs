@@ -98,11 +98,8 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-
-                    // -- Add new registrant a role of "NewUser" -- //
+                    // Add new registrant a role of "NewUser" //
                     await _userManager.AddToRoleAsync(user, Roles.NewUser.ToString());
-                   // ----------------------------------------------------------------------------------------------------------------------------------------
-
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -135,4 +132,4 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
             return Page();
         }
     }
-}
+}/*//Sat*/

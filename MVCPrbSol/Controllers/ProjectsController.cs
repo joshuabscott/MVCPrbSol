@@ -38,58 +38,53 @@ namespace MVCPrbSol.Controllers
             _PSProjectService = PSProjectService;
         }
 
-
-        // GET: Projects
+        // GET: Projects Index
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());
         }
 
-        [Authorize(Roles = "ProjectManager")]
-        public async Task<IActionResult> MyProjects()
-        {
+
+        //GET: Projects/ MyProjects 
+        public async Task<IActionResult> MyProjects(int? id)
+        {   // Should function similarly to MyTickets, but able to use service to filter projects seen based on user's role or if 
+            // the user submitted a ticket for that project.
+
+            var model = new List<Project>();
             var userId = _userManager.GetUserId(User);
-            var projectUserRecords = await _context.ProjectUsers
-                                    .Where(p => p.UserId == userId)
-                                    .Include(pu => pu.Project)
-                                    .ToListAsync();
-            var projects = new List<Project>();
-            foreach (var projectUserRecord in projectUserRecords)
+
+
+
+
+            if (User.IsInRole("Administrator"))
             {
-                projects.Add(projectUserRecord.Project);
+                //create or use a service (BTProjectService?) that will filter a user's projects on the MyProjects View
+                model = _context.Projects.ToList();
+                return View("MyProjects", model);
             }
-            return View(projects);
+            if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") ||
+                User.IsInRole("Submitter") || User.IsInRole("NewUser"))
+            {
+
+                model = await _projectService.ListUserProjects(userId);
+
+                return View("MyProjects", model);
+
+            }
+
+            return NotFound();
+
         }
 
-        // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var project = await _context.Projects
-                .Include(p => p.ProjectUsers).ThenInclude(p => p.User)
-                .Include(p => p.Tickets).ThenInclude(p => p.TicketType)
-                .Include(p => p.Tickets).ThenInclude(p => p.TicketPriority)
-                .Include(p => p.Tickets).ThenInclude(p => p.TicketStatus)
-                .Include(p => p.Tickets).ThenInclude(p => p.OwnerUser)
-                .Include(p => p.Tickets).ThenInclude(p => p.DeveloperUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
 
-            return View(project);
-        }
-
-        // GET: Projects/Create
+        //GET: Projects/Create
+        [Authorize(Roles = "Administrator, ProjectManager")]
         public IActionResult Create()
         {
             return View();
         }
+
 
         // POST: Projects/Create
         // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
@@ -98,21 +93,61 @@ namespace MVCPrbSol.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ImagePath,ImageData")] Project project)
         {
-            if (User.IsInRole("Demo"))
+            if (!User.IsInRole("Demo"))
             {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction("Index", "Projects", new { id = project.Id });
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(project);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(project);
             }
-            if (ModelState.IsValid)
+            else
             {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["DemoLockout"] = "Your changes have not been saved. To make changes to the database, please log in as a full user.";
+                return RedirectToAction("MyProjects", "Projects");
+
             }
+        }
+
+        // GET: Projects/Details
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+
+
+            var project = await _context.Projects
+                .Include(p => p.ProjectUsers)           //in Addition to project, bring the reference to project user
+                .ThenInclude(p => p.User)               //also bring the user reference
+                .FirstOrDefaultAsync(m => m.Id == id);      //go into db, go into projects table, find the first project with this id, grab that and only that item with that id
+
+            project.Tickets = await _context.Tickets
+                .Where(t => t.ProjectId == id)
+                .Include(t => t.DeveloperUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.Project)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .ToListAsync();
+
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
             return View(project);
         }
 
-        // GET: Projects/Edit/5
+        // GET: Projects/Edit
+        [Authorize(Roles = "Administrator, ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -128,47 +163,55 @@ namespace MVCPrbSol.Controllers
             return View(project);
         }
 
-        // POST: Projects/Edit/5
+
+        // POST: Projects/Edit
         // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImagePath,ImageData")] Project project)
         {
-            if (id != project.Id)
+            if (!User.IsInRole("Demo"))
             {
-                return NotFound();
-            }
-            if (User.IsInRole("Demo"))
-            {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction("Details", "Projects", new { id = project.Id });
-            }
-            if (ModelState.IsValid)
-            {
-                try
+
+                if (id != project.Id)
                 {
-                    _context.Update(project);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                if (ModelState.IsValid)
                 {
-                    if (!ProjectExists(project.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(project);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ProjectExists(project.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(project);
             }
-            return View(project);
+            else
+            {
+                TempData["DemoLockout"] = "Your changes have not been saved. To make changes to the database, please log in as a full user.";
+                return RedirectToAction("MyProjects", "Projects");
+
+            }
         }
-        
+
+
+        // GET: Projects/Delete
         [Authorize(Roles = "Administrator")]
-        // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -186,95 +229,86 @@ namespace MVCPrbSol.Controllers
             return View(project);
         }
 
-        // POST: Projects/Delete/5
+
+        // POST: Projects/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (User.IsInRole("Demo"))
-            {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction("Index", "Projects", new { id = id });
-            }
             var project = await _context.Projects.FindAsync(id);
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        //Get: AssignUsers
-        [HttpGet]
-        public async Task<IActionResult> AssignUsers(int id)
+        private bool ProjectExists(int id)
         {
-            var model = new ProjectUsersViewModel();
+            return _context.Projects.Any(pe => pe.Id == id);
+        }
+
+        // GET: Projects/ManageProjectUsers
+        [Authorize(Roles = "Administrator, ProjectManager")]
+        public async Task<IActionResult> AssignUsers(int id)          //By default, this is a get method//
+        {
+            var model = new ManageProjectUsersViewModel();      //Newing up an instance of ManageProjectUsersViewModel
             var project = _context.Projects.Find(id);
 
             model.Project = project;
+            List<PSUser> users = await _context.Users.ToListAsync();
             List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id);
-
-            var usersOnProj = await _PSProjectService.UsersOnProject(project.Id);
-            model.UsersOnProject = new MultiSelectList(usersOnProj.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName", members);
-            var usersOffProj = await _PSProjectService.UsersNotOnProject(project.Id);
-            model.UsersOffProject = new MultiSelectList(usersOffProj.OrderBy(u => u.FirstName).ThenBy(u => u.LastName), "Id", "FullName", members);
-
+            model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
-        //Post: AssignUsers
+
+
+
+        //POST: Projects/Assign Users To Project
+        [Authorize(Roles = "Administrator, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignUsers(ProjectUsersViewModel model)
+        public async Task<IActionResult> AssignUsers(ManageProjectUsersViewModel model)
         {
-            if (User.IsInRole("Demo"))
+            if (!User.IsInRole("Demo"))
             {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id });
-            }
-            if (ModelState.IsValid)
-            {
-                if (model.SelectedUsers != null)
-                {
-                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
-                    List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
-                    foreach (string id in model.SelectedUsers)
-                    {
-                        await _PSProjectService.AddUserToProject(id, model.Project.Id);
-                    }
-                    return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id });
-                }
-            }
-            return View(model);
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveUsers(ProjectUsersViewModel model)
-        {
-            if (User.IsInRole("Demo"))
-            {
-                TempData["DemoLockout"] = "Demo users can't submit data.";
-                return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id });
-            }
-            if (ModelState.IsValid)
-            {
-                if (model.SelectedUsers != null)
+                if (ModelState.IsValid)
                 {
-                    var currentMembers = await _context.Projects.Include(p => p.ProjectUsers).FirstOrDefaultAsync(p => p.Id == model.Project.Id);
-                    List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
-                    foreach (string id in model.SelectedUsers)
+                    if (model.SelectedUsers != null)
                     {
-                        await _PSProjectService.RemoveUserFromProject(id, model.Project.Id);
-                    }
-                    return RedirectToAction("AssignUsers", "Projects", new { id = model.Project.Id });
-                }
-            }
-            return View(model);
-        }
+                        var currentMembers = await _context.Projects.Include(p => p.ProjectUsers)
+                            .FirstOrDefaultAsync(p => p.Id == model.Project.Id);
+                        List<string> memberIds = currentMembers.ProjectUsers.Select(u => u.UserId).ToList();
 
-        private bool ProjectExists(int id)
-        {
-            return _context.Projects.Any(e => e.Id == id);
+                        foreach (string id in memberIds)
+                        {
+                            await _PSProjectService.RemoveUserFromProject(id, model.Project.Id);
+                        }
+
+                        foreach (string id in model.SelectedUsers)
+                        {
+                            await _PSProjectService.AddUserToProject(id, model.Project.Id);
+                        }
+                        return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
+                        //return RedirectToAction(name of(BlogPosts), new { id = post.BlogId }); Default statement that returns to all projects: return RedirectToAction("Index", "Projects");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("****ERROR****");
+                        //Send an error message back
+                    }
+                }
+                return View(model);
+            }
+            else
+            {
+                TempData["DemoLockout"] = "Your changes have not been saved. To make changes to the database, please log in as a full user.";
+                return RedirectToAction("MyProjects", "Projects");
+
+            }
         }
     }
 }
+
 //The Logic to create an instance of an Object : Project
 //Friday
+//Sat

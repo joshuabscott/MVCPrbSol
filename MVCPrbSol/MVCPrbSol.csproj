@@ -16,8 +16,12 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ProjectUsersController.cs" />
+    <Compile Remove="Models\ViewModels\ProjectTicketsViewModel.cs" />
+    <Compile Remove="Models\ViewModels\ProjectUsersViewModel.cs" />
     <Compile Remove="Services\IPSNotificationService.cs" />
+    <Compile Remove="Services\IPSTicketService.cs" />
     <Compile Remove="Services\PSNotificationService.cs" />
+    <Compile Remove="Services\PSTicketService.cs" />
     <Compile Remove="Utilities\BubbleSort.cs" />
   </ItemGroup>
 

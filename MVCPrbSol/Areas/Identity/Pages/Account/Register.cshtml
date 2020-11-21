@@ -1,78 +1,78 @@
 ﻿@page
 @model RegisterModel
 @{
+    Layout = null;
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Problem Solver | Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.FirstName"></label>
-                <input asp-for="Input.FirstName" class="form-control" />
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.LastName"></label>
-                <input asp-for="Input.LastName" class="form-control" />
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
+    <link href="~/css/app.min.css" rel="stylesheet" />
+    
 
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to register.</h4>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
+</head>
+
+<body>
+    <!-- BEGIN #app -->
+    <div id="app" class="app app-full-height app-without-header">
+        <!-- BEGIN register -->
+        <div class="register">
+            <!-- BEGIN register-content -->
+            <div class="register-content">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="POST" name="register_form">
+                    <h1 class="text-center">Sign Up</h1>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.FirstName">First Name <span asp-validation-for="Input.FirstName" class="text-danger">*</span></label>
+                        <input asp-for="Input.FirstName" type="text" class="form-control form-control-lg fs-15px" placeholder="John" value="" />
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+                    <div class="form-group">
+                        <label asp-for="Input.LastName">Last Name <span asp-validation-for="Input.LastName" class="text-danger">*</span></label>
+                        <input asp-for="Input.LastName" type="text" class="form-control form-control-lg fs-15px" placeholder="Smith" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email">Email Address <span asp-validation-for="Input.Email" class="text-danger">*</span></label>
+                        <input asp-for="Input.Email" type="text" class="form-control form-control-lg fs-15px" placeholder="username@address.com" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password">Password <span asp-validation-for="Input.Password" class="text-danger">*</span></label>
+                        <input asp-for="Input.Password" type="password" class="form-control form-control-lg fs-15px" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ConfirmPassword">Confirm Password <span asp-validation-for="Input.ConfirmPassword" class="text-danger">*</span></label>
+                        <input asp-for="Input.ConfirmPassword" type="password" class="form-control form-control-lg fs-15px" value="" />
+                    </div>
+                   
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-lg fs-15px fw-500 btn-block">Sign Up</button>
+                    </div>
+                    <div class="text-muted text-center">
+                        Already a user? <a asp-area="Identity" asp-page="/Account/Login">Sign In</a>
+                    </div>
+                </form>
+            </div>
+            <!-- END register-content -->
+        </div>
+        <!-- END register -->
+        <!-- BEGIN btn-scroll-top -->
+        <a href="#" data-click="scroll-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+        <!-- END btn-scroll-top -->
     </div>
-</div>
+    <!-- END #app -->
+    
+    <script src="~/js/app.min.js"></script>
+  
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>@*//Sat*@

@@ -4,16 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using MVCPrbSol.Models;
+using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
+using MVCPrbSol.Models;
 
 namespace MVCPrbSol.Controllers
 {
-    //------------------------------------------------------------------------------------error-----------------------------------------
     [Authorize]
     public class NotificationsController : Controller
     {
@@ -23,8 +22,7 @@ namespace MVCPrbSol.Controllers
         {
             _context = context;
         }
-
-        // GET: Notifications
+         // GET: Notifications
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Notifications.Include(n => n.Ticket).Include(n => n.User);
@@ -168,4 +166,4 @@ namespace MVCPrbSol.Controllers
             return _context.Notifications.Any(e => e.Id == id);
         }
     }
-}//Friday
+}//Sat

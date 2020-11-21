@@ -8,11 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
-using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Services
 {
-    public class PSHistoryService : IPSHistoryService
+    public class PSHistoriesService : IPSHistoriesService
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<PSUser> _userManager;
@@ -20,7 +19,7 @@ namespace MVCPrbSol.Services
         //private readonly IEmailSender _emailService;
         //private readonly IPSNotificationService _notificationService;
 
-        public PSHistoryService(ApplicationDbContext context, UserManager<PSUser> userManager, IEmailSender emailSender/*, IPSNotificationService notificationService*/)
+        public PSHistoriesService(ApplicationDbContext context, UserManager<PSUser> userManager, IEmailSender emailSender/*, IPSNotificationService notificationService*/)
         {
             _context = context;
             _userManager = userManager;
@@ -156,6 +155,7 @@ namespace MVCPrbSol.Services
                         RecipientId = newTicket.DeveloperUserId
                     };
                     await _context.Notifications.AddAsync(notification);
+
                     //Then, Send an email now to Dev
                     string devEmail = newTicket.DeveloperUser.Email;
                     string subject = "New Ticket Assignment";
@@ -167,3 +167,4 @@ namespace MVCPrbSol.Services
         }
     }
 }//keeping track of a tickets data and tracking it as it is changed and updated, and Sending an email if New Assignment
+//Sat

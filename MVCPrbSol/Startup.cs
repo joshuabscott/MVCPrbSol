@@ -16,7 +16,6 @@ using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Services;
 
-
 namespace MVCPrbSol
 {
     public class Startup
@@ -34,19 +33,19 @@ namespace MVCPrbSol
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+
+            services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
+            //Injecting dependency to other parts of this project at startup
+
             services.AddScoped<IPSRolesService, PSRolesService>();
             services.AddScoped<IPSProjectService, PSProjectService>();
-            services.AddScoped<IPSHistoryService, PSHistoryService>();
+            services.AddScoped<IPSHistoriesService, PSHistoriesService>();
             services.AddScoped<IPSAccessService, PSAccessService>();
-            //services.AddScoped<IPSTicketService, PSTicketService>();
-            //services.AddScoped<IPSNotificationService, PSNotificationService>();
 
-            //Email Service
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailSender, EmailService>();
 
@@ -80,9 +79,10 @@ namespace MVCPrbSol
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                //pattern: "{controller=Home}/{action=LandingPage}/{id?}");
+                pattern: "{controller=Home}/{action=LandingPage}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
     }
-}//Friday
+}//SAt

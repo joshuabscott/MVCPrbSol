@@ -87,7 +87,7 @@ namespace MVCPrbSol.Controllers
                     ticketAttachment.FileData = bytes;
                     ticketAttachment.Description = attachment.FileName;
                     ticketAttachment.Created = DateTime.Now;
-                    //Something was added here during class I belive, I don't know if this is working correctly or if this is pulled out as a service
+                    //Something was added here during class I believe, I don't know if this is working correctly or if this is pulled out as a service
                     _context.Add(ticketAttachment);
                     await _context.SaveChangesAsync();
 
@@ -201,3 +201,4 @@ namespace MVCPrbSol.Controllers
         }
     }
 }//Friday
+//Sat

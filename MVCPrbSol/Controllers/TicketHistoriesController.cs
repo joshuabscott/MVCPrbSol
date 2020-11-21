@@ -11,12 +11,12 @@ using MVCPrbSol.Models;
 
 namespace MVCPrbSol.Controllers
 {
-    [Authorize/*(Roles = "Administrator")*/]
-    public class TicketHistorysController : Controller
+    [Authorize(Roles = "Administrator")]
+    public class TicketHistoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TicketHistorysController(ApplicationDbContext context)
+        public TicketHistoriesController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,7 +24,10 @@ namespace MVCPrbSol.Controllers
         // GET: TicketHistories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TicketHistories.Include(t => t.Ticket).Include(t => t.User);
+            var applicationDbContext = _context.TicketHistories
+                .Include(t => t.Ticket)
+                .Include(t => t.User);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -61,8 +64,7 @@ namespace MVCPrbSol.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(",TicketId,Property,OldValue,NewValue,Created,UserId")] TicketHistory ticketHistory)
-        //remove Id
+        public async Task<IActionResult> Create([Bind("Id,TicketId,Property,OldValue,NewValue,Created,UserId")] TicketHistory ticketHistory)
         {
             if (ModelState.IsValid)
             {
@@ -166,4 +168,5 @@ namespace MVCPrbSol.Controllers
             return _context.TicketHistories.Any(e => e.Id == id);
         }
     }
-}//Friday
+}
+//Sat

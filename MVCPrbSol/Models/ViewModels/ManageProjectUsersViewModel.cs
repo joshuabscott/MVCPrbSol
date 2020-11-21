@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MVCPrbSol.Models.ViewModels
 {
-    //[Authorize(Roles = "Administrator")]
     public class ManageProjectUsersViewModel
     {
         public Project Project { get; set; }
@@ -15,3 +13,4 @@ namespace MVCPrbSol.Models.ViewModels
         public string[] SelectedUsers { get; set; }
     }
 }// Manage what Users can be on what project
+//Sat

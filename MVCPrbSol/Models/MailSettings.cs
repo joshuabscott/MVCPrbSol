@@ -14,3 +14,4 @@ namespace MVCPrbSol.Models
         public int Port { get; set; }
     }
 }//Data for Mail Objects when instance is called
+//Sat
