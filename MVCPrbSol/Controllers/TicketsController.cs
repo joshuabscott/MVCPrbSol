@@ -35,13 +35,14 @@ namespace MVCPrbSol.Controllers
         // 2) Create a local, private readonly reference to the service injected. This goes above the Constructor.
         // 3) Assign the value of the injection to local reference 
         #endregion
-        public TicketsController(ApplicationDbContext context, UserManager<PSUser> userManager, IPSHistoryService historyService, IPSRolesService rolesService, IPSAccessService accessService)
+        public TicketsController(ApplicationDbContext context, UserManager<PSUser> userManager, IPSHistoryService historyService, IPSRolesService rolesService, IPSAccessService accessService, IPSTicketService ticketService)
         {
             _userManager = userManager;
             _context = context;
             _historyService = historyService;
             _rolesService = rolesService;
             _accessService = accessService;
+            _ticketService = ticketService;
         }
 
         #region All Tickets Index
@@ -59,6 +60,8 @@ namespace MVCPrbSol.Controllers
         // var to hold and puts in in an async list with the .ToListAsync() method (this is why the await is 
         // needed in front of the local var)".
         #endregion
+
+
         // GET: Tickets Index
         public async Task<IActionResult> Index()
         {
@@ -89,6 +92,9 @@ namespace MVCPrbSol.Controllers
         //
         //Previous Action name that was asynchronous: public async Task<IActionResult> MyTickets()
         #endregion
+
+
+
         // GET: MyTickets Index
         public IActionResult MyTickets()
         {   //Create an item of type "new List" of type Ticket
@@ -218,6 +224,8 @@ namespace MVCPrbSol.Controllers
             //return View(await applicationDbContext.ToListAsync());
             #endregion
         }
+
+
 
         // GET: Tickets/Details
         public async Task<IActionResult> Details(int? id)
@@ -522,10 +530,5 @@ namespace MVCPrbSol.Controllers
             return _context.Tickets.Any(e => e.Id == id);
         }
     }
-}
-
-
-
-
-
-//The Logic to create an instance of an Object : Ticket
+}//The Logic to create an instance of an Object : Ticket
+//Friday

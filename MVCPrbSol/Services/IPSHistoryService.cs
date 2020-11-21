@@ -12,4 +12,4 @@ namespace MVCPrbSol.Services
         Task AddHistory(Ticket oldTicket, Ticket newTicket, string userId);
 
     }
-}//This is the interface that gathers information of tickets to be used for History 
+}//This is the interface that gathers information of tickets to be used for History when updating newTicket

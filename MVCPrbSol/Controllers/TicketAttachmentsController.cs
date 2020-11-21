@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
-using MVCPrbSol.Services;
 
 
 namespace MVCPrbSol.Controllers
@@ -88,7 +87,7 @@ namespace MVCPrbSol.Controllers
                     ticketAttachment.FileData = bytes;
                     ticketAttachment.Description = attachment.FileName;
                     ticketAttachment.Created = DateTime.Now;
-
+                    //Something was added here during class I belive, I don't know if this is working correctly or if this is pulled out as a service
                     _context.Add(ticketAttachment);
                     await _context.SaveChangesAsync();
 
@@ -201,4 +200,4 @@ namespace MVCPrbSol.Controllers
             return _context.TicketAttachments.Any(e => e.Id == id);
         }
     }
-}
+}//Friday

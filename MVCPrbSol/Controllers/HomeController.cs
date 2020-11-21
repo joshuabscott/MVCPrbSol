@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MVCPrbSol.Models;
 
-namespace SJBugTracker.Controllers
+namespace MVCPrbSol.Controllers
 {
     [Authorize]
     public class HomeController : Controller
@@ -25,6 +25,17 @@ namespace SJBugTracker.Controllers
             return View();
         }
 
+
+
+
+        [AllowAnonymous]
+        public IActionResult LandingPage()
+        {
+            return View();
+        }
+
+
+
         public IActionResult Privacy()
         {
             return View();
@@ -36,4 +47,4 @@ namespace SJBugTracker.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
-}
+}//Friday

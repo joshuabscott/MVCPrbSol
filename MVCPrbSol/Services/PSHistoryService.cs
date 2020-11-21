@@ -31,6 +31,7 @@ namespace MVCPrbSol.Services
         }
         public async Task AddHistory(Ticket oldTicket, Ticket newTicket, string userId)
         {
+            //.Title
             if (oldTicket.Title != newTicket.Title)
             {
                 TicketHistory history = new TicketHistory
@@ -44,7 +45,7 @@ namespace MVCPrbSol.Services
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
-
+            //.Description
             if (oldTicket.Description != newTicket.Description)
             {
                 TicketHistory history = new TicketHistory
@@ -58,7 +59,7 @@ namespace MVCPrbSol.Services
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
-
+            //.TicketTypeId
             if (oldTicket.TicketTypeId != newTicket.TicketTypeId)
             {
                 TicketHistory history = new TicketHistory
@@ -72,7 +73,7 @@ namespace MVCPrbSol.Services
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
-
+            //.TicketPriorityId
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
             {
                 TicketHistory history = new TicketHistory
@@ -86,7 +87,7 @@ namespace MVCPrbSol.Services
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
-
+            //.TicketStatusId
             if (oldTicket.TicketStatusId != newTicket.TicketStatusId)
             {
                 TicketHistory history = new TicketHistory
@@ -100,9 +101,12 @@ namespace MVCPrbSol.Services
                 };
                 await _context.TicketHistories.AddAsync(history);
             }
-
+            
+            
+            //.DeveloperUserId
             if (oldTicket.DeveloperUserId != newTicket.DeveloperUserId)
             {
+                //if this, do this
                 if (String.IsNullOrWhiteSpace(oldTicket.DeveloperUserId))
                 {
                     TicketHistory history = new TicketHistory
@@ -116,6 +120,7 @@ namespace MVCPrbSol.Services
                     };
                     await _context.TicketHistories.AddAsync(history);
                 }
+                //unless this, do this
                 else if (String.IsNullOrWhiteSpace(newTicket.DeveloperUserId))
                 {
                     TicketHistory history = new TicketHistory
@@ -129,6 +134,7 @@ namespace MVCPrbSol.Services
                     };
                     await _context.TicketHistories.AddAsync(history);
                 }
+                //if neither of those "if", do this instead
                 else
                 {
                     TicketHistory history = new TicketHistory
@@ -150,7 +156,7 @@ namespace MVCPrbSol.Services
                         RecipientId = newTicket.DeveloperUserId
                     };
                     await _context.Notifications.AddAsync(notification);
-                    //Send an email
+                    //Then, Send an email now to Dev
                     string devEmail = newTicket.DeveloperUser.Email;
                     string subject = "New Ticket Assignment";
                     string message = $"You have a new ticket for project: {newTicket.Project.Name}";

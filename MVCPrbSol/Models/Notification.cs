@@ -12,7 +12,7 @@ namespace MVCPrbSol.Models
 
         public string Description { get; set; }
         public DateTimeOffset Created { get; set; }
-        public string UserId { get; set; }
+        //public string UserId { get; set; }
 
         public string RecipientId { get; set; }
         public string SenderId { get; set; }

@@ -29,4 +29,4 @@ namespace MVCPrbSol.Models
         public List<ProjectUser> ProjectUsers { get; set; }
 
     }
-}//Data of User
+}//Data of User to be used with IdentityUser

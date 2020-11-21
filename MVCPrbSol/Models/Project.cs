@@ -21,7 +21,7 @@ namespace MVCPrbSol.Models
         public string Name { get; set; }
 
      
-        [Display(Name = "Image Path")]
+        [Display(Name = "Project Image")]
         public string ImagePath { get; set; }
         public byte [] ImageData { get; set; }
 

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\ProjectUsersController.cs" />
     <Compile Remove="Services\IPSNotificationService.cs" />
     <Compile Remove="Services\PSNotificationService.cs" />
     <Compile Remove="Utilities\BubbleSort.cs" />

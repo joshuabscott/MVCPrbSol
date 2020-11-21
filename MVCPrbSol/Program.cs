@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -27,9 +29,9 @@ namespace MVCPrbSol
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(roleManager);
                     await ContextSeed.SeedDefaultUsersAsync(userManager);
-                    //await ContextSeed.SeedDefaultTicketPrioritiesAsync(context); //Need to seed all 3 Ticket controllers default selections in ContextSeed
-                    //await ContextSeed.SeedDefaultTicketStatusesAsync(context);
-                    //await ContextSeed.SeedDefaultTicketTypesAsync(context);
+                    await ContextSeed.SeedDefaultTicketPrioritiesAsync(context); //Need to seed all 3 Ticket controllers default selections in ContextSeed
+                    await ContextSeed.SeedDefaultTicketStatusesAsync(context);
+                    await ContextSeed.SeedDefaultTicketTypesAsync(context);
                 }
                 catch (Exception ex)
                 {
@@ -48,4 +50,4 @@ namespace MVCPrbSol
                     webBuilder.UseStartup<Startup>();
                 });
     }
-}
+}//Friday
