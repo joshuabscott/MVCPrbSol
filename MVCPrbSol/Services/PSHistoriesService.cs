@@ -16,7 +16,6 @@ namespace MVCPrbSol.Services
         private readonly ApplicationDbContext _context;
         private readonly UserManager<PSUser> _userManager;
         private readonly IEmailSender _emailSender;
-        //private readonly IEmailSender _emailService;
         //private readonly IPSNotificationService _notificationService;
 
         public PSHistoriesService(ApplicationDbContext context, UserManager<PSUser> userManager, IEmailSender emailSender/*, IPSNotificationService notificationService*/)
@@ -24,7 +23,7 @@ namespace MVCPrbSol.Services
             _context = context;
             _userManager = userManager;
             _emailSender = emailSender;
-            //_emailService = emailService;
+    
             //_notificationService = notificationService;
 
         }

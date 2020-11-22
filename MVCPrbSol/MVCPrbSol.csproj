@@ -9,12 +9,17 @@
 
   <ItemGroup>
     <Compile Remove="obj\**" />
+    <Compile Remove="Views\Notifications\**" />
     <Content Remove="obj\**" />
+    <Content Remove="Views\Notifications\**" />
     <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="Views\Notifications\**" />
     <None Remove="obj\**" />
+    <None Remove="Views\Notifications\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\NotificationsController.cs" />
     <Compile Remove="Controllers\ProjectUsersController.cs" />
     <Compile Remove="Models\ViewModels\ProjectTicketsViewModel.cs" />
     <Compile Remove="Models\ViewModels\ProjectUsersViewModel.cs" />
