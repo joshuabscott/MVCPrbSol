@@ -1,40 +1,43 @@
 ﻿@model MVCPrbSol.Models.ViewModels.ManageProjectUsersViewModel
-@{
-    ViewData["Title"] = "Assign Project Users";
-
-}
-
-<h2>Assign Project Users</h2>
 
 <div class="container">
-    @*------Notes------*@
-    @*for-each loop is not here, it is in the ProjectsControler*@
-    @*We are assigning users to THIS Project*@
-    @*No longer just looking to users*@
-    <div class="card col-6" style="margin:2px"></div>
-    <div class="card-body">
-        <h2 class="m-t-0 h3"><b>Assign Users to @Model.Project.Name</b></h2>
-        <p class="text-muted font-13 m-b-30"></p>
-        <hr />
-        <form asp-action="AssignUsers" asp-controller="Projects" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*--------or html type="hidden"----------*@
-            <input type="hidden" asp-for="@Model.Project.Id" />
-            <input type="hidden" asp-for="@Model.Project.Name" />
-            <div class="col-12">
-                <div class="form-group">
-                    <label asp-for="@Model.Users" class="custom-control-label">Assign team members for Project: @Model.Project.Name</label>
-                    <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
-                </div>
-            </div>
-            <hr />
-            <div class="col-12">
-                <div class="form-group pull-right">
-                    <input type="submit" value="Assign Roles" class="btn btn-info" />
-                    <a class="btn btn-info" asp-controller="Projects" asp-action="AddProjectUsers">Cancel</a>
-                </div>
-            </div>
 
-        </form>
-    </div>
+    <h2>Assign Users</h2>
+
+    <div class="cold-md-4"></div>
+    <div class="panel panel-green margin-bottom-40"></div>
+
+    <p>
+        Project Name:
+        <span>@Model.Project.Name</span>
+    </p>
+
+    <form asp-controller="Projects" asp-action="AssignUsers" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="@Model.Project.Id">
+        <input type="hidden" asp-for="@Model.Project.Name">   
+        <div class="col-12">
+
+            <div class="form-group">
+
+                <label asp-for="@Model.Users" class="control-label">Assign team member to Project: @Model.Project.Name</label>
+
+                <select asp-for="@Model.SelectedUsers" class="form-control" asp-items="@Model.Users" multiple="multiple"></select>
+
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+
+                <input type="submit" value="Assign Users" class="btn btn-success" />
+
+            </div>
+        </div>
+    </form>
+
 </div>
+@*//Sun*@

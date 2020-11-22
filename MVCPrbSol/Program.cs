@@ -19,8 +19,7 @@ namespace MVCPrbSol
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            await DataHelper.ManageDataAsync(host);
-
+            //await DataHelper.ManageDataAsync(host);
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -32,7 +31,7 @@ namespace MVCPrbSol
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(roleManager);
                     await ContextSeed.SeedDefaultUsersAsync(userManager);
-                    await ContextSeed.SeedDefaultTicketPrioritiesAsync(context); //Need to seed all 3 Ticket controllers default selections in ContextSeed
+                    await ContextSeed.SeedDefaultTicketPrioritiesAsync(context);
                     await ContextSeed.SeedDefaultTicketStatusesAsync(context);
                     await ContextSeed.SeedDefaultTicketTypesAsync(context);
                 }
