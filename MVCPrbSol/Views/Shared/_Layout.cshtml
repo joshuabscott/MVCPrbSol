@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using MVCPrbSol.Services
+@inject UserManager<PSUser> UserManager
+@inject IPSAccessService AccessService
+@inject IPSProjectService _projectService
+
+@{
+    ViewData["Title"] = "Dashboard";
+    var userId = await UserManager.GetUserAsync(User);
+    var roleName = (await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User))).FirstOrDefault();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +19,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
     <link rel="stylesheet" href="~/css/site.css" />
+
+    @*<link href="~/css/Datatables/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/Datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/Datatables/responsive.bootstrap4.min.css" rel="stylesheet" />*@
 </head>
 <body>
     <header>
@@ -59,6 +75,19 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @*<script src="~/js/Datatables/jquery.dataTables.min.js"></script>
+    <script src="~/js/Datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/Datatables/dataTables.buttons.min.js"></script>
+    <script src="~/js/Datatables/buttons.colVis.min.js"></script>
+    <script src="~/js/Datatables/buttons.flash.min.js"></script>
+    <script src="~/js/Datatables/buttons.html5.min.js"></script>
+    <script src="~/js/Datatables/buttons.print.min.js"></script>
+    <script src="~/js/Datatables/buttons.bootstrap4.min.js"></script>
+    <script src="~/js/Datatables/dataTables.responsive.min.js"></script>
+    <script src="~/js/Datatables/responsive.bootstrap4.min.js"></script>*@
+
+
     @RenderSection("Scripts", required: false)
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script>
@@ -71,5 +100,18 @@
             });
         });
     </script>
+
+
+    @*<script>
+            $('#datatableDefault').DataTable({
+                dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-right'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'mr-auto'i><'mb-0'p>>",
+                lengthMenu: [10, 20, 30, 40, 50],
+                responsive: true,
+                buttons: [
+                    { extend: 'print', className: 'btn btn-default' },
+                    { extend: 'csv', className: 'btn btn-default' }
+                ]
+            });
+        </script>*@
 </body>
-</html>
+</html>@*//Sun*@

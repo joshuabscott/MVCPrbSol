@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MVCPrbSol.Services
+@model IEnumerable<MVCPrbSol.Models.Project>
+@inject SignInManager<PSUser> SignInManager
+@inject UserManager<PSUser> _userManager
+@inject IPSAccessService _accessService
+@inject IPSProjectService _projectService
+
+@{
+    ViewData["Title"] = "MyProjects";
+    var userId = _userManager.GetUserId(User);
+    var roleName = (await _userManager.GetRolesAsync(await _userManager.GetUserAsync(User))).FirstOrDefault();
+}
+
+<h1>My Current Projects</h1>
+
+@if (User.IsInRole("Adminisitrator") || User.IsInRole("ProjectManager"))
+{
+    <span><a asp-action="Create">Create New</a></span>
+}
+
+<table id="datatableDefault" class="table text-nowrap w-100 table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImagePath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageData)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageData)
+                </td>
+                <td>
+                    @if (await _accessService.CanInteractProject(userId, item.Id, roleName))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <span>|</span>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> <span>|</span>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>@*//Sun*@
