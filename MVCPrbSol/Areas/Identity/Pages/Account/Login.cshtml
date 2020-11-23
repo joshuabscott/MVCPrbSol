@@ -7,103 +7,6 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>Problem Solver | Sign In</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-
-    
-    <link href="~/css/app.min.css" rel="stylesheet" />
-
-</head>
-<body>
-
-    <div id="app" class="app app-full-height app-without-header">
-       
-        <div class="login">
-           
-            <div class="login-content">
-                <form id="account" method="post">
-                    <h1 class="text-center">Sign In</h1>
-                    <hr />
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Input.Email"></label>
-                        <input asp-for="Input.Email" class="form-control form-control-lg fs-15px" placeholder="username@address.com" />
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" class="form-control form-control-lg fs-15px" placeholder="Enter your password" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox custom-checkbox">
-                            <label asp-for="Input.RememberMe">
-                                <input asp-for="Input.RememberMe" />
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block fw-500 mb-3">Sign In</button>
-                    </div>
-                    <div class="form-group">
-                        <div class="text-center text-muted">
-                            Don't have an account yet? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Sign up</a>.
-                        </div>
-                        <div class="text-center">
-                            <a id="forgot-password" asp-page="./ForgotPassword">Forget your password?</a>
-                        </div>
-                        <hr />
-
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoAdminEmail" class="btn btn-primary">Demo Administrator</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoPMEmail" class="btn btn-primary">Demo Project Manager</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoDevEmail" class="btn btn-primary">Demo Developer</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoSubEmail" class="btn btn-primary">Demo Submitter</button>
-                    </div>
-                </form>
-                <form id="account" method="post">
-                    <div class="form-group">
-                        <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="btn btn-primary">Demo New User</button>
-                    </div>
-                </form>
-            </div>
-            <!-- END login-content -->
-        </div>
-        <!-- END login -->
-        <!-- BEGIN btn-scroll-top -->
-        <a href="#" data-click="scroll-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
-        <!-- END btn-scroll-top -->
-    </div>
-    <!-- END #app -->
-    
-    <script src="~/js/app.min.js"></script>
-    
-
-</body>
-</html>
-
-<!DOCTYPE html>
 <html lang="zxx" class="js">
 
 <head>
@@ -115,10 +18,12 @@
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="./images/favicon.png">
     <!-- Page Title  -->
-    <title>Login | DashLite Admin Template</title>
+    <title>Problem Solver | Sign In</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="./assets/css/dashlite.css?ver=2.1.0">
     <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=2.1.0">
+
+    <link href="~/css/app.min.css" rel="stylesheet" />
 </head>
 
 <body class="nk-body bg-white npc-general pg-auth">
@@ -127,8 +32,6 @@
         <div class="nk-main ">
             <!-- wrap  -->
             <div class="nk-wrap nk-wrap-nosidebar">
-
-
 
                 <!-- content  -->
                 <div class="nk-content ">
@@ -152,6 +55,8 @@
                                         </div>
                                     </div>
                                 </div><!-- .nk-block-head -->
+
+
                                 <form action="#">
                                     <div class="form-group">
                                         <div class="form-label-group">
@@ -173,13 +78,19 @@
                                             <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter your passcode">
                                         </div>
                                     </div><!-- .foem-group -->
+
                                     <div class="form-group">
-                                        <button class="btn btn-lg btn-primary btn-block">Sign in</button>
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block fw-500 mb-3">Sign In</button>
                                     </div>
+
                                 </form><!-- form -->
+
+
                                 <div class="form-note-s2 pt-4">
                                     New on our platform? <a href="html/pages/auths/auth-register-v3.html">Create an account</a>
                                 </div>
+
+
                                 <div class="text-center pt-4 pb-3">
                                     <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
                                 </div>
@@ -190,6 +101,32 @@
                                 <div class="text-center mt-5">
                                     <span class="fw-500">I don't have an account? <a href="#">Try 15 days free</a></span>
                                 </div>
+
+
+                                <div class="text-center pt-4 pb-3">
+                                    <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
+                                </div>
+
+                                <form action="#">
+
+                                    <div class="form-group">
+                                        <button type="submit" name="demoEmail" value="DemoAdminEmail" class="btn btn-lg btn-primary btn-block">Demo Administrator</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" name="demoEmail" value="DemoPMEmail" class="btn btn-lg btn-primary btn-block">Demo Project Manager</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" name="demoEmail" value="DemoDevEmail" class="btn btn-lg btn-primary btn-block">Demo Developer</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" name="demoEmail" value="DemoSubEmail" class="btn btn-lg btn-primary btn-block">Demo Submitter</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" name="demoEmail" value="DemoNewUserEmail" class="btn btn-lg btn-primary btn-block">Demo New User</button>
+                                    </div>
+
+                                </form><!-- form -->
+
                             </div><!-- .nk-block -->
                             <div class="nk-block nk-auth-footer">
                                 <div class="nk-block-between">
@@ -254,5 +191,7 @@
     <!-- JavaScript -->
     <script src="./assets/js/bundle.js?ver=2.1.0"></script>
     <script src="./assets/js/scripts.js?ver=2.1.0"></script>
+
+    <script src="~/js/app.min.js"></script>
 </body>
-</html>
+</html>@*//Mon*@
