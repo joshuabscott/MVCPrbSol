@@ -36,6 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Areas\Identity\Pages\Account\login-v3.html" />
+    <None Remove="Views\Home\_blank.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\assets\fonts\Nioicon.svg" />
     <None Include="wwwroot\assets\fonts\Nunito-Bold.woff2" />
     <None Include="wwwroot\assets\fonts\Nunito-Regular.woff2" />
