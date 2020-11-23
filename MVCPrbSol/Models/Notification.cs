@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MVCPrbSol.Models
+namespace MVCPrbSol.Models       //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     public class Notification
     {

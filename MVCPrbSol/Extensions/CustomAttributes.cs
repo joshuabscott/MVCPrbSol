@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace MVCPrbSol.Extensions
 {
@@ -20,7 +20,9 @@ namespace MVCPrbSol.Extensions
             _maxFileSize = maxFileSize;
         }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-            //inheritance happening when you see override, extend further then we could normally reach. method name is valid, bass in the object, the value of the property, validationContect is used, passed. by decorating or data
+            //inheritance happening when you see override, extend further then we could normally reach. 
+            //method name is valid, bass in the object, the value of the property, 
+            //validationContect is used, passed. by decorating or data
         {
             var file = value as IFormFile;
             if (file != null)

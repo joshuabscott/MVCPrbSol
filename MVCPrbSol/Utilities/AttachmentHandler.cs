@@ -23,7 +23,7 @@ namespace MVCPrbSol.Utilities
             var binary = Convert.ToBase64String(bytes);
             var ext = Path.GetExtension(attachment.FileName);
 
-            ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+            //ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
             ticketAttachment.FileData = bytes;
             ticketAttachment.Created = DateTime.Now;
 
@@ -31,3 +31,4 @@ namespace MVCPrbSol.Utilities
         }
     }
 }//Sat
+///Mon

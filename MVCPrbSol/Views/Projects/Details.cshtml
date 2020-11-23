@@ -28,7 +28,6 @@
                     @if (User.IsInRole("Admininistrator") || User.IsInRole("ProjectManager"))
                     {
                         <a asp-action="AssignUsers" asp-route-id="@Model.Id">Assign Team Members</a>
-
                     }
                 </li>
                 <li class="list-group-item">
@@ -54,7 +53,7 @@
                     }
                 </li>
             </ul>
-            <!--  -->
+        
             <table id="datatableDefault" class="table text-nowrap w-100 table table-hover">
                 <thead class="thead-light">
                     <tr>

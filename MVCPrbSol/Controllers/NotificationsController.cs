@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 
-namespace MVCPrbSol.Controllers
+namespace MVCPrbSol.Controllers //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     [Authorize]
     public class NotificationsController : Controller
@@ -167,3 +167,4 @@ namespace MVCPrbSol.Controllers
         }
     }
 }//Sat
+//Mon

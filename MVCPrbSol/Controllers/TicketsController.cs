@@ -15,7 +15,7 @@ using MVCPrbSol.Models;
 using MVCPrbSol.Services;
 using MVCPrbSol.Utilities;
 
-namespace MVCPrbSol.Controllers
+namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     [Authorize]
     public class TicketsController : Controller

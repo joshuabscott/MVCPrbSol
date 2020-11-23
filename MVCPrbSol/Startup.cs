@@ -30,25 +30,27 @@ namespace MVCPrbSol
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-              options.UseNpgsql(
-                  DataHelper.GetConnectionString(Configuration)));
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(
             //        Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+              options.UseNpgsql(
+                  DataHelper.GetConnectionString(Configuration)));
 
             services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+           //services.AddDefaultIdentity<IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+               .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
-
-            //Injecting dependency to other parts of this project at startup
 
             services.AddScoped<IPSRolesService, PSRolesService>();
             services.AddScoped<IPSProjectService, PSProjectService>();
             services.AddScoped<IPSHistoriesService, PSHistoriesService>();
             services.AddScoped<IPSAccessService, PSAccessService>();
+            //new service addded Mon 23
+            services.AddScoped<IPSFileService, PSFileService>();
 
+            //These services are for the Email
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailSender, EmailService>();
 
@@ -82,10 +84,10 @@ namespace MVCPrbSol
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                //pattern: "{controller=Home}/{action=LandingPage}/{id?}");
                 pattern: "{controller=Home}/{action=LandingPage}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
     }
 }//SAt
+//Mon

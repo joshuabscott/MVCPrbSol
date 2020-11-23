@@ -10,12 +10,20 @@
     <h4>TicketAttachment</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FormFile)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FormFile)
+        </dd>
+
+        @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FilePath)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FilePath)
-        </dd>
+        </dd>*@
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FileData)
         </dt>

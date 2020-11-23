@@ -31,3 +31,4 @@ namespace MVCPrbSol.Models
     }
 }//Data of User to be used with IdentityUser
 //Sat
+//Mon

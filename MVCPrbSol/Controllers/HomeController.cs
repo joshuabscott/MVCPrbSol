@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MVCPrbSol.Models;
 
-namespace MVCPrbSol.Controllers
+namespace MVCPrbSol.Controllers  //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     [Authorize]
     public class HomeController : Controller
@@ -45,3 +45,4 @@ namespace MVCPrbSol.Controllers
     }
 }//Friday
 //Sat
+//Mon

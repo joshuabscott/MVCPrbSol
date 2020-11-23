@@ -28,7 +28,7 @@ namespace MVCPrbSol.Models
         [DataType(DataType.Date)]
         public DateTimeOffset Created { get; set; }
         [DataType(DataType.Date)]
-        public DateTimeOffset? Updated { get; set; }
+        public DateTimeOffset? Updated { get; set; } //? look at view/ticket/details and re-watch Monday morning second video
 
         public int ProjectId { get; set; }
         public int TicketTypeId { get; set; }
@@ -53,3 +53,4 @@ namespace MVCPrbSol.Models
 
     }
 }//Data to be used when creating an Instance of a Ticket Object of this class
+//Mon

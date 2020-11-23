@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 
-namespace MVCPrbSol.Controllers
+namespace MVCPrbSol.Controllers     //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     [Authorize]
     public class TicketCommentsController : Controller

@@ -11,7 +11,7 @@ using MVCPrbSol.Models;
 using MVCPrbSol.Models.ViewModels;
 using MVCPrbSol.Services;
 
-namespace MVCPrbSol.Controllers
+namespace MVCPrbSol.Controllers    //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     [Authorize/*(Roles = "Administrator, ProjectManager")*/]
     public class UserRolesController : Controller

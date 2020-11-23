@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 
-namespace MVCPrbSol.Controllers
+namespace MVCPrbSol.Controllers    //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     [Authorize/*(Roles = "Administrator")*/]
     public class TicketStatusController : Controller

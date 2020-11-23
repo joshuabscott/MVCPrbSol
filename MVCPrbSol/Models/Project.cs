@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 
-namespace MVCPrbSol.Models
+namespace MVCPrbSol.Models   //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     public class Project
     {

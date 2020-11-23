@@ -12,12 +12,15 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FormFile)
+            </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.FilePath)
-            </th>
+            </th>>*@
             <th>
                 @Html.DisplayNameFor(model => model.FileData)
-            </th>*@
+            </th
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
@@ -36,12 +39,15 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FormFile)
+            </td>
             @*<td>
                 @Html.DisplayFor(modelItem => item.FilePath)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.FileData)
-            </td>*@
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>

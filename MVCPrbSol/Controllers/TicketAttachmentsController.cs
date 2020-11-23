@@ -13,7 +13,7 @@ using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 
 
-namespace MVCPrbSol.Controllers
+namespace MVCPrbSol.Controllers      //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
     [Authorize]
     public class TicketAttachmentsController : Controller
@@ -64,50 +64,77 @@ namespace MVCPrbSol.Controllers
             return View();
         }
 
+
         // POST: TicketAttachments/Create
         // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
+        public async Task<IActionResult> Create([Bind("Id,FormFile,Image,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment)
         {
             if (ModelState.IsValid)
             {
-                if (attachment != null)
-                {
-                    var memoryStream = new MemoryStream();
-                    attachment.CopyTo(memoryStream);
-                    byte[] bytes = memoryStream.ToArray();
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                    var binary = Convert.ToBase64String(bytes);
-                    var ext = Path.GetExtension(attachment.FileName);
+                MemoryStream ms = new MemoryStream();
+                await ticketAttachment.FormFile.CopyToAsync(ms);
 
-                    ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
-                    ticketAttachment.FileData = bytes;
-                    ticketAttachment.Description = attachment.FileName;
-                    ticketAttachment.Created = DateTime.Now;
-                    //Something was added here during class I believe, I don't know if this is working correctly or if this is pulled out as a service
-                    _context.Add(ticketAttachment);
-                    await _context.SaveChangesAsync();
+                ticketAttachment.FileData = ms.ToArray();
+                ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
+                ticketAttachment.Created = DateTimeOffset.Now;
+                ticketAttachment.UserId = _userManager.GetUserId(User);
 
-                    var ticket = await _context.Tickets
-                        .Include(t => t.TicketPriority)
-                        .Include(t => t.TicketStatus)
-                        .Include(t => t.TicketType)
-                        .Include(t => t.DeveloperUser)
-                        .Include(t => t.Project)
-                        .FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
-
-                    //await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
-                    return RedirectToAction(nameof(Index));
-                }
+                _context.Add(ticketAttachment);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
             return View(ticketAttachment);
         }
+
+        //// POST: TicketAttachments/Create
+        //// To protect from over-posting attacks, enable the specific properties you want to bind to, for 
+        //// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,FilePath,FileData,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment, IFormFile attachment)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (attachment != null)
+        //        {
+        //            var memoryStream = new MemoryStream();
+        //            attachment.CopyTo(memoryStream);
+        //            byte[] bytes = memoryStream.ToArray();
+        //            memoryStream.Close();
+        //            memoryStream.Dispose();
+        //            var binary = Convert.ToBase64String(bytes);
+        //            var ext = Path.GetExtension(attachment.FileName);
+
+        //            ticketAttachment.FilePath = $"data:image/{ext};base64,{binary}";
+        //            ticketAttachment.FileData = bytes;
+        //            ticketAttachment.Description = attachment.FileName;
+        //            ticketAttachment.Created = DateTime.Now;
+        //            //Something was added here during class I believe, I don't know if this is working correctly or if this is pulled out as a service
+        //            _context.Add(ticketAttachment);
+        //            await _context.SaveChangesAsync();
+
+        //            var ticket = await _context.Tickets
+        //                .Include(t => t.TicketPriority)
+        //                .Include(t => t.TicketStatus)
+        //                .Include(t => t.TicketType)
+        //                .Include(t => t.DeveloperUser)
+        //                .Include(t => t.Project)
+        //                .FirstOrDefaultAsync(t => t.Id == ticketAttachment.TicketId);
+
+        //            //await _notificationService.NotifyOfAttachment(_userManager.GetUserId(User), ticket, ticketAttachment);
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+        //    }
+        //    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
+        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
+        //    return View(ticketAttachment);
+        //}
 
         // GET: TicketAttachments/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -202,3 +229,4 @@ namespace MVCPrbSol.Controllers
     }
 }//Friday
 //Sat
+//Mon
