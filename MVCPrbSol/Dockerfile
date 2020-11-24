@@ -20,4 +20,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 #ENTRYPOINT ["dotnet", "MVCPrbSol.dll"]
-CMD ASPNETCORE_URLS=http://*PORT dotnet MVCPrbSol.dll
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet MVCPrbSol.dll

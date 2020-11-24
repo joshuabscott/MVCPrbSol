@@ -247,7 +247,7 @@ namespace MVCPrbSol.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("FileName")
                         .HasColumnType("text");
 
                     b.Property<int>("TicketId")

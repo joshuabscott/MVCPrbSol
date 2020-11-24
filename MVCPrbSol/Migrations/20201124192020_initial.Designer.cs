@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MVCPrbSol.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201123062553_initial")]
+    [Migration("20201124192020_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -249,7 +249,7 @@ namespace MVCPrbSol.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("FileName")
                         .HasColumnType("text");
 
                     b.Property<int>("TicketId")

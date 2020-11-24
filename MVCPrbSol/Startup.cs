@@ -47,6 +47,7 @@ namespace MVCPrbSol
             services.AddScoped<IPSProjectService, PSProjectService>();
             services.AddScoped<IPSHistoriesService, PSHistoriesService>();
             services.AddScoped<IPSAccessService, PSAccessService>();
+            services.AddScoped<IPSFileService, PSFileService>();
             //new service addded Mon 23
             services.AddScoped<IPSFileService, PSFileService>();
 
