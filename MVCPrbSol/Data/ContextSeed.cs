@@ -175,9 +175,18 @@ namespace MVCPrbSol.Data
         }
         #endregion
 
+        public static async Task SeedProjectsAsync(ApplicationDbContext context)
+        {
+            List<Project> projects = new List<Project>();
+            Project seedProject1 = new Project
+            {
+                Name = "Blog Project"
+            };
+            Project seedProject2 = new Project(); 
 
+        }
 
-        //Seed Users
+        #region Seed Default Users
         public static async Task SeedDefaultUsersAsync(UserManager<PSUser> userManager)
         {
             //SeedDefault Administrator
@@ -1162,6 +1171,7 @@ namespace MVCPrbSol.Data
                 Debug.WriteLine("********************************");
                 throw;
             }
+            #endregion
             #endregion
         }
     }

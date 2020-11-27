@@ -8,11 +8,12 @@ using MVCPrbSol.Models;
 
 namespace MVCPrbSol.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<PSUser>
+    public class ApplicationDbContext : IdentityDbContext<PSUser>//this is the class that connects directly to the Database
     {
+        //ApplicatioDbContext is a representation of our database by links our classes to our Database entities
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
+            : base(options)//allows us to connect to default database using appsettins.json
+        {//This is were our Authorization and Authentication comes from
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -6,36 +6,32 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MVCPrbSol.Data;
 using Npgsql;
+using MVCPrbSol.Data;
 
 namespace MVCPrbSol.Services
 {
     public class DataHelper
     {
-        //The default connection string will come from app settings like usual
         public static string GetConnectionString(IConfiguration configuration)
         {
-            //It will be automatically overwritten if we are running on Heroku
             var connnectionString = configuration.GetConnectionString("DefaultConnection");
-
-            var herokuDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            return string.IsNullOrEmpty(herokuDatabaseUrl) ? connnectionString : BuildConnectionString(herokuDatabaseUrl);
+            var HerokuDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            return string.IsNullOrEmpty(HerokuDatabaseUrl) ? connnectionString : BuildConnectionString(HerokuDatabaseUrl);
         }
 
-        public static string BuildConnectionString(string herokuDataBaseUrl)
+        public static string BuildConnectionString(string HerokuDataBaseUrl)
         {
-            //Provide an object representation of a uniform resource identifier URI
-            var herokuDatabaseUri = new Uri(herokuDataBaseUrl);
-            var userInfo = herokuDatabaseUri.UserInfo.Split(":");
-            //Provides a simple way to create and manage the contents of connection strings used by the NpgsqlConnection class.
+            var HerokuDatabaseUri = new Uri(HerokuDataBaseUrl);
+            var userInfo = HerokuDatabaseUri.UserInfo.Split(":");
+
             var builder = new NpgsqlConnectionStringBuilder
             {
-                Host = herokuDatabaseUri.Host,
-                Port = herokuDatabaseUri.Port,
+                Host = HerokuDatabaseUri.Host,
+                Port = HerokuDatabaseUri.Port,
                 Username = userInfo[0],
                 Password = userInfo[1],
-                Database = herokuDatabaseUri.LocalPath.TrimStart('/')
+                Database = HerokuDatabaseUri.LocalPath.TrimStart('/')
             };
             return builder.ToString();
         }

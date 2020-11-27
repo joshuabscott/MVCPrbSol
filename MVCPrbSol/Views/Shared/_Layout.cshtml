@@ -20,9 +20,15 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
     <link rel="stylesheet" href="~/css/site.css" />
 
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    
+   
+
+
     @*<link href="~/css/Datatables/buttons.bootstrap4.min.css" rel="stylesheet" />
-    <link href="~/css/Datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
-    <link href="~/css/Datatables/responsive.bootstrap4.min.css" rel="stylesheet" />*@
+        <link href="~/css/Datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+        <link href="~/css/Datatables/responsive.bootstrap4.min.css" rel="stylesheet" />*@
 </head>
 <body>
     <header>
@@ -74,18 +80,23 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @*<script src="~/js/Datatables/jquery.dataTables.min.js"></script>
-    <script src="~/js/Datatables/dataTables.bootstrap4.min.js"></script>
-    <script src="~/js/Datatables/dataTables.buttons.min.js"></script>
-    <script src="~/js/Datatables/buttons.colVis.min.js"></script>
-    <script src="~/js/Datatables/buttons.flash.min.js"></script>
-    <script src="~/js/Datatables/buttons.html5.min.js"></script>
-    <script src="~/js/Datatables/buttons.print.min.js"></script>
-    <script src="~/js/Datatables/buttons.bootstrap4.min.js"></script>
-    <script src="~/js/Datatables/dataTables.responsive.min.js"></script>
-    <script src="~/js/Datatables/responsive.bootstrap4.min.js"></script>*@
+        <script src="~/js/Datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="~/js/Datatables/dataTables.buttons.min.js"></script>
+        <script src="~/js/Datatables/buttons.colVis.min.js"></script>
+        <script src="~/js/Datatables/buttons.flash.min.js"></script>
+        <script src="~/js/Datatables/buttons.html5.min.js"></script>
+        <script src="~/js/Datatables/buttons.print.min.js"></script>
+        <script src="~/js/Datatables/buttons.bootstrap4.min.js"></script>
+        <script src="~/js/Datatables/dataTables.responsive.min.js"></script>
+        <script src="~/js/Datatables/responsive.bootstrap4.min.js"></script>*@
 
 
     @RenderSection("Scripts", required: false)

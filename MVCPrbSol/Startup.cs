@@ -4,9 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +16,7 @@ using MVCPrbSol.Services;
 
 namespace MVCPrbSol
 {
-    public class Startup
+    public class Startup    //At Startup the tools/services are declared and confirmed for use  Remember Dependences Injection is set up her in the configureServices
     {
         public Startup(IConfiguration configuration)
         {
@@ -27,18 +25,14 @@ namespace MVCPrbSol
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
+        public void ConfigureServices(IServiceCollection services) // Remember Dependences Injection is set up her in the configureServices
+        {//services are configured for using DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
-              options.UseNpgsql(
-                  DataHelper.GetConnectionString(Configuration)));
+              options.UseNpgsql(//for using DbContext
+                  DataHelper.GetConnectionString(Configuration)));//for using DbContext
 
-            services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-           //services.AddDefaultIdentity<IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+            //using directive for injection using IdentityRole with PSUser
+            services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
@@ -55,6 +49,7 @@ namespace MVCPrbSol
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailSender, EmailService>();
 
+            //adding controllers with views and RazorPages
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

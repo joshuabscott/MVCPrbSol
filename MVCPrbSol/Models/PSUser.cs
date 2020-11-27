@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MVCPrbSol.Models
 {
-    public class PSUser : IdentityUser
+    public class PSUser : IdentityUser //Inheritance from the Identity, this gives ability to extend privileges, extension PSUser
     {
         [Required]
         [StringLength(30)]

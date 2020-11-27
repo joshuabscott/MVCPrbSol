@@ -26,6 +26,8 @@ namespace MVCPrbSol.Models
 
         [Required]
         public byte[] FileData { get; set; }
+
+        public string ContentType { get; set; }
         public string Description { get; set; }
         public DateTimeOffset Created { get; set; }
 

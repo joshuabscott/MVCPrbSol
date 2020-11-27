@@ -7,10 +7,11 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["MVCPrbSol/MVCPrbSol.csproj", "MVCPrbSol/"]
-RUN dotnet restore "MVCPrbSol/MVCPrbSol.csproj"
+
+COPY ["MVCPrbSol.csproj", ""]
+RUN dotnet restore "./MVCPrbSol.csproj"
 COPY . .
-WORKDIR "/src/MVCPrbSol"
+WORKDIR "/src/."
 RUN dotnet build "MVCPrbSol.csproj" -c Release -o /app/build
 
 FROM build AS publish

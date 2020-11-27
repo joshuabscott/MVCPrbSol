@@ -77,6 +77,7 @@ namespace MVCPrbSol.Controllers      //Namespace is the outermost , Inside is a 
                 MemoryStream ms = new MemoryStream();
                 await ticketAttachment.FormFile.CopyToAsync(ms);
 
+                ticketAttachment.ContentType = ticketAttachment.FormFile.ContentType;
                 ticketAttachment.FileData = ms.ToArray();
                 ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
                 ticketAttachment.Created = DateTimeOffset.Now;
@@ -89,6 +90,14 @@ namespace MVCPrbSol.Controllers      //Namespace is the outermost , Inside is a 
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
             return View(ticketAttachment);
+        }
+
+        //Controller action that is not a get or a post
+        public async Task<FileResult> DownloadFile(int id)
+        {
+            TicketAttachment attachment = await _context.TicketAttachments.FindAsync(id);
+           
+            return File(attachment.FileData, attachment.ContentType);
         }
 
         //// POST: TicketAttachments/Create
@@ -219,7 +228,8 @@ namespace MVCPrbSol.Controllers      //Namespace is the outermost , Inside is a 
             var ticketAttachment = await _context.TicketAttachments.FindAsync(id);
             _context.TicketAttachments.Remove(ticketAttachment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
         }
 
         private bool TicketAttachmentExists(int id)

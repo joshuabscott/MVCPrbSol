@@ -337,6 +337,7 @@ namespace MVCPrbSol.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FileName = table.Column<string>(nullable: true),
                     FileData = table.Column<byte[]>(nullable: false),
+                    ContentType = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Created = table.Column<DateTimeOffset>(nullable: false),
                     TicketId = table.Column<int>(nullable: false),
