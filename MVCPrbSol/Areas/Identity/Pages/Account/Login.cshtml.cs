@@ -73,7 +73,7 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
         //<!--  -->
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null, string demoEmail = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null, string demoEmail = null) //Looking for fix to login issue 
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
@@ -86,7 +86,7 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");//goes to the HomeController
                 }
                 else
                 {

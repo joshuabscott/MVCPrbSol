@@ -33,6 +33,8 @@
 
   <ItemGroup>
     <Content Remove="Views\Tickets\AssignUser.cshtml" />
+    <Content Remove="wwwroot\images\logo.png" />
+    <Content Remove="wwwroot\images\logo2x.png" />
   </ItemGroup>
 
   <ItemGroup>
