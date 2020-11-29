@@ -19,6 +19,7 @@ namespace MVCPrbSol.Extensions
         {
             _maxFileSize = maxFileSize;
         }
+        //IsValid - 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
             //inheritance happening when you see override, extend further then we could normally reach. 
             //method name is valid, bass in the object, the value of the property, 
