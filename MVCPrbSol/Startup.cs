@@ -29,7 +29,8 @@ namespace MVCPrbSol
         {//services are configured for using DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
               options.UseNpgsql(//for using DbContext
-                  DataHelper.GetConnectionString(Configuration)));//for using DbContext
+                  DataHelper.GetConnectionString(Configuration)));
+            //Configuration.GetConnectionString("DefaultConnection")));
 
             //using directive for injection using IdentityRole with PSUser
             services.AddIdentity<PSUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)

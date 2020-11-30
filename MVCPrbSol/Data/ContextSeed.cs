@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MVCPrbSol.Models;
-using NuGet.Frameworks;
 
 namespace MVCPrbSol.Data
 {
@@ -19,31 +19,6 @@ namespace MVCPrbSol.Data
         Demo
     }
 
-    //public enum TicketTypes
-    //{
-    //    UI,
-    //    Calculation,
-    //    Logic,
-    //    Security
-    //}
-
-    //public enum TicketPriorities
-    //{
-    //    Low,
-    //    Moderate,
-    //    Major,
-    //    Critical
-    //}
-
-    //public enum TicketStatuses
-    //{
-    //    Opened,
-    //    Testing,
-    //    Development,
-    //    QA,
-    //    FinalPass,
-    //    Closed
-    //}
     public static class ContextSeed
     {
         //Seed Roles
@@ -182,7 +157,7 @@ namespace MVCPrbSol.Data
             {
                 Name = "Blog Project"
             };
-            Project seedProject2 = new Project(); 
+            Project seedProject2 = new Project();
 
         }
 

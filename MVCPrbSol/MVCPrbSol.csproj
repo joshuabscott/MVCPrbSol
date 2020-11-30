@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <None Remove="Areas\Identity\Pages\Account\login-v3.html" />
+    <None Remove="Views\Home\index-sales.html" />
     <None Remove="Views\Home\_blank.html" />
   </ItemGroup>
 

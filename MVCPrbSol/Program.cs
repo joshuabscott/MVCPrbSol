@@ -37,8 +37,6 @@ namespace MVCPrbSol  //Namespace is the outermost , Inside is a class, then a me
                     await ContextSeed.SeedDefaultTicketPrioritiesAsync(context);
                     await ContextSeed.SeedDefaultTicketStatusesAsync(context);
                     await ContextSeed.SeedDefaultTicketTypesAsync(context);
-
-                    
                 }
                 catch (Exception ex)
                 {

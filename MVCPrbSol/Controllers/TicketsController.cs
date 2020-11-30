@@ -26,7 +26,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
         private readonly IPSRolesService _rolesService;
         private readonly IPSAccessService _accessService;
 
-       
         public TicketsController(ApplicationDbContext context, UserManager<PSUser> userManager, IPSHistoriesService historiesService, IPSRolesService rolesService, IPSAccessService accessService)
         {
             _userManager = userManager;
@@ -36,7 +35,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             _accessService = accessService;
         }
 
-       
         // GET: Tickets Index
         public async Task<IActionResult> Index()
         {
@@ -51,7 +49,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             return View(await applicationDbContext.ToListAsync());
         }
 
-
         // GET: MyTickets Index
         public IActionResult MyTickets()
         {   //Create an item of type "new List" of type Ticket
@@ -59,7 +56,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             var userId = _userManager.GetUserId(User);
 
             #region Method for showing tickets to User who owns them (MyTickets method + associated view)
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Administrator"))
             {
                 model = _context.Tickets
                     .Include(t => t.DeveloperUser)
@@ -136,12 +133,9 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                 return NotFound();
             }
 
-            
             var userId = _userManager.GetUserId(User);
             var roleName = (await _userManager.GetRolesAsync(await _userManager.GetUserAsync(User))).FirstOrDefault();
-
-            
-            
+ 
             var ticket = await _context.Tickets
                 .Include(t => t.DeveloperUser)
                 .Include(t => t.OwnerUser)
@@ -161,10 +155,8 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
 
             //return View(ticket);
 
-            
             return RedirectToAction("MyTickets", "Tickets");
         }
-
 
 
         // GET: Tickets/Create
@@ -178,14 +170,9 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                 model.ProjectId = (int)id;
             }
 
-
-
-           
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
 
-
-           
-            if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+            if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
             {
                 ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
                 ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
@@ -202,7 +189,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             return View(model);
         }
 
-
         // POST: Tickets/Create
         // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -216,7 +202,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                 if (ModelState.IsValid)
                 {
 
-                    
                     ticket.Created = DateTimeOffset.Now;
                     ticket.OwnerUserId = _userManager.GetUserId(User);
 
@@ -241,15 +226,14 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             {
                 TempData["DemoLockout"] = "Your changes have not been saved. To make changes to the database, please log in as a full user.";
                 return RedirectToAction("MyTickets", "Tickets");
-
             }
         }
 
         // GET: Tickets/Edit/5
-        //[Authorize(Roles = "Admin, ProjectManager, Developer")]
+        [Authorize(Roles = "Administrator, ProjectManager, Developer")]
         public async Task<IActionResult> Edit(int? id)
         {
-            //Need ticket comments to show in edit view so I can edit/archive them(as admin/PM)
+            //Need ticket comments to show in edit view so I can edit/archive them(as administrator/PM)
             var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
@@ -276,7 +260,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
             ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             return View(ticket);
-           
         }
 
         // POST: Tickets/Edit
@@ -338,15 +321,12 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                 .FirstOrDefaultAsync(t => t.Id == ticket.Id);
                 await _historiesService.AddHistory(oldTicket, newTicket, userId);
 
-
                 ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
                 ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
                 ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
                 ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Id", ticket.TicketPriorityId);
                 ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Id", ticket.TicketStatusId);
                 ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
-
-
 
                 return RedirectToAction("Details", "Tickets", new { id = ticket.Id });
                 //return RedirectToAction(name of(Index));
@@ -359,9 +339,8 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
 
         }
 
-
         // GET: Tickets/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

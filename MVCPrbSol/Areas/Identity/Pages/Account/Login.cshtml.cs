@@ -68,6 +68,7 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
 
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
@@ -122,3 +123,4 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
         }
     }
 }
+//2.0 11-28
