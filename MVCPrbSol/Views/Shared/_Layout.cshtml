@@ -13,29 +13,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Problem Solver</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="~/css/site.css" />
+    <base href="../">
+    <meta charset="utf-8">
+    <meta name="author" content="Problem Solver">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="./images/favicon.png">
+    <!-- Page Title  -->
+    <title>Problem Solver | Welcome </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="./assets/css/dashlite.css?ver=2.1.0">
+    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=2.1.0">
 
-    
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-
-    @*<link href="~/css/Datatables/buttons.bootstrap4.min.css" rel="stylesheet" />
-        <link href="~/css/Datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
-        <link href="~/css/Datatables/responsive.bootstrap4.min.css" rel="stylesheet" />*@
+    <link href="~/css/app.min.css" rel="stylesheet" />
 </head>
+
+<!-- main header  -->
+<div class="nk-header nk-header-fluid is-theme">
+    <div class="container-xl wide-xl">
+        <div class="nk-header-wrap">
+
+            <div class="nk-menu-trigger mr-sm-2 d-lg-none">
+                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="headerNav"><em class="icon ni ni-menu"></em></a>
+            </div>
+            <!--    ------------------------------------------------------------------------------------------------------------------------------------------------------------------>
+            <div class="nk-header-brand">
+                <a href="html/index.html" class="logo-link">
+                    @*//comment out original art for Templete*@
+                    <img src="~/images/logo-darkPSsmall.png" />
+
+           
+                </a>
+            </div><!-- .nk-header-brand -->
+
+            <div class="nk-header-menu" data-content="headerNav">
+                <div class="nk-header-mobile">
+                    <div class="nk-header-brand">
+                        <a href="html/index.html" class="logo-link">
+                            <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                            <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                        </a>
+                    </div>
+                    <div class="nk-menu-trigger mr-n2">
+                        <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="headerNav"><em class="icon ni ni-arrow-left"></em></a>
+                    </div>
+                </div>
+            </div><!-- .nk-header-menu -->
+
+
+        </div><!-- .nk-header-wrap -->
+    </div><!-- .container-fliud -->
+</div>
+<!-- main header  -->
+
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Problem Solver</a>
+
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
@@ -127,4 +170,5 @@
             });
         </script>*@
 </body>
-</html>@*//Sun*@
+</html>
+@*//Sun*@
