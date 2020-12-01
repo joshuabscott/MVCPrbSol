@@ -1,20 +1,22 @@
 ﻿@model IEnumerable<MVCPrbSol.Models.ViewModels.ManageUserRolesViewModel>
 
+
 <head>
-    <base href="../">
+     <base href="../">
     <meta charset="utf-8">
-    <meta name="author" content="Softnio">
+    <meta name="author" content="Problem Solver">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <meta name="description" content="A powerful tracking system to maintain an accurate record of the software development process on a per-project basis">
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="./images/favicon.png">
     <!-- Page Title  -->
-    <title>Default Dashboard | DashLite Admin Template</title>
+    <title>Problem Solver | Welcome </title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="./assets/css/dashlite.css?ver=2.1.0">
     <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=2.1.0">
+   
+    <link href="~/css/app.min.css" rel="stylesheet" />
 </head>
-
 
     <div class="row">
         @foreach (var psuser in Model)
@@ -39,8 +41,8 @@
                         <hr />
                         <div class="col-12">
                             <div class="form-group pull-right">
-                                <input type="submit" value="Assign Roles" class="btn btn-info" />
-                                <a class="btn btn-info" asp-controller="Users" asp-action="Index">Cancel</a>
+                                <input type="submit" value="Assign Roles" class="btn btn-primary" />
+                                <a class="btn btn-danger" asp-controller="Users" asp-action="Index">Cancel</a>
                             </div>
                         </div>
 

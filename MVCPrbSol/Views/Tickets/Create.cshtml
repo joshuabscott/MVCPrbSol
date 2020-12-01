@@ -1,19 +1,22 @@
 ﻿@model MVCPrbSol.Models.Ticket
 
-    <head>
-        <base href="../">
-        <meta charset="utf-8">
-        <meta name="author" content="Softnio">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
-        <!-- Fav Icon  -->
-        <link rel="shortcut icon" href="./images/favicon.png">
-        <!-- Page Title  -->
-        <title>Default Dashboard | DashLite Admin Template</title>
-        <!-- StyleSheets  -->
-        <link rel="stylesheet" href="./assets/css/dashlite.css?ver=2.1.0">
-        <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=2.1.0">
-    </head>
+
+<head>
+    <base href="../">
+    <meta charset="utf-8">
+    <meta name="author" content="Problem Solver">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful tracking system to maintain an accurate record of the software development process on a per-project basis">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="./images/favicon.png">
+    <!-- Page Title  -->
+    <title>Problem Solver | Welcome </title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="./assets/css/dashlite.css?ver=2.1.0">
+    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=2.1.0">
+
+    <link href="~/css/app.min.css" rel="stylesheet" />
+</head>
 
 @{
     ViewData["Title"] = "Create";
@@ -50,7 +53,7 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-           
+
             <div class="form-group">
                 <label asp-for="TicketTypeId" class="control-label"></label>
                 <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
