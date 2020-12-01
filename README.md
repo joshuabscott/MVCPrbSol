@@ -1,7 +1,7 @@
 # MVCPrbSol
  Problem Solver Tracker
 
-## by [Josh Scott](https://josh-scott-portfolio.netlify.app/)
+## by [Josh Scott](https://thejoshscott.com/)
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
