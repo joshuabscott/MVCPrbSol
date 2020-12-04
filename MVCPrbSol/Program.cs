@@ -34,6 +34,7 @@ namespace MVCPrbSol  //Namespace is the outermost , Inside is a class, then a me
                     //await ContextSeed.RunSeedMethods(roleManager, userManager, context);     this is the defualt way
                     await ContextSeed.SeedRolesAsync(roleManager);
                     await ContextSeed.SeedDefaultUsersAsync(userManager);
+                    // projects, users, tickets
                     await ContextSeed.SeedDefaultTicketPrioritiesAsync(context);
                     await ContextSeed.SeedDefaultTicketStatusesAsync(context);
                     await ContextSeed.SeedDefaultTicketTypesAsync(context);
@@ -57,6 +58,4 @@ namespace MVCPrbSol  //Namespace is the outermost , Inside is a class, then a me
                     webBuilder.UseStartup<Startup>();
                 });
     }
-}//Friday
-//Sun
-//Tue
+}

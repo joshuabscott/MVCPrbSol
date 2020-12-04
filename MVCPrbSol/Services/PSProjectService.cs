@@ -20,7 +20,6 @@ namespace MVCPrbSol.Services
             _context = context;
         }
 
-        //Methods implemented 
         public async Task<bool> IsUserOnProject(string userId, int projectId)                           
         {
             Project project = await _context.Projects                                                  

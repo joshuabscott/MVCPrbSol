@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Npgsql;
 using MVCPrbSol.Data;
+using MVCPrbSol.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace MVCPrbSol.Services
 {
     public class DataHelper
-    {
+    {//working with the Heroku Database
         public static string GetConnectionString(IConfiguration configuration)
         {
             var connnectionString = configuration.GetConnectionString("DefaultConnection");
@@ -46,9 +49,9 @@ namespace MVCPrbSol.Services
                 var context = svcProvider.GetRequiredService<ApplicationDbContext>();
                 await context.Database.MigrateAsync();
             }
-            catch (PostgresException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Something went wrong: {ex}");
+                Console.WriteLine($"Something went wrong => {ex}");
             }
         }
     }

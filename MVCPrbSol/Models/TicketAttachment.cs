@@ -12,7 +12,7 @@ namespace MVCPrbSol.Models
     public class TicketAttachment
     {
         //public int Id { get; set; }
-        //public string FilePath { get; set; }
+        
         public int Id { get; set; }
 
         [Display(Name = "Select Image")]
@@ -23,8 +23,7 @@ namespace MVCPrbSol.Models
         public IFormFile FormFile { get; set; }
 
         public string FileName { get; set; }
-
-        [Required]
+        public string FilePath { get; set; }
         public byte[] FileData { get; set; }
 
         public string ContentType { get; set; }
@@ -38,4 +37,3 @@ namespace MVCPrbSol.Models
         public virtual PSUser User { get; set; }
     }
 }
-//Mon

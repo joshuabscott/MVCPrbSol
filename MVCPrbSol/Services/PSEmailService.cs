@@ -43,6 +43,4 @@ namespace MVCPrbSol.Services
 
         }
     }
-}//Using the Microsoft SendEmailAsync we can use existing code to send email notification when action takes place for a users projects, tickets, comments, statues
- //The purpose of this service is to send an email notification to a user whenever a change is made on a ticket they are associated with
- //Sat
+}

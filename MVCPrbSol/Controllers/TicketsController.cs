@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 using MVCPrbSol.Services;
+using MimeKit;
+using System.IO;
 using MVCPrbSol.Utilities;
 
 namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a class, than a method, than the logic
@@ -36,7 +38,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
         }
 
         // GET: Tickets Index
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() //Create a list of this information for the Ticket
         {
             var applicationDbContext = _context.Tickets
                     .Include(t => t.DeveloperUser)
@@ -51,11 +53,10 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
 
         // GET: MyTickets Index
         public IActionResult MyTickets()
-        {   //Create an item of type "new List" of type Ticket
+        { 
             var model = new List<Ticket>();
             var userId = _userManager.GetUserId(User);
 
-            #region Method for showing tickets to User who owns them (MyTickets method + associated view)
             if (User.IsInRole("Administrator"))
             {
                 model = _context.Tickets
@@ -69,7 +70,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             else if (User.IsInRole("ProjectManager"))
             {
                 var projectIds = new List<int>();
-                //Actively grabbing data I want NOW;
+               
                 var userProjects = _context.ProjectUsers.Where(pu => pu.UserId == userId).ToList();
 
 
@@ -88,13 +89,12 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                     .Include(t => t.TicketStatus)
                     .Include(t => t.TicketType).ToList();
                     model.AddRange(tickets);
-                    //If and if else are useful for ranges
                 }
             }
             else if (User.IsInRole("Developer"))
             {
                 model = _context.Tickets
-                    //This will grab ONLY criteria
+                    
                     .Where(t => t.DeveloperUserId == userId || t.OwnerUserId == userId)
 
                     .Include(t => t.OwnerUser)
@@ -112,17 +112,12 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
                     .Include(t => t.TicketType).ToList();
-
             }
             else
             {
                 return NotFound();
             }
             return View(model);
-            #endregion
-
-
-            
         }
 
         // GET: Tickets/Details
@@ -154,17 +149,14 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             }
 
             //return View(ticket);
-
             return RedirectToAction("MyTickets", "Tickets");
         }
-
 
         // GET: Tickets/Create
         public IActionResult Create(int? id)
         {
             var model = new Ticket();
 
-            //This if statement is used(along with view logic) to let me create a new ticket and show the drop-down menu
             if (id != null)
             {
                 model.ProjectId = (int)id;
@@ -176,7 +168,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             {
                 ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
                 ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name");
-                ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName"); //Need to filter this to only developers
+                ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "FullName");
                 ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
             }
             else
@@ -184,7 +176,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                 model.TicketTypeId = _context.TicketTypes.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
                 model.TicketPriorityId = _context.TicketPriorities.Where(tp => tp.Name == "Pending").FirstOrDefault().Id;
                 model.TicketStatusId = _context.TicketStatuses.Where(tp => tp.Name == "Pending").FirstOrDefault().Id; ;
-                model.DeveloperUserId = null; //Null by default
+                model.DeveloperUserId = null;
             }
             return View(model);
         }
@@ -233,7 +225,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
         [Authorize(Roles = "Administrator, ProjectManager, Developer")]
         public async Task<IActionResult> Edit(int? id)
         {
-            //Need ticket comments to show in edit view so I can edit/archive them(as administrator/PM)
             var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
@@ -279,8 +270,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                     return NotFound();
                 }
 
-                //"Snapshot" of the old ticket
-
                 Ticket oldTicket = await _context.Tickets
                     .Include(t => t.TicketPriority)
                     .Include(t => t.TicketStatus)
@@ -309,7 +298,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                         }
                     }
                 }
-                //Add history; 
+                
                 string userId = _userManager.GetUserId(User);
                 Ticket newTicket = await _context.Tickets
                 .Include(t => t.TicketPriority)
@@ -329,14 +318,13 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                 ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Id", ticket.TicketTypeId);
 
                 return RedirectToAction("Details", "Tickets", new { id = ticket.Id });
-                //return RedirectToAction(name of(Index));
+         
             }
             else
             {
                 TempData["DemoLockout"] = "Your changes have not been saved. To make changes to the database, please log in as a full user.";
                 return RedirectToAction("Details", "Tickets", new { id = ticket.Id });
             }
-
         }
 
         // GET: Tickets/Delete/5
@@ -360,7 +348,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             {
                 return NotFound();
             }
-
             return View(ticket);
         }
 
@@ -383,5 +370,3 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
     }
 }
 //The Logic to create an instance of an Object : Ticket
-//Friday
-//Sat

@@ -87,13 +87,16 @@
                         @Html.DisplayFor(modelItem => item.TicketStatus.Name)
                     </td>*@
                 <td>
-
+                    @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
+                    {
+                        <a class="btn btn-primary" asp-action="AssignUsers" asp-route-id="@item.Id">Assign</a>
+                    }
                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
                     @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
                     {
                         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     }
-                    @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
+                    @if (User.IsInRole("Administrator"))
                     {
                         <a class="btn btn-danger text-light" data-target="#deleteModal-@item.Id" data-toggle="modal">Delete</a>
                     }

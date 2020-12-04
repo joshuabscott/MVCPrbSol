@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\indexNewDashLite.cshtml" />
     <Content Remove="Views\Tickets\AssignUser.cshtml" />
     <Content Remove="wwwroot\images\logo.png" />
     <Content Remove="wwwroot\images\logo2x.png" />
@@ -40,10 +41,12 @@
   <ItemGroup>
     <None Remove="Areas\Identity\Pages\Account\login-v3.html" />
     <None Remove="Views\Home\index-sales.html" />
+    <None Remove="Views\Home\welcome.html" />
     <None Remove="Views\Home\_blank.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Home\indexNewDashLite.cshtml" />
     <None Include="wwwroot\assets\fonts\Nioicon.svg" />
     <None Include="wwwroot\assets\fonts\Nunito-Bold.woff2" />
     <None Include="wwwroot\assets\fonts\Nunito-Regular.woff2" />

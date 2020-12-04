@@ -18,10 +18,8 @@ namespace MVCPrbSol.Models       //Namespace is the outermost , Inside is a clas
         public string SenderId { get; set; }
         public bool Viewed { get; set; }
         
-
         public virtual Ticket Ticket { get; set; }
         public virtual PSUser Recipient { get; set; }
         public virtual PSUser Sender { get; set; }
     }
 }//Data of Notification Class
-//Sat

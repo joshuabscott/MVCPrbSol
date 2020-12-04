@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
+using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Controllers     //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
@@ -73,23 +74,52 @@ namespace MVCPrbSol.Controllers     //Namespace is the outermost , Inside is a c
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Comment,Created,TicketId,UserId")] TicketComment ticketComment)
+        public async Task<IActionResult> Create([Bind("Comment,Created,TicketId,UserId")] TicketComment ticketComment, string content, int ticketId)
         {
+            if (User.IsInRole("Demo"))
+            {
+                TempData["DemoLockout"] = "Demo users can't submit data.";
+                return RedirectToAction("Details", "Tickets", new { id = ticketId });
+            }
+            var userId = _userManager.GetUserId(User);
+            ticketComment.UserId = userId;
+            if (content != null)
+            {
+                ticketComment.Comment = content;
+                ticketComment.TicketId = ticketId;
+                ticketComment.Created = DateTimeOffset.Now;
+            }
+
+            //ticketComment.Created = DateTimeOffset.Now;
+            //ticketComment.UserId = _userManager.GetUserId(User);
+
             if (ModelState.IsValid)
             {
-                ticketComment.Created = DateTimeOffset.Now;
-                ticketComment.UserId = _userManager.GetUserId(User);
-
-
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
+                var ticket = await _context.Tickets
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .Include(t => t.DeveloperUser)
+                    .Include(t => t.Project)
+                    .FirstOrDefaultAsync(t => t.Id == ticketId);
+                if (ticket.DeveloperUserId != null)
+                {
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                    var description = $"{user.FullName} left a comment on Ticket titled: '{ticket.Title}' saying, '{ticketComment.Comment}'";
+                    //await _notificationService.Notify(userId, ticket, description);
+                }
 
+                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
             }
-            else
-            {
-                return NotFound();
-            }
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
+            return View(ticketComment);
+            //else
+            //{
+            //    return NotFound();
+            //}
         }
 
         // GET: TicketComments/Edit/5
@@ -184,5 +214,3 @@ namespace MVCPrbSol.Controllers     //Namespace is the outermost , Inside is a c
         }
     }
 }
- //Friday
- //Sat
