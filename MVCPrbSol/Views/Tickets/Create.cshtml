@@ -34,7 +34,7 @@
             @if (Model.ProjectId == 0)
             {
                 <div class="form-group">
-                    <label asp-for="ProjectId" class="control-label"></label>
+                    <label asp-for="ProjectId" class="control-label">Ticket</label>
                     <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
                 </div> }
             else
