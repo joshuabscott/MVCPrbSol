@@ -32,39 +32,27 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>All Current Projects</h1>
+<h2>All Current Projects</h2>
 
-@if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
+@if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer"))
 {
     <p>
         <a class="btn btn-primary" asp-action="Create">Add A New Project</a>
     </p>
-    @*<span><a asp-action="Create">Add A New Project</a></span>*@
 }
 
 
 
 <table class="myTable table table-striped table-bordered">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.TicketPriority)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TicketStatus)
-                </th>
-                <th>*@
-            Settings
+              <th>
+                Settings
             </th>
+             
         </tr>
     </thead>
     <tbody>
@@ -74,18 +62,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.TicketPriority.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TicketStatus.Name)
-                    </td>*@
+                
                 <td>
                     @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager"))
                     {

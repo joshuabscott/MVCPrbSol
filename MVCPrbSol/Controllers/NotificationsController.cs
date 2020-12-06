@@ -4,10 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
 
@@ -22,7 +20,8 @@ namespace MVCPrbSol.Controllers //Namespace is the outermost , Inside is a class
         {
             _context = context;
         }
-         // GET: Notifications
+
+        // GET: Notifications
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Notifications.Include(n => n.Ticket).Include(n => n.User);
@@ -58,7 +57,7 @@ namespace MVCPrbSol.Controllers //Namespace is the outermost , Inside is a class
         }
 
         // POST: Notifications/Create
-        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -94,7 +93,7 @@ namespace MVCPrbSol.Controllers //Namespace is the outermost , Inside is a class
         }
 
         // POST: Notifications/Edit/5
-        // To protect from over-posting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -166,5 +165,4 @@ namespace MVCPrbSol.Controllers //Namespace is the outermost , Inside is a class
             return _context.Notifications.Any(e => e.Id == id);
         }
     }
-}//Sat
-//Mon
+}

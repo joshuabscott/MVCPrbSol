@@ -5,14 +5,19 @@
     ViewData["Title"] = "Register";
 }
 
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Problem Solver | Register</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <base href="../../../">
+    <meta charset="utf-8">
+    <meta name="author" content="Josh Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful issue tracker application">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="./images/favicon.png">
+    <!-- Page Title  -->
+    <title>Problem Solver | Sign In</title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="./assets/css/dashlite.css?ver=2.1.0">
+    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=2.1.0">
 
     <link href="~/css/app.min.css" rel="stylesheet" />
 </head>
@@ -21,9 +26,9 @@
     <!-- BEGIN #app -->
     <div id="app" class="app app-full-height app-without-header">
         <!-- BEGIN register -->
-        <div class="register">
+        <div class="register ">
             <!-- BEGIN register-content -->
-            <div class="register-content">
+            <div class="register-contentc col-6 justify-content-center">
                 <form asp-route-returnUrl="@Model.ReturnUrl" method="POST" name="register_form">
                     <h1 class="text-center">Sign Up</h1>
                     <hr />
@@ -48,7 +53,7 @@
                         <label asp-for="Input.ConfirmPassword">Confirm Password <span asp-validation-for="Input.ConfirmPassword" class="text-danger">*</span></label>
                         <input asp-for="Input.ConfirmPassword" type="password" class="form-control form-control-lg fs-15px" value="" />
                     </div>
-                   
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-lg fs-15px fw-500 btn-block">Sign Up</button>
                     </div>
@@ -65,9 +70,9 @@
         <!-- END btn-scroll-top -->
     </div>
     <!-- END #app -->
-    
+
     <script src="~/js/app.min.js"></script>
-  
+
 
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />

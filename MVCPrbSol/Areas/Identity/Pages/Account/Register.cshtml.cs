@@ -70,7 +70,7 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "The password and confirmation password do not match, Try Again.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -86,7 +86,7 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new PSUser
+                var user = new PSUser //Added First & Last Name
                 {
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
@@ -97,7 +97,6 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
                     // Add new registrant a role of "NewUser" //
                     await _userManager.AddToRoleAsync(user, Roles.NewUser.ToString());
                     //
@@ -131,4 +130,4 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
             return Page();
         }
     }
-}/*//Sat*/
+}

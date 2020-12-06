@@ -19,6 +19,32 @@ namespace MVCPrbSol.Data
         Demo
     }
 
+    public enum TicketTypes
+    {
+        UI,
+        Calculation,
+        Logic,
+        Security
+    }
+
+    public enum TicketPriorities
+    {
+        Low,
+        Moderate,
+        Major,
+        Critical
+    }
+
+    public enum TicketStatuses
+    {
+        Opened,
+        Testing,
+        Development,
+        QA,
+        FinalPass,
+        Resolved
+    }
+
     public static class ContextSeed
     {
         //Seed Roles
@@ -31,138 +57,11 @@ namespace MVCPrbSol.Data
             await roleManager.CreateAsync(new IdentityRole(Roles.NewUser.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Demo.ToString()));
         }
-
-        //In order to have default values in place for our Ticket types, statuses, and priorities, we need to seed
-        //default values in place.
-
-        #region Seed Default Ticket Types
-        public static async Task SeedDefaultTicketTypesAsync(ApplicationDbContext context)
-        {
-            try
-            {
-                if (!context.TicketTypes.Any(tt => tt.Name == "Runtime"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "Runtime" });
-                }
-
-                if (!context.TicketTypes.Any(tt => tt.Name == "User-Interface"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "User-Interface" });
-                }
-
-                if (!context.TicketTypes.Any(tt => tt.Name == "Front-End"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "Front-End" });
-                }
-
-                if (!context.TicketTypes.Any(tt => tt.Name == "Back-End"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "Back-End" });
-                }
-
-                if (!context.TicketTypes.Any(tt => tt.Name == "Miscellaneous"))
-                {
-                    await context.TicketTypes.AddAsync(new TicketType { Name = "Miscellaneous" });
-                }
-                context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("**************** ERROR ****************");
-                Debug.WriteLine("Error Seeding Ticket Types");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("************************************************");
-                throw;
-            }
-        }
-        #endregion
-
-        #region Seed Default Ticket Priorities
-        public static async Task SeedDefaultTicketPrioritiesAsync(ApplicationDbContext context)
-        {
-            try
-            {
-                if (!context.TicketPriorities.Any(tp => tp.Name == "Low"))
-                {
-                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Low" });
-                }
-
-                if (!context.TicketPriorities.Any(tp => tp.Name == "High"))
-                {
-                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "High" });
-                }
-
-                if (!context.TicketPriorities.Any(tp => tp.Name == "Urgent"))
-                {
-                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Urgent" });
-                }
-
-                if (!context.TicketPriorities.Any(tp => tp.Name == "Pending"))
-                {
-                    await context.TicketPriorities.AddAsync(new TicketPriority { Name = "Pending" });
-                }
-                context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("**************** ERROR ****************");
-                Debug.WriteLine("Error Seeding Ticket Priorities");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("************************************************");
-                throw;
-            }
-        }
-        #endregion
-
-        #region Seed Default Ticket Statuses
-        public static async Task SeedDefaultTicketStatusesAsync(ApplicationDbContext context)
-        {
-            try
-            {
-                if (!context.TicketStatuses.Any(ts => ts.Name == "New"))
-                {
-                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "New" });
-                }
-
-                if (!context.TicketStatuses.Any(ts => ts.Name == "In-Progress"))
-                {
-                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "In-Progress" });
-                }
-
-                if (!context.TicketStatuses.Any(ts => ts.Name == "Resolved"))
-                {
-                    await context.TicketStatuses.AddAsync(new TicketStatus { Name = "Resolved" });
-                }
-
-                context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("**************** ERROR ****************");
-                Debug.WriteLine("Error Seeding Ticket Statuses");
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine("************************************************");
-                throw;
-            }
-        }
-        #endregion
-
-        public static async Task SeedProjectsAsync(ApplicationDbContext context)
-        {
-            List<Project> projects = new List<Project>();
-            Project seedProject1 = new Project
-            {
-                Name = "Blog Project"
-            };
-            Project seedProject2 = new Project();
-
-        }
        
         //See Default Users & Demo Users
         #region Default Users & Demo Users
         public static async Task SeedDefaultUsersAsync(UserManager<PSUser> userManager)
         {
-
             #region Administrator Seed
             var defaultUser = new PSUser
             {
@@ -299,11 +198,10 @@ namespace MVCPrbSol.Data
             }
             #endregion
 
-            string demoPassword = "ytrewQ1!";
-
             //These are my seeded demo users for showing off the software
             //Each user occupies a "main" role and the new Demo role
             //We will target this Demo role to prevent demo users from changing the database
+            string demoPassword = "ytrewQ1!";
 
             #region Demo Administrator Seed
             defaultUser = new PSUser
@@ -448,5 +346,196 @@ namespace MVCPrbSol.Data
             #endregion
         }
         #endregion
+
+
+        //In order to have default values in place for our Ticket types, statuses, and priorities, we need to seed
+        //default values in place.
+
+        #region Seed Default Ticket Types / Priorities / Statuses
+        public static async Task SeedTicketListsAsync(ApplicationDbContext context)
+        {
+            try
+            {
+                // Types
+                var types = context.TicketTypes.Any();
+                if (types == false)
+                {
+                    var type = new TicketType { Name = TicketTypes.UI.ToString() };
+                    context.TicketTypes.Add(type);
+                    type = new TicketType { Name = TicketTypes.Calculation.ToString() };
+                    context.TicketTypes.Add(type);
+                    type = new TicketType { Name = TicketTypes.Logic.ToString() };
+                    context.TicketTypes.Add(type);
+                    type = new TicketType { Name = TicketTypes.Security.ToString() };
+                    context.TicketTypes.Add(type);
+                    await context.SaveChangesAsync();
+                }
+
+                // Priority
+                var priorites = context.TicketPriorities.Any();
+                if (priorites == false)
+                {
+                    var priority = new TicketPriority { Name = TicketPriorities.Low.ToString() };
+                    context.TicketPriorities.Add(priority);
+                    priority = new TicketPriority { Name = TicketPriorities.Moderate.ToString() };
+                    context.TicketPriorities.Add(priority);
+                    priority = new TicketPriority { Name = TicketPriorities.Major.ToString() };
+                    context.TicketPriorities.Add(priority);
+                    priority = new TicketPriority { Name = TicketPriorities.Critical.ToString() };
+                    context.TicketPriorities.Add(priority);
+                    await context.SaveChangesAsync();
+                }
+
+                // Status
+                var statuses = context.TicketStatuses.Any();
+                if (statuses == false)
+                {
+                    var status = new TicketStatus { Name = TicketStatuses.Opened.ToString() };
+                    context.TicketStatuses.Add(status);
+                    status = new TicketStatus { Name = TicketStatuses.Testing.ToString() };
+                    context.TicketStatuses.Add(status);
+                    status = new TicketStatus { Name = TicketStatuses.Development.ToString() };
+                    context.TicketStatuses.Add(status);
+                    status = new TicketStatus { Name = TicketStatuses.QA.ToString() };
+                    context.TicketStatuses.Add(status);
+                    status = new TicketStatus { Name = TicketStatuses.FinalPass.ToString() };
+                    context.TicketStatuses.Add(status);
+                    status = new TicketStatus { Name = TicketStatuses.Resolved.ToString() };
+                    context.TicketStatuses.Add(status);
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("*********** ERROR **********");
+                Debug.WriteLine("Error Seeding Ticket Priorities.");
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine("****************************");
+                throw;
+            }
+        }
+        #endregion
+
+        #region Seed Default Projects
+        public static async Task SeedProjectAsync(ApplicationDbContext context)
+        {
+            List<string> projectNames = new List<string> { "Blog", "Bug Tracker", "Financial Portal" };
+            foreach (var projectName in projectNames)
+            {
+                Project project = new Project();
+                project.Name = projectName;
+                try
+                {
+                    if (context.Projects.FirstOrDefault(p => p.Name == projectName) == null)
+                    {
+                        await context.Projects.AddAsync(project);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("*********** ERROR **********");
+                    Debug.WriteLine($"Error Seeding Project: {projectName}");
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine("****************************");
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Seed Default Project Users
+        public static async Task SeedProjectUsersAsync(ApplicationDbContext context, UserManager<PSUser> userManager)
+        {
+            string adminId = (await userManager.FindByEmailAsync("garretreynolds@mailinator.com")).Id;
+            string pmId = (await userManager.FindByEmailAsync("alexheim@mailinator.com")).Id;
+            string devId = (await userManager.FindByEmailAsync("dennisenerson@mailinator.com")).Id;
+            string subId = (await userManager.FindByEmailAsync("larryedwards@mailinator.com")).Id;
+            int project1Id = context.Projects.FirstOrDefault(p => p.Name == "Blog").Id;
+            int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
+            int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;
+
+            List<string> userIds = new List<string> { adminId, pmId, devId, subId };
+            List<int> projectIds = new List<int> { project1Id, project2Id, project3Id };
+
+            ProjectUser projectUser = new ProjectUser();
+            foreach (var userId in userIds)
+            {
+                foreach (var projectId in projectIds)
+                {
+                    projectUser.UserId = userId;
+                    projectUser.ProjectId = projectId;
+                    try
+                    {
+                        var record = context.ProjectUsers.FirstOrDefault(p => p.UserId == userId && p.ProjectId == projectId);
+                        if (record == null)
+                        {
+                            await context.ProjectUsers.AddAsync(projectUser);
+                            await context.SaveChangesAsync();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("*********** ERROR **********");
+                        Debug.WriteLine($"Error Seeding {userId} for {projectId}");
+                        Debug.WriteLine(ex.Message);
+                        Debug.WriteLine("****************************");
+                        throw;
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Seed Default Tickets
+        public static async Task SeedTicketsAsync(ApplicationDbContext context, UserManager<PSUser> userManager)
+        {
+            string devId = (await userManager.FindByEmailAsync("dennisenerson@mailinator.com")).Id;
+            string subId = (await userManager.FindByEmailAsync("larryedwards@mailinator.com")).Id;
+            int project1Id = context.Projects.FirstOrDefault(p => p.Name == "Blog").Id;
+            int project2Id = context.Projects.FirstOrDefault(p => p.Name == "Bug Tracker").Id;
+            int project3Id = context.Projects.FirstOrDefault(p => p.Name == "Financial Portal").Id;
+            List<int> projects = new List<int> { project1Id, project2Id, project3Id };
+            int numTickets = 10;
+            var statuses = context.TicketStatuses.ToList();
+            var types = context.TicketTypes.ToList();
+            var priorities = context.TicketPriorities.ToList();
+            for (var i = 0; i < numTickets; i++)
+            {
+                int random = new Random().Next(numTickets);
+                bool hasDeveloper = random > (numTickets / 2) ? true : false;
+                Ticket ticket = new Ticket
+                {
+                    Title = $"Random: {random}",
+                    Description = $"{random} uniquely identifies this ticket",
+                    Created = DateTimeOffset.Now.AddDays(-(random * random)),
+                    Updated = DateTimeOffset.Now.AddHours(-(random * random)),
+                    ProjectId = projects[new Random().Next(projects.Count)],
+                    TicketPriorityId = priorities[new Random().Next(priorities.Count)].Id,
+                    TicketStatusId = statuses[new Random().Next(statuses.Count)].Id,
+                    TicketTypeId = types[new Random().Next(types.Count)].Id,
+                    DeveloperUserId = hasDeveloper ? devId : null,
+                    OwnerUserId = subId
+                };
+                try
+                {
+                    var myticket = context.Tickets.FirstOrDefault(t => t.Title == ticket.Title);
+                    if (myticket == null)
+                    {
+                        await context.Tickets.AddAsync(ticket);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("*********** ERROR **********");
+                    Debug.WriteLine($"Error Seeding ticket {random}");
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine("****************************");
+                    throw;
+                }
+            }
+            #endregion
+        }
     }
 }

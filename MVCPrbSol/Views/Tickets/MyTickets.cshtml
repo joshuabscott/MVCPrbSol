@@ -30,7 +30,7 @@
     var roleName = (await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User))).FirstOrDefault();
 }
 
-<h1>My Current Tickets</h1>
+<h2>My Current Tickets</h2>
 
 <p>
     <a asp-controller="Tickets" asp-action="Create">Create New</a>

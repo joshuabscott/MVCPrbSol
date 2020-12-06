@@ -8,12 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Enums\**" />
     <Compile Remove="obj\**" />
     <Compile Remove="Views\Notifications\**" />
+    <Content Remove="Data\Enums\**" />
     <Content Remove="obj\**" />
     <Content Remove="Views\Notifications\**" />
+    <EmbeddedResource Remove="Data\Enums\**" />
     <EmbeddedResource Remove="obj\**" />
     <EmbeddedResource Remove="Views\Notifications\**" />
+    <None Remove="Data\Enums\**" />
     <None Remove="obj\**" />
     <None Remove="Views\Notifications\**" />
   </ItemGroup>
@@ -39,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Areas\Identity\Pages\Account\auth-register-v3.html" />
     <None Remove="Areas\Identity\Pages\Account\login-v3.html" />
     <None Remove="Views\Home\index-sales.html" />
     <None Remove="Views\Home\welcome.html" />

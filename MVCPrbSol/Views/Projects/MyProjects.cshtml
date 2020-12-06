@@ -30,7 +30,7 @@
         var roleName = (await _userManager.GetRolesAsync(await _userManager.GetUserAsync(User))).FirstOrDefault();
     }
 
-    <h1>My Current Projects</h1>
+    <h2>My Current Projects</h2>
 
     @if (User.IsInRole("Adminisitrator") || User.IsInRole("ProjectManager"))
     {

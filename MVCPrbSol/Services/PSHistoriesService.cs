@@ -23,7 +23,6 @@ namespace MVCPrbSol.Services
             _context = context;
             _userManager = userManager;
             _emailSender = emailSender;
-    
             //_notificationService = notificationService;
 
         }
@@ -41,8 +40,16 @@ namespace MVCPrbSol.Services
                     Created = DateTimeOffset.Now,
                     UserId = userId
                 };
-                await _context.TicketHistories.AddAsync(history);
+                //await _context.TicketHistories.AddAsync(history);
+                _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
+                {
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    //await _notificationService.Notify(userId, newTicket, description);
+                }
             }
+
             //.Description
             if (oldTicket.Description != newTicket.Description)
             {
@@ -55,8 +62,16 @@ namespace MVCPrbSol.Services
                     Created = DateTimeOffset.Now,
                     UserId = userId
                 };
-                await _context.TicketHistories.AddAsync(history);
+                //await _context.TicketHistories.AddAsync(history);
+                _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
+                {
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    //await _notificationService.Notify(userId, newTicket, description);
+                }
             }
+
             //.TicketTypeId
             if (oldTicket.TicketTypeId != newTicket.TicketTypeId)
             {
@@ -69,8 +84,16 @@ namespace MVCPrbSol.Services
                     Created = DateTimeOffset.Now,
                     UserId = userId
                 };
-                await _context.TicketHistories.AddAsync(history);
+                //await _context.TicketHistories.AddAsync(history);
+                _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
+                {
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    //await _notificationService.Notify(userId, newTicket, description);
+                }
             }
+
             //.TicketPriorityId
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
             {
@@ -83,8 +106,16 @@ namespace MVCPrbSol.Services
                     Created = DateTimeOffset.Now,
                     UserId = userId
                 };
-                await _context.TicketHistories.AddAsync(history);
+                //await _context.TicketHistories.AddAsync(history);
+                _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
+                {
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    //await _notificationService.Notify(userId, newTicket, description);
+                }
             }
+
             //.TicketStatusId
             if (oldTicket.TicketStatusId != newTicket.TicketStatusId)
             {
@@ -97,7 +128,14 @@ namespace MVCPrbSol.Services
                     Created = DateTimeOffset.Now,
                     UserId = userId
                 };
-                await _context.TicketHistories.AddAsync(history);
+                //await _context.TicketHistories.AddAsync(history);
+                _context.TicketHistories.Add(history);
+                // notify developer that someone else made a change
+                if (oldTicket.DeveloperUserId != userId && oldTicket.DeveloperUserId != null)
+                {
+                    var description = $"The {history.Property} was updated from {history.OldValue} to {history.NewValue}.";
+                    //await _notificationService.Notify(userId, newTicket, description);
+                }
             }
             
             
@@ -166,4 +204,3 @@ namespace MVCPrbSol.Services
         }
     }
 }//keeping track of a tickets data and tracking it as it is changed and updated, and Sending an email if New Assignment
-//Sat

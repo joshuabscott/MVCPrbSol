@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MVCPrbSol.Data;
 using MVCPrbSol.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace MVCPrbSol.Services
 {

@@ -1,148 +1,287 @@
-﻿@model MVCPrbSol.Models.ViewModels.HomePMViewModel
-@inject MVCPrbSol.Services.IPSRolesService _rolesService
-@inject Microsoft.AspNetCore.Identity.UserManager<PSUser> _userManager
-@inject MVCPrbSol.Services.IPSProjectService _projectService
+﻿@using Microsoft.AspNetCore.Identity
+@using MVCPrbSol.Services
+@inject UserManager<PSUser> UserManager
+@inject IPSAccessService AccessService
+@inject IPSRolesService RolesService
 
-
-@{
-    ViewData["Title"] = "Dashboard";
-    var user = await _userManager.GetUserAsync(User);
-    var roles = await _rolesService.ListUserRoles(user);
-    string roleName = "";
-    foreach (var role in roles)
-    {
-        if (role != "Demo")
-        {
-            roleName = role;
-        }
-    }
-}
-<div class="row justify-content-center">
-    <div class="col-md-12">
+<div class="container-fluid">
+    <div class="block-header">
         <div class="row">
-            <div class="col-md-auto">
-                <h1>Welcome back, @user.FirstName</h1>
-                <h4>Role --> <u>@roleName</u></h4>
+            <!--------Dashboard---------->
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Dashboard</h2>
+                <!--<ul class="breadcrumb">-->
+                    @*<li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="icon-home"></i></a></li>*@
+                    @*<li class="breadcrumb-item active">Dashboard</li>*@
+                <!--</ul>-->
             </div>
+        </div>
+    </div>
 
-            <!-- start widget -->
-            <div class="state-overview">
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 col-12">
-                        <div class="info-box bg-b-green">
-                            <span class="info-box-icon push-bottom"><i class="material-icons">group</i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Students</span>
-                                <span class="info-box-number">450</span>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: 45%"></div>
-                                </div>
-                                <span class="progress-description">
-                                    45% Increase in 28 Days
-                                </span>
-                            </div>
-                            <!-- /.info-box-content -->
+
+    <!-- start widget -->
+    <div class="state-overview">
+        <div class="row">
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="info-box bg-b-green">
+                    <span class="info-box-icon push-bottom"><i class="material-icons">group</i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Students</span>
+                        <span class="info-box-number">450</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 45%"></div>
                         </div>
-                        <!-- /.info-box -->
+                        <span class="progress-description">
+                            45% Increase in 28 Days
+                        </span>
                     </div>
-                    <!-- /.col -->
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
 
-                    <div class="col-xl-3 col-md-6 col-12">
-                        <div class="info-box bg-b-yellow">
-                            <span class="info-box-icon push-bottom"><i class="material-icons">person</i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">New Students</span>
-                                <span class="info-box-number">155</span>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: 40%"></div>
-                                </div>
-                                <span class="progress-description">
-                                    40% Increase in 28 Days
-                                </span>
-                            </div>
-                            <!-- /.info-box-content -->
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="info-box bg-b-yellow">
+                    <span class="info-box-icon push-bottom"><i class="material-icons">person</i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">New Students</span>
+                        <span class="info-box-number">155</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 40%"></div>
                         </div>
-                        <!-- /.info-box -->
+                        <span class="progress-description">
+                            40% Increase in 28 Days
+                        </span>
                     </div>
-                    <!-- /.col -->
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
 
-                    <div class="col-xl-3 col-md-6 col-12">
-                        <div class="info-box bg-b-blue">
-                            <span class="info-box-icon push-bottom"><i class="material-icons">school</i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Course</span>
-                                <span class="info-box-number">52</span>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: 85%"></div>
-                                </div>
-                                <span class="progress-description">
-                                    85% Increase in 28 Days
-                                </span>
-                            </div>
-                            <!-- /.info-box-content -->
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="info-box bg-b-blue">
+                    <span class="info-box-icon push-bottom"><i class="material-icons">school</i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Course</span>
+                        <span class="info-box-number">52</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 85%"></div>
                         </div>
-                        <!-- /.info-box -->
+                        <span class="progress-description">
+                            85% Increase in 28 Days
+                        </span>
                     </div>
-                    <!-- /.col -->
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
 
-                    <div class="col-xl-3 col-md-6 col-12">
-                        <div class="info-box bg-b-pink">
-                            <span class="info-box-icon push-bottom">
-                                <i class="material-icons">monetization_on</i>
-                            </span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Fees Collection</span>
-                                <span class="info-box-number">13,921</span><span>$</span>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: 50%"></div>
-                                </div>
-                                <span class="progress-description">
-                                    50% Increase in 28 Days
-                                </span>
-                            </div>
-                            <!-- /.info-box-content -->
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="info-box bg-b-pink">
+                    <span class="info-box-icon push-bottom">
+                        <i class="material-icons">monetization_on</i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Fees Collection</span>
+                        <span class="info-box-number">13,921</span><span>$</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 50%"></div>
                         </div>
-                        <!-- /.info-box -->
+                        <span class="progress-description">
+                            50% Increase in 28 Days
+                        </span>
                     </div>
-                    <!-- /.col -->
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
 
+        </div>
+    </div>
+    <!-- end widget -->
+    <!------------------>
+    <!-- Pie Chart #2 -->
+    <!------------------>
+    <div class="row clearfix">
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="body">
+                    <h3>Ticket Status</h3>
+                    <br />
+                    <div id="mythirdchart" style="height: 300px;"></div>
                 </div>
             </div>
-            <!-- end widget -->
 
-            <!--Charts-->
-            <div class="row g-gs">
-                <div class="col-md-4">
-                    <div class="card card-preview">
-                        <div class="card-inner">
-                            <div class="card-head text-center">
-                                <h6 class="title">Pie Chart</h6>
-                            </div>
-                            <div class="nk-ck-sm">
-                                <canvas class="pie-chart" id="pieChartData"></canvas>
-                            </div>
-                        </div>
-                    </div><!-- .card-preview -->
-                </div>
-                <div class="col-md-4">
-                    <div class="card card-preview">
-                        <div class="card-inner">
-                            <div class="card-head text-center">
-                                <h6 class="title">Doughnut Chart</h6>
-                            </div>
-                            <div class="nk-ck-sm">
-                                <canvas class="doughnut-chart" id="doughnutChartData"></canvas>
-                            </div>
-                        </div>
-                    </div><!-- .card-preview -->
-
+        </div>
+        <!------------------>
+        <!-- Pie Chart #1 -->
+        <!------------------>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="body" style="height: 390px">
+                    <h3>Ticket Types</h3>
+                    <br />
+                    <br />
+                    <div id="mysecondchart"></div>
                 </div>
             </div>
         </div>
+        <!--------------->
+        <!-- Bar Chart -->
+        <!--------------->
+        <div class="col-lg-6 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h3>Ticket Priorities</h3>
+                </div>
+                <div class="body" style="height: 330px">
+                    <div id="myfirstchart" class="chartist"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-@section scripts {
+<!---------------->
+<!-- Line Chart -->
+<!---------------->
+<div class="row clearfix">
+    <div class="col-lg-9 col-md-12">
+        <div class="card">
+            <div class="header">
+                <h2>Project Work Schedule</h2>
+            </div>
+            <div class="body" style="height: 400px">
+                <div id="total_Salary" class="ct-chart"></div>
+            </div>
+        </div>
+    </div>
+    <!--------------->
+    <!-- ToDo List -->
+    <!--------------->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="header">
+                <h2>ToDo List</h2>
+            </div>
+            <div class="body todo_list">
+                <ul class="list-unstyled">
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox" checked>
+                            <span>Status Tracker Demo</span>
+                        </label>
+                        <div class="m-l-35 m-b-30">
+                            <small class="text-muted">Scheduled for 10:00 am on 30 Nov 2020</small>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox">
+                            <span>Publish Address Book App</span>
+                        </label>
+                        <div class="m-l-35 m-b-30">
+                            <small class="text-muted">Scheduled for 6:00 pm on 25 Nov 2020</small>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox">
+                            <span>Prep for Financial Portal</span>
+                        </label>
+                        <div class="m-l-35 m-b-30">
+                            <small><a href="#">Shyann</a> Designer</small><br>
+                            <small><a href="#">Denis</a> PM</small><br>
+                            <small><a href="#">Kit</a> Developer</small><br>
+                            <small><a href="#">Nathan</a> iOS Developer</small>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox">
+                            <span>Blog</span>
+                        </label>
+                        <div class="m-l-35">
+                            <small class="text-muted">Submit new 2 new posts by 3 Dec 2020</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
     <script>
-        InitDonut('@Url.Action("PieData", "Charts")');
-        InitBarChart('@Url.Action("BarData", "Charts")');
+        //Construct the URL needed to draw the chart.
+        var Url1 = '@Url.Action("PriorityChart", "Charts")';
+        var data = {
+            labels: [],
+            series: []
+        };
+        $.post(Url1).then(function (response) {
+            console.log(response);
+            response.forEach(el => {
+                console.log(el);
+                data.labels.push(el.name);
+                data.series.push(el.count);
+            });
+            console.log(data);
+            new Chartist.Bar('#myfirstchart', data, {
+                height: "230px",
+                distributeSeries: true
+            });
+        });
+        //Second Chart - Pie - T-Types
+        var Url2 = '@Url.Action("TypeChart", "Charts")';
+        var piedata = {
+            labels: [],
+            series: []
+        };
+        $.post(Url2).then(function (response) {
+            console.log(response);
+            response.forEach(el => {
+              //  console.log(el);
+                piedata.labels.push(el.name);
+                piedata.series.push(el.count);
+            });
+          //  console.log(data);
+            new Chartist.Pie('#mysecondchart', piedata, {
+                height: "230px",
+                chartPadding: 30,
+                labelOffset: 50,
+                labelDirection: 'explode',
+                plugins: [Chartist.plugins.tooltip()]
+            });
+        });
+      //Third Chart - Pie - S-Types
+        var Url3 = '@Url.Action("StatusChart", "Charts")';
+        var statusdata = {
+            labels: [],
+            series: []
+        };
+        $.post(Url3).then(function (response) {
+            console.log(response);
+            response.forEach(el => {
+              //  console.log(el);
+                statusdata.labels.push(el.name);
+                statusdata.series.push(el.count);
+            });
+          //  console.log(data);
+            new Chartist.Pie('#mythirdchart', statusdata, {
+                height: "230px",
+                chartPadding: 30,
+                labelOffset: 50,
+                labelDirection: 'explode',
+                plugins: [Chartist.plugins.tooltip()]
+            });
+        });
     </script>
+
 }

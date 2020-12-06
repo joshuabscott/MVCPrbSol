@@ -6,7 +6,6 @@
 @inject IPSAccessService AccessService
 @inject IPSProjectService _project
 
-
 <head>
     <base href="../">
     <meta charset="utf-8">
@@ -30,7 +29,7 @@
     var userId = userManager.GetUserId(User);
     var roleName = (await userManager.GetRolesAsync(await userManager.GetUserAsync(User))).FirstOrDefault();
 }
-<h1>All Current Tickets</h1>
+<h2>All Current Tickets</h2>
 
 @if (User.IsInRole("Administrator") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
 {
@@ -39,19 +38,37 @@
     </p>
 }
 <table class="myTable table table-striped table-bordered">
-    <thead>
+    <thead class="thead-dark">
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Updated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TicketType)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.TicketPriority)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.TicketStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OwnerUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeveloperUser)
             </th>
             <th>
                 Settings
@@ -63,17 +80,36 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TicketPriority.Name)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Description)
+                </td>*@
+                <td>
+                    @item.Created.ToString("MM/dd/yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Updated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Project.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketPriority.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TicketStatus.Name)
                 </td>
+                 <td>
+                    @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
+                </td>
+
                 <td>
 
                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
