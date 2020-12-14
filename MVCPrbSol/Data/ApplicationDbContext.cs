@@ -11,15 +11,17 @@ namespace MVCPrbSol.Data
     public class ApplicationDbContext : IdentityDbContext<PSUser>//this is the class that connects directly to the Database
     {
         //ApplicatioDbContext is a representation of our database by links our classes to our Database entities
+        //allows us to connect to default database using appsettins.json
+        //This is were our Authorization and Authentication comes from
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)//allows us to connect to default database using appsettins.json
-        {//This is were our Authorization and Authentication comes from
+            : base(options)
+        {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ProjectUser>()
-                .HasKey(pu => new { pu.ProjectId, pu.UserId });
+            .HasKey(pu => new { pu.ProjectId, pu.UserId });
         }
 
         public DbSet<Ticket> Tickets { get; set; }
@@ -35,7 +37,5 @@ namespace MVCPrbSol.Data
 
         //public DbSet<PSUser> PSUsers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-
     }
 }
-//Sun

@@ -28,7 +28,6 @@
         </div>
     </div>
 
-
     <!-- start widget -->
     <div class="state-overview">
         <div class="row">
@@ -114,32 +113,6 @@
     </div>
     <!-- end widget -->
 
-    <!-- Morris Bar Chart -->
-    <script>
-    new Morris.Bar({
-    // ID of the element in which to draw the chart.
-    element: 'myfirstchart',
-    // Chart data records -- each entry in this array corresponds to a point on
-    // the chart.
-    data: [
-    { priority: 'Critical', Count: 20 },
-    { priority: 'Important', Count: 10 },
-    { priority: 'Normal', Count: 5 },
-    { priority: 'Low', Count: 5 },
-    { priority: 'Resolved', Count: 20 }
-    ],
-    // The name of the data record attribute that contains x-values.
-    xkey: 'priority',
-    // A list of names of data record attributes that contain y-values.
-    ykeys: ['Count'],
-    // Labels for the ykeys -- will be displayed when you hover over the
-    // chart.
-    labels: ['Count']
-    });
-    </script>
-
-
-
     <!------------------>
     <!-- Pie Chart #2 -->
     <!------------------>
@@ -159,7 +132,7 @@
         <!------------------>
         <div class="col-lg-3 col-md-6">
             <div class="card text-center">
-                <div class="body" style="height: 300px">
+                <div class="body" style="height: 390px">
                     <h3>Ticket Types</h3>
                     <br />
                     <br />
@@ -175,7 +148,7 @@
                 <div class="header">
                     <h3>Ticket Priorities</h3>
                 </div>
-                <div class="body" style="height: 300px">
+                <div class="body" style="height: 330px">
                     <div id="myfirstchart" class="chartist"></div>
                 </div>
             </div>
@@ -198,18 +171,71 @@
         </div>
     </div>
 
+    <!--------------->
+    <!-- ToDo List -->
+    <!--------------->
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="header">
+                <h2>ToDo List</h2>
+            </div>
+            <div class="body todo_list">
+                <ul class="list-unstyled">
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox" checked>
+                            <span>Status Tracker Demo</span>
+                        </label>
+                        <div class="m-l-35 m-b-30">
+                            <small class="text-muted">Scheduled for 10:00 am on 30 Nov 2020</small>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox">
+                            <span>Publish Address Book App</span>
+                        </label>
+                        <div class="m-l-35 m-b-30">
+                            <small class="text-muted">Scheduled for 6:00 pm on 25 Nov 2020</small>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox">
+                            <span>Prep for Financial Portal</span>
+                        </label>
+                        <div class="m-l-35 m-b-30">
+                            <small><a href="#">Shyann</a> Designer</small><br>
+                            <small><a href="#">Denis</a> PM</small><br>
+                            <small><a href="#">Kit</a> Developer</small><br>
+                            <small><a href="#">Nathan</a> iOS Developer</small>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="fancy-checkbox mb-0">
+                            <input type="checkbox" name="checkbox">
+                            <span>Blog</span>
+                        </label>
+                        <div class="m-l-35">
+                            <small class="text-muted">Submit new 2 new posts by 3 Dec 2020</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts{
 
     <script>
-        //Step 1. Construct the URL needed to draw the chart.
+        //Construct the URL needed to draw the chart.
         var Url1 = '@Url.Action("PriorityChart", "Charts")';
         var data = {
             labels: [],
             series: []
         };
-        //Step 2. start the structure for our AJAX call
-        //this is called an anonymous function with a variable named response that will hold the JSON when returned with the data from the post.Url
         $.post(Url1).then(function (response) {
             console.log(response);
             response.forEach(el => {
@@ -223,8 +249,7 @@
                 distributeSeries: true
             });
         });
-        //Step 3. Repeat
-        //Second Chart - Pie - TypeChart-Types
+        //Second Chart - Pie - T-Types
         var Url2 = '@Url.Action("TypeChart", "Charts")';
         var piedata = {
             labels: [],
@@ -246,9 +271,7 @@
                 plugins: [Chartist.plugins.tooltip()]
             });
         });
-
-        //Step 4. Repeat
-      //Third Chart - Pie -StatusChart-Types
+      //Third Chart - Pie - S-Types
         var Url3 = '@Url.Action("StatusChart", "Charts")';
         var statusdata = {
             labels: [],

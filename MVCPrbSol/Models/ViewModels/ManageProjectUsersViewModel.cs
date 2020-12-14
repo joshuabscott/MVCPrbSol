@@ -11,6 +11,11 @@ namespace MVCPrbSol.Models.ViewModels
         public Project Project { get; set; }
         public MultiSelectList Users { get; set; }
         public string[] SelectedUsers { get; set; }
+
+        public PSUser User { get; set; }
+        public IEnumerable<string> UserRole { get; set; }
+        public ICollection<Project> CurrentProjects { get; set; }
+        public SelectList Projects { get; set; }
+        public int SelectedProject { get; set; }
     }
 }// Manage what Users can be on what project
-//Sat

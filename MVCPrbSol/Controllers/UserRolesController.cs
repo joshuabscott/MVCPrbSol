@@ -13,7 +13,7 @@ using MVCPrbSol.Services;
 
 namespace MVCPrbSol.Controllers    //Namespace is the outermost , Inside is a class, than a method, than the logic
 {
-    [Authorize/*(Roles = "Administrator, ProjectManager")*/]
+    [Authorize(Roles = "Administrator, ProjectManager")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -39,10 +39,12 @@ namespace MVCPrbSol.Controllers    //Namespace is the outermost , Inside is a cl
 
             foreach (var user in users)
             {
-                ManageUserRolesViewModel vm = new ManageUserRolesViewModel();   
-                vm.User = user;
+                ManageUserRolesViewModel vm = new ManageUserRolesViewModel
+                {
+                    User = user
+                };
                 var selected = await _rolesService.ListUserRoles(user);
-                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);      //Overload example
+                vm.Roles = new MultiSelectList(_context.Roles, "Name", "Name", selected);      //Overload example, maybe just a select list instead?
                 model.Add(vm);
             }
             return View(model);
@@ -61,7 +63,7 @@ namespace MVCPrbSol.Controllers    //Namespace is the outermost , Inside is a cl
                 IEnumerable<string> roles = await _rolesService.ListUserRoles(user);
                 await _userManager.RemoveFromRolesAsync(user, roles);
                 var userRoles = psuser.SelectedRoles;
-                //string userRole = btuser.SelectedRoles.FirstOrDefault();
+                string userRole = psuser.SelectedRoles.FirstOrDefault();
 
                 foreach (var role in userRoles)
                 {
@@ -83,5 +85,4 @@ namespace MVCPrbSol.Controllers    //Namespace is the outermost , Inside is a cl
             }
         }
     }
-}//Friday
-//Sat
+}

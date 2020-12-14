@@ -1,34 +1,33 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using MVCPrbSol.Services
-@inject UserManager<PSUser> UserManager
-@inject IPSAccessService AccessService
-@inject IPSProjectService _projectService
-
-@{
-    ViewData["Title"] = "Dashboard";
-    var userId = await UserManager.GetUserAsync(User);
-    var roleName = (await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User))).FirstOrDefault();
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <base href="../">
     <meta charset="utf-8">
-    <meta name="author" content="Problem Solver">
+    <title>@ViewData["Title"]</title>
+    <meta name="author" content="Josh Scott">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A powerful">
-   
+    <meta name="description" content="A powerful issue tracker application">
+
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="./images/favicon.png">
     <!-- Page Title  -->
-    <title>Problem Solver | Welcome </title>
+    <title>Problem Solver by Josh Scott </title>
+
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="./assets/css/dashlite.css?ver=2.1.0">
     <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=2.1.0">
-  
+
+    <!-- FontAwesome StyleSheet  -->
+    <script src="https://kit.fontawesome.com/8b5ae67e5c.js" crossorigin="anonymous"></script>
+
     <!-- Morris StyleSheet  -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <!-- TinyMCE StyleSheet  -->
+    <script src="//cdn.tiny.cloud/1/5hebe8k5m07qf4mcta3paw6it1x1fve47c5l4qh7m2e7nbhv/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!--https://datatables.net/-->
+    <script src="// cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" referrerpolicy="origin"></script>
 
     <link href="~/css/app.min.css" rel="stylesheet" />
 </head>
@@ -82,7 +81,9 @@
                 </button>
 
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    @*//_LoginPartial here takes us to the File name we need to login or register a new user*@
                     <partial name="_LoginPartial" />
+
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">All Projects</a>
@@ -115,11 +116,14 @@
             </div>
         </nav>
     </header>
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
 
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -129,6 +133,9 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/bundle.js"></script>
+
+    <!-- Morris Javascript  -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
@@ -146,30 +153,41 @@
 
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <!-- for datatables to work on all shared  _Layout pages -->
+    <!-- https://datatables.net/ -->
     @RenderSection("Scripts", required: false)
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    @*<script>
+            $(document).ready(function () {
+                $('.myTable').DataTable({
+                    searching: true
+                });
+                //$('#anotherTable').DataTable({
+                //    searching: false
+                //});
+            });
+        </script>*@
+
     <script>
-        $(document).ready(function () {
-            $('.myTable').DataTable({
-                searching: true
-            });
-            $('#anotherTable').DataTable({
-                searching: false
-            });
+        $('#datatableDefault').DataTable({
+            dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-right'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'mr-auto'i><'mb-0'p>>",
+            lengthMenu: [10, 20, 30, 40, 50],
+            responsive: true,
+            buttons: [
+                { extend: 'print', className: 'btn btn-default' },
+                { extend: 'csv', className: 'btn btn-default' }
+            ]
         });
     </script>
 
-    @*<script>
-            $('#datatableDefault').DataTable({
-                dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-right'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'mr-auto'i><'mb-0'p>>",
-                lengthMenu: [10, 20, 30, 40, 50],
-                responsive: true,
-                buttons: [
-                    { extend: 'print', className: 'btn btn-default' },
-                    { extend: 'csv', className: 'btn btn-default' }
-                ]
+    <script>
+        $(document).ready(function () {
+            //This kicks off Tiny MCX
+            tinymce.init({
+                selector: '#Body'
             });
-        </script>*@
+
+            $('.table').DataTable();
+        });
+    </script>
 </body>
 </html>

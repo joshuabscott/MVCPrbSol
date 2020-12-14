@@ -12,8 +12,7 @@
     <meta name="author" content="Josh Scott">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="A powerful issue tracker application">
-    <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="./images/favicon.png">
+   
     <!-- Page Title  -->
     <title>Problem Solver | Sign In</title>
     <!-- StyleSheets  -->
@@ -90,15 +89,17 @@
                                     <!-- form alternative log-in-->
                                     <div class="form-group" text="center">
                                         <div class="text-center form-note-s2 pt-4">
-                                            <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a asp-page="./ForgotPassword">Forgot password?</a></span>
+                                            <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a asp-page="~/Identity/auth-reset-v3.html">Forgot password?</a></span>
                                             <span>Don't have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a></span>
-                                            @*New on our platform?  <a href="C:\Users\admin\source\repos\MVCPrbSol\MVCPrbSol\Areas\Identity\Pages\Account\auth-register-v3.html">Create an account</a>*@
+                                            New on our platform?  <a href="C:\Users\admin\source\repos\MVCPrbSol\MVCPrbSol\Areas\Identity\Pages\Account\auth-register-v3.html">Create an account</a>
                                             @*<a href="html/pages/account/auth-register-v3.html">Create an account</a>*@
 
                                         </div>
                                         <div class="text-center pt-4 pb-3">
                                             <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
                                         </div>
+
+                                        <!--Use Social Media to Login-->
                                         <ul class="nav justify-center gx-4">
                                             <li class="nav-item"><a class="nav-link" href="#">Facebook</a></li>
                                             <li class="nav-item"><a class="nav-link" href="#">Google</a></li>

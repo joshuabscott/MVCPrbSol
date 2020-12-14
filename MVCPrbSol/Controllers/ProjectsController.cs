@@ -20,7 +20,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
     [Authorize]
     public class ProjectsController : Controller
     {
-
         private readonly ApplicationDbContext _context;                 
         private readonly UserManager<PSUser> _userManager;
         private readonly IPSAccessService _accessService;
@@ -44,17 +43,12 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             return View(await _context.Projects.ToListAsync());
         }
 
-
         //GET: Projects/ MyProjects 
         public async Task<IActionResult> MyProjects(int? id)
-        {   // Should function similarly to MyTickets, but able to use service to filter projects seen based on user's role or if 
-            // the user submitted a ticket for that project.
+        {   // Should function similarly to MyTickets
 
             var model = new List<Project>();
             var userId = _userManager.GetUserId(User);
-
-
-
 
             if (User.IsInRole("Administrator"))
             {
@@ -62,12 +56,11 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
                 model = _context.Projects.ToList();
                 return View("MyProjects", model);
             }
-            if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") ||
-                User.IsInRole("Submitter") || User.IsInRole("NewUser"))
+            //My Projects for the different roles
+            if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter") || User.IsInRole("NewUser"))
             {
 
                 model = await _projectService.ListUserProjects(userId);
-
                 return View("MyProjects", model);
 
             }
@@ -75,8 +68,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             return NotFound();
 
         }
-
-
 
         //GET: Projects/Create
         [Authorize(Roles = "Administrator, ProjectManager")]
@@ -119,8 +110,6 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
             {
                 return NotFound();
             }
-
-
 
             var project = await _context.Projects
                 .Include(p => p.ProjectUsers)           //in Addition to project, bring the reference to project user
@@ -255,7 +244,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
 
             model.Project = project;
             List<PSUser> users = await _context.Users.ToListAsync();
-            List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id);
+            List<PSUser> members = (List<PSUser>)await _PSProjectService.UsersOnProject(id); //
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
@@ -268,7 +257,7 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ManageProjectUsersViewModel model)
         {
-            if (!User.IsInRole("Demo"))
+            if (!User.IsInRole("Demo")) //Prevent Demo User from 
             {
 
                 if (ModelState.IsValid)
@@ -308,7 +297,3 @@ namespace MVCPrbSol.Controllers   //Namespace is the outermost , Inside is a cla
         }
     }
 }
-
-//The Logic to create an instance of an Object : Project
-//Friday
-//Sat

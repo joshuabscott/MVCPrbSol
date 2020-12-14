@@ -24,6 +24,7 @@ namespace MVCPrbSol.Models
 
         public string FileName { get; set; }
         public string FilePath { get; set; }
+        [Required]
         public byte[] FileData { get; set; }
 
         public string ContentType { get; set; }

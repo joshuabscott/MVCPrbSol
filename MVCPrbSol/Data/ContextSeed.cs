@@ -29,10 +29,10 @@ namespace MVCPrbSol.Data
 
     public enum TicketPriorities
     {
-        Low,
-        Moderate,
-        Major,
-        Critical
+        Critical,
+        Important,
+        Normal,
+        Low
     }
 
     public enum TicketStatuses
@@ -46,7 +46,21 @@ namespace MVCPrbSol.Data
     }
 
     public static class ContextSeed
+    { 
+    public static async Task RunSeedMethodsAsync(
+            RoleManager<IdentityRole> roleManager,
+            UserManager<PSUser> userManager,
+            ApplicationDbContext context)
     {
+        await SeedRolesAsync(roleManager);
+        await SeedDefaultUsersAsync(userManager);
+        //await SeedTicketTypesAsync(context);
+        //await SeedTicketStatusesAsync(context);
+        //await SeedTicketPrioritiesAsync(context);
+        //await SeedProjectsAsync(context);
+        await SeedProjectUsersAsync(context, userManager);
+        await SeedTicketsAsync(context, userManager);
+    }
         //Seed Roles
         public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
@@ -375,13 +389,13 @@ namespace MVCPrbSol.Data
                 var priorites = context.TicketPriorities.Any();
                 if (priorites == false)
                 {
-                    var priority = new TicketPriority { Name = TicketPriorities.Low.ToString() };
+                    var priority = new TicketPriority { Name = TicketPriorities.Critical.ToString() };
                     context.TicketPriorities.Add(priority);
-                    priority = new TicketPriority { Name = TicketPriorities.Moderate.ToString() };
+                    priority = new TicketPriority { Name = TicketPriorities.Important.ToString() };
                     context.TicketPriorities.Add(priority);
-                    priority = new TicketPriority { Name = TicketPriorities.Major.ToString() };
+                    priority = new TicketPriority { Name = TicketPriorities.Normal.ToString() };
                     context.TicketPriorities.Add(priority);
-                    priority = new TicketPriority { Name = TicketPriorities.Critical.ToString() };
+                    priority = new TicketPriority { Name = TicketPriorities.Low.ToString() };
                     context.TicketPriorities.Add(priority);
                     await context.SaveChangesAsync();
                 }
@@ -422,8 +436,10 @@ namespace MVCPrbSol.Data
             List<string> projectNames = new List<string> { "Blog", "Bug Tracker", "Financial Portal" };
             foreach (var projectName in projectNames)
             {
-                Project project = new Project();
-                project.Name = projectName;
+                Project project = new Project
+                {
+                    Name = projectName
+                };
                 try
                 {
                     if (context.Projects.FirstOrDefault(p => p.Name == projectName) == null)
