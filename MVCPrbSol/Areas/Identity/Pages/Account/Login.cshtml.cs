@@ -27,7 +27,7 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
         public LoginModel(SignInManager<PSUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<PSUser> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration) // allows access to appsettings.json
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -58,36 +58,37 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
-        //<!--  -->
+
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
+
             returnUrl = returnUrl ?? Url.Content("~/");
 
+            // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
         }
-        //<!--  -->
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null, string demoEmail = null) //Looking for fix to login issue 
+
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null, string demoEmail = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-
             if (!String.IsNullOrWhiteSpace(demoEmail))
             {
                 var email = _configuration[demoEmail];
                 var password = _configuration["DemoPassword"];
-
                 var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToAction("Index", "Home");//goes to the HomeController
+                    //return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -95,14 +96,15 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
-
             if (ModelState.IsValid)
             {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToAction("Index", "Home");
+                    return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -119,6 +121,8 @@ namespace MVCPrbSol.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
+
+            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

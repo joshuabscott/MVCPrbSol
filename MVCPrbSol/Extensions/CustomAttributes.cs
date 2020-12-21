@@ -19,11 +19,8 @@ namespace MVCPrbSol.Extensions
         {
             _maxFileSize = maxFileSize;
         }
-        //IsValid - 
+       
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-            //inheritance happening when you see override, extend further then we could normally reach. 
-            //method name is valid, bass in the object, the value of the property, 
-            //validationContect is used, passed. by decorating or data
         {
             var file = value as IFormFile;
             if (file != null)
@@ -69,7 +66,3 @@ namespace MVCPrbSol.Extensions
         }    
     }
 }
-
-//overloading is two methods with the same name but different signature
-//we are extending this to do new things with classes
-//using maxFileSize;
