@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MVCPrbSol.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -336,6 +336,7 @@ namespace MVCPrbSol.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FileName = table.Column<string>(nullable: true),
+                    FilePath = table.Column<string>(nullable: true),
                     FileData = table.Column<byte[]>(nullable: false),
                     ContentType = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),

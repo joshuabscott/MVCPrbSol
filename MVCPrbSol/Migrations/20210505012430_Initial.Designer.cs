@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MVCPrbSol.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201204025655_secound")]
-    partial class secound
+    [Migration("20210505012430_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -249,6 +249,7 @@ namespace MVCPrbSol.Migrations
                         .HasColumnType("text");
 
                     b.Property<byte[]>("FileData")
+                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<string>("FileName")

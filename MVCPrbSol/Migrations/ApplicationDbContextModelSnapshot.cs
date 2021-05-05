@@ -247,6 +247,7 @@ namespace MVCPrbSol.Migrations
                         .HasColumnType("text");
 
                     b.Property<byte[]>("FileData")
+                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<string>("FileName")
