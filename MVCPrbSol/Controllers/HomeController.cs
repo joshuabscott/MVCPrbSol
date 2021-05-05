@@ -127,8 +127,8 @@ namespace MVCPrbSol.Controllers  //Namespace is the outermost , Inside is a clas
                         vm.Tickets.Add(ticket);
 
                         // get dev
-                        devs = _projectService.SortListOfDevsByTicketCountAsync(devs, tickets);
-                        //var dev = devs.Count > i ? devs[i] : devs[0];
+                        //devs = _projectService.SortListOfDevsByTicketCountAsync(devs, tickets);
+                        var dev = devs.Count > i ? devs[i] : devs[0];
                         vm.Developers.Add(devs[0]);
                         // get task count
                         vm.Count.Add(tickets.Where(t => t.DeveloperUserId == devs[0].Id).ToList().Count);
